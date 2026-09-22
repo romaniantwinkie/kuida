@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: #f6f3ee;
+  color: #1b365d;
+}
+
+button,
+a {
+  cursor: pointer;
+}
