@@ -14,10 +14,10 @@ export function LangToggle() {
         onClick={() => setLocale(code)}
         aria-pressed={active}
         aria-label={name}
-        className={`inline-flex min-h-11 min-w-11 items-center justify-center border px-3 text-sm font-medium ${
+        className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-md border px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
           active
-            ? "border-ink bg-ink text-paper"
-            : "border-ink bg-transparent text-ink hover:bg-wash"
+            ? "border-primary bg-primary text-primary-foreground"
+            : "border-primary bg-transparent text-foreground hover:bg-accent"
         }`}
       >
         {label}

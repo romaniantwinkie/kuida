@@ -7,7 +7,7 @@ import { Shell } from "@/components/shell";
 import { fill } from "@/lib/i18n";
 import { PLANS } from "@/lib/product";
 
-const fieldClass = "mt-1 min-h-11 w-full border border-mist bg-cream px-3 outline-none focus:border-ink";
+const fieldClass = "mt-1 min-h-11 w-full border border-border bg-background px-3 outline-none focus:border-ring";
 
 export default function AgencySignup() {
   const { t } = useI18n();
@@ -22,18 +22,18 @@ export default function AgencySignup() {
   return (
     <Shell>
       <main className="mx-auto max-w-md px-5 py-14">
-        <p className="text-xs tracking-widest text-mute">{copy.kicker}</p>
+        <p className="text-xs tracking-widest text-muted-foreground">{copy.kicker}</p>
         <h1 className="mt-3 text-3xl font-medium">{copy.title}</h1>
-        <p className="mt-2 text-sm leading-relaxed text-mute">{copy.body}</p>
+        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{copy.body}</p>
         {done ? (
-          <div className="mt-8 border border-mist bg-paper p-6">
+          <div className="mt-8 rounded-lg border border-border bg-card p-6">
             <p>{copy.done}</p>
-            <Link href="/search" className="mt-6 inline-flex min-h-11 items-center bg-ink px-4 text-sm text-paper">
+            <Link href="/search" className="mt-6 inline-flex min-h-11 items-center rounded-md bg-primary px-4 text-sm text-primary-foreground">
               {copy.openSearch}
             </Link>
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="mt-8 space-y-4 border border-mist bg-paper p-6">
+          <form onSubmit={onSubmit} className="mt-8 space-y-4 rounded-lg border border-border bg-card p-6">
             <label className="block text-sm">
               {copy.legalName}
               <input required className={fieldClass} />
@@ -53,12 +53,12 @@ export default function AgencySignup() {
                 {fill(copy.proPlan, { price: PLANS.pro.monthly })}
               </label>
             </fieldset>
-            <button type="submit" className="min-h-11 w-full bg-ink text-sm text-paper hover:bg-ink-soft">
+            <button type="submit" className="min-h-11 w-full rounded-md bg-primary text-sm text-primary-foreground hover:bg-foreground">
               {copy.continue}
             </button>
           </form>
         )}
-        <p className="mt-6 text-sm text-mute">
+        <p className="mt-6 text-sm text-muted-foreground">
           <Link href="/signup/caregiver" className="underline">
             {copy.caregiver}
           </Link>

@@ -21,10 +21,11 @@ export function Header() {
         ? "/signup/agency"
         : "/";
 
-  const linkClass = "hidden min-h-11 items-center px-2 text-mute hover:text-ink lg:inline-flex";
+  const linkClass =
+    "hidden min-h-11 items-center rounded-md px-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring lg:inline-flex";
 
   return (
-    <header className="sticky top-0 z-30 border-b border-mist bg-cream/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-sm">
       <div className="mx-auto max-w-5xl px-4 sm:px-5">
         <div className="flex justify-center py-2 sm:hidden">
           <LangToggle />
@@ -45,13 +46,16 @@ export function Header() {
                 {t.nav.pricing}
               </Link>
             ) : null}
-            <Link href="/sign-in" className="inline-flex min-h-11 items-center px-2 text-mute hover:text-ink">
+            <Link
+              href="/sign-in"
+              className="inline-flex min-h-11 items-center rounded-md px-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
               {t.nav.logIn}
             </Link>
             {audience === "home" ? null : (
               <Link
                 href={startHref}
-                className="inline-flex min-h-11 items-center whitespace-nowrap bg-ink px-3 text-paper hover:bg-ink-soft sm:px-4"
+                className="inline-flex min-h-11 items-center whitespace-nowrap rounded-md bg-primary px-3 text-primary-foreground transition-colors hover:bg-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:px-4"
               >
                 {t.nav.getStarted}
               </Link>

@@ -2,12 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: 0.9491 0.0085 197.0126;
+  --foreground: 0.3772 0.0619 212.664;
+  --card: 0.9724 0.0053 197.0692;
+  --card-foreground: 0.3772 0.0619 212.664;
+  --popover: 0.9724 0.0053 197.0692;
+  --popover-foreground: 0.3772 0.0619 212.664;
+  --primary: 0.5624 0.0947 203.2755;
+  --primary-foreground: 1 0 0;
+  --secondary: 0.9244 0.0181 196.845;
+  --secondary-foreground: 0.3772 0.0619 212.664;
+  --muted: 0.9295 0.0107 196.9723;
+  --muted-foreground: 0.5428 0.0594 201.5662;
+  --accent: 0.9021 0.0297 201.8915;
+  --accent-foreground: 0.3772 0.0619 212.664;
+  --destructive: 0.5732 0.1901 25.5409;
+  --destructive-foreground: 1 0 0;
+  --border: 0.8931 0.0205 204.4136;
+  --input: 0.9244 0.0181 196.845;
+  --ring: 0.5624 0.0947 203.2755;
+  --radius: 0.5rem;
+  --tracking-normal: 0em;
+  --shadow-sm: 1px 1px 2px 0px hsl(185 70% 30% / 0.15), 1px 1px 2px -1px hsl(185 70% 30% / 0.15);
+  --shadow-md: 1px 1px 2px 0px hsl(185 70% 30% / 0.15), 1px 2px 4px -1px hsl(185 70% 30% / 0.15);
+}
+
+.dark {
+  --background: 0.2068 0.0247 224.4533;
+  --foreground: 0.852 0.1269 195.0354;
+  --card: 0.2293 0.0276 216.0674;
+  --card-foreground: 0.852 0.1269 195.0354;
+  --popover: 0.2293 0.0276 216.0674;
+  --popover-foreground: 0.852 0.1269 195.0354;
+  --primary: 0.852 0.1269 195.0354;
+  --primary-foreground: 0.2068 0.0247 224.4533;
+  --secondary: 0.3775 0.0564 216.501;
+  --secondary-foreground: 0.852 0.1269 195.0354;
+  --muted: 0.2894 0.0412 218.8153;
+  --muted-foreground: 0.6611 0.0975 195.0526;
+  --accent: 0.3775 0.0564 216.501;
+  --accent-foreground: 0.852 0.1269 195.0354;
+  --destructive: 0.6168 0.2086 25.8088;
+  --destructive-foreground: 0.9612 0 0;
+  --border: 0.3775 0.0564 216.501;
+  --input: 0.3775 0.0564 216.501;
+  --ring: 0.852 0.1269 195.0354;
+}
+
 body {
-  background: #f6f3ee;
-  color: #1b365d;
+  background: oklch(var(--background));
+  color: oklch(var(--foreground));
+  letter-spacing: var(--tracking-normal);
 }
 
 button,
 a {
   cursor: pointer;
+}
+
+@layer base {
+  button,
+  input,
+  select,
+  textarea {
+    border-radius: calc(var(--radius) - 2px);
+  }
 }

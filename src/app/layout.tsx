@@ -23,11 +23,11 @@ export default function RootLayout({
           crossOrigin=""
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-cream font-sans text-ink antialiased">
+      <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>

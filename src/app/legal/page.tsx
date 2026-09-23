@@ -9,10 +9,10 @@ export default function LegalPage() {
   return (
     <Shell>
       <main className="mx-auto max-w-2xl px-5 py-14">
-        <p className="text-xs tracking-widest text-mute">{t.legal.kicker}</p>
+        <p className="text-xs tracking-widest text-muted-foreground">{t.legal.kicker}</p>
         <h1 className="mt-3 text-3xl font-medium">{t.legal.title}</h1>
-        <p className="mt-4 text-sm leading-relaxed text-mute">{t.footer.legalLine}</p>
-        <p className="mt-4 text-sm leading-relaxed text-mute">{t.legal.later}</p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{t.footer.legalLine}</p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{t.legal.later}</p>
       </main>
     </Shell>
   );
