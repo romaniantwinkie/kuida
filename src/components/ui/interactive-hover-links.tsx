@@ -50,23 +50,34 @@ function HoverLink({ heading, subheading, href }: InteractiveHoverLinkItem) {
           }}
           transition={{
             type: "spring",
-            staggerChildren: 0.075,
-            delayChildren: 0.25,
+            staggerChildren: 0.05,
+            delayChildren: 0.1,
           }}
           className="relative z-10 block text-3xl font-bold text-muted-foreground transition-colors duration-500 group-hover:text-foreground group-focus-visible:text-foreground sm:text-4xl md:text-5xl"
         >
-          {heading.split("").map((letter, index) => (
-            <motion.span
-              variants={{
-                initial: { x: 0 },
-                whileHover: { x: 16 },
-              }}
-              transition={{ type: "spring" }}
-              className="inline-block"
-              key={`${letter}-${index}`}
-            >
-              {letter === " " ? "\u00A0" : letter}
-            </motion.span>
+          {heading.split(" ").map((word, wordIndex, words) => (
+            <span key={`${word}-${wordIndex}`}>
+              <motion.span
+                className="inline-block whitespace-nowrap"
+                variants={{ initial: { x: 0 }, whileHover: { x: 0 } }}
+                transition={{ staggerChildren: 0.03 }}
+              >
+                {word.split("").map((letter, letterIndex) => (
+                  <motion.span
+                    variants={{
+                      initial: { x: 0 },
+                      whileHover: { x: 16 },
+                    }}
+                    transition={{ type: "spring" }}
+                    className="inline-block"
+                    key={`${letter}-${letterIndex}`}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
+              </motion.span>
+              {wordIndex < words.length - 1 ? " " : null}
+            </span>
           ))}
         </motion.span>
         <span className="relative z-10 mt-2 block text-base text-muted-foreground transition-colors duration-500 group-hover:text-foreground group-focus-visible:text-foreground md:text-lg">
