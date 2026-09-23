@@ -30,6 +30,8 @@ export type Messages = {
     caregiverTitle: string;
     caregiverBody: string;
     continue: string;
+    agencyButton: string;
+    caregiverButton: string;
   };
   agency: {
     heroKicker: string;
@@ -182,6 +184,8 @@ export const messages: Record<Locale, Messages> = {
       caregiverTitle: "I want shifts",
       caregiverBody: "Free to join. Set your hours and area. Agencies message you in the app.",
       continue: "Continue",
+      agencyButton: "I am an Agency",
+      caregiverButton: "I am a Caregiver",
     },
     agency: {
       heroKicker: "For agencies",
@@ -444,6 +448,8 @@ export const messages: Record<Locale, Messages> = {
       caregiverTitle: "Quiero turnos",
       caregiverBody: "Entrar es gratis. Pon tus horas y tu zona. Las agencias te escriben en la app.",
       continue: "Continuar",
+      agencyButton: "Soy una agencia",
+      caregiverButton: "Soy cuidador",
     },
     agency: {
       heroKicker: "Para agencias",

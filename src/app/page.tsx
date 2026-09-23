@@ -1,38 +1,36 @@
 "use client";
 
-import { Building2, HeartHandshake } from "lucide-react";
-import { DoorCard } from "@/components/door-card";
-import { Shell } from "@/components/shell";
+import { useRouter } from "next/navigation";
+import { LangToggle } from "@/components/lang-toggle";
+import { Mark } from "@/components/mark";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { SonarGrid } from "@/components/ui/sonar-grid";
 import { useI18n } from "@/components/language-provider";
 
 export default function Home() {
+  const router = useRouter();
   const { t } = useI18n();
 
   return (
-    <Shell>
-      <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center px-5 py-16 md:py-24">
-        <p className="max-w-xl text-base leading-relaxed text-muted-foreground">{t.home.line}</p>
-        <h1 className="mt-4 text-4xl font-medium leading-tight text-foreground md:text-5xl">{t.home.title}</h1>
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          <DoorCard
-            href="/for-agencies"
-            kicker={t.home.agencyKicker}
-            title={t.home.agencyTitle}
-            body={t.home.agencyBody}
-            cta={t.home.continue}
-            icon={Building2}
+    <SonarGrid interactive className="h-dvh bg-background text-foreground">
+      <div className="relative z-10 flex h-full flex-col">
+        <div className="flex flex-col items-center gap-4 px-5 pt-8">
+          <Mark />
+          <LangToggle />
+        </div>
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 px-5 pb-16">
+          <InteractiveHoverButton
+            text={t.home.agencyButton}
+            className="w-80 [&>span]:block [&>span]:w-full [&>span]:text-center"
+            onClick={() => router.push("/for-agencies")}
           />
-          <DoorCard
-            href="/for-caregivers"
-            kicker={t.home.caregiverKicker}
-            title={t.home.caregiverTitle}
-            body={t.home.caregiverBody}
-            cta={t.home.continue}
-            icon={HeartHandshake}
-            swatchAlign="start"
+          <InteractiveHoverButton
+            text={t.home.caregiverButton}
+            className="w-80 [&>span]:block [&>span]:w-full [&>span]:text-center"
+            onClick={() => router.push("/for-caregivers")}
           />
         </div>
-      </main>
-    </Shell>
+      </div>
+    </SonarGrid>
   );
 }
