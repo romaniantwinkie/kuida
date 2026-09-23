@@ -32,6 +32,10 @@ export type Messages = {
     continue: string;
     agencyButton: string;
     caregiverButton: string;
+    agencySubtitle: string;
+    caregiverSubtitle: string;
+    agencyImageAlt: string;
+    caregiverImageAlt: string;
   };
   agency: {
     heroKicker: string;
@@ -186,6 +190,10 @@ export const messages: Record<Locale, Messages> = {
       continue: "Continue",
       agencyButton: "I am an Agency",
       caregiverButton: "I am a Caregiver",
+      agencySubtitle: "Pick from hundreds of available caregivers looking for work",
+      caregiverSubtitle: "Find work from multiple agencies at once",
+      agencyImageAlt: "Care coordinators reviewing a case together",
+      caregiverImageAlt: "Caregiver sitting with a client at home",
     },
     agency: {
       heroKicker: "For agencies",
@@ -450,6 +458,10 @@ export const messages: Record<Locale, Messages> = {
       continue: "Continuar",
       agencyButton: "Soy una agencia",
       caregiverButton: "Soy cuidador",
+      agencySubtitle: "Elige entre cientos de cuidadores disponibles que buscan trabajo",
+      caregiverSubtitle: "Encuentra trabajo con varias agencias a la vez",
+      agencyImageAlt: "Coordinadores de cuidado revisando un caso juntos",
+      caregiverImageAlt: "Cuidador acompañando a un cliente en casa",
     },
     agency: {
       heroKicker: "Para agencias",

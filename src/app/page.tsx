@@ -1,35 +1,45 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { LangToggle } from "@/components/lang-toggle";
 import { Mark } from "@/components/mark";
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import GalleryHoverCarousel from "@/components/ui/gallery-hover-carousel";
 import { SonarGrid } from "@/components/ui/sonar-grid";
 import { useI18n } from "@/components/language-provider";
 
 export default function Home() {
-  const router = useRouter();
   const { t } = useI18n();
 
   return (
-    <SonarGrid interactive className="h-dvh bg-background text-foreground">
-      <div className="relative z-10 flex h-full flex-col">
-        <div className="flex flex-col items-center gap-4 px-5 pt-8">
-          <Mark />
-          <LangToggle />
-        </div>
-        <div className="flex flex-1 flex-col items-center justify-center gap-4 px-5 pb-16">
-          <InteractiveHoverButton
-            text={t.home.agencyButton}
-            className="w-80 [&>span]:block [&>span]:w-full [&>span]:text-center"
-            onClick={() => router.push("/for-agencies")}
-          />
-          <InteractiveHoverButton
-            text={t.home.caregiverButton}
-            className="w-80 [&>span]:block [&>span]:w-full [&>span]:text-center"
-            onClick={() => router.push("/for-caregivers")}
-          />
-        </div>
+    <SonarGrid interactive className="min-h-dvh bg-background text-foreground">
+      <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-5 pb-8 pt-8 sm:px-8 sm:pt-10">
+        <header className="flex w-full flex-col items-center">
+          <Mark large />
+          <div className="mt-4">
+            <LangToggle />
+          </div>
+        </header>
+        <GalleryHoverCarousel
+          showHeader={false}
+          className="mt-8 min-h-0 flex-1 md:mt-10"
+          items={[
+            {
+              id: "agency",
+              title: t.home.agencyButton,
+              summary: t.home.agencySubtitle,
+              url: "/for-agencies",
+              image: "/images/agency.jpg",
+              imageAlt: t.home.agencyImageAlt,
+            },
+            {
+              id: "caregiver",
+              title: t.home.caregiverButton,
+              summary: t.home.caregiverSubtitle,
+              url: "/for-caregivers",
+              image: "/images/caregiver.jpg",
+              imageAlt: t.home.caregiverImageAlt,
+            },
+          ]}
+        />
       </div>
     </SonarGrid>
   );

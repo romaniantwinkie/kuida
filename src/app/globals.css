@@ -69,3 +69,11 @@ a {
     border-radius: calc(var(--radius) - 2px);
   }
 }
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
