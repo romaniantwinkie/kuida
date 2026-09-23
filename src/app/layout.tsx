@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { LanguageProvider } from "@/components/language-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "KUIDA",
+  title: "KUIDAO",
   description:
-    "Find available caregivers by address and schedule. For licensed Florida agencies and nurse registries.",
+    "Software for home care, nurse registry, and home health agencies staffing their cases, and for caregivers finding shifts. Starts in Florida.",
 };
 
 export default function RootLayout({
@@ -27,7 +28,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-cream font-sans text-ink antialiased">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

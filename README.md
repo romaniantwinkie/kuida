@@ -1,6 +1,10 @@
-# Kuida
+# Kuidao
 
-Private repo for the caregiver staffing site.
+Software for home care, nurse registry, and home health agencies staffing their own cases, and for caregivers finding shifts. Caregivers join free. Agencies pay a monthly plan. The product starts in Florida and is built to expand nationwide.
+
+The site opens with a two-door chooser. Agency marketing, including pricing, lives on its own page. Caregiver pages do not show plans or prices.
+
+Private repo. Accounts, payments, and a live map are not wired yet. Search and signup are demos.
 
 ## Cursor
 
@@ -14,5 +18,3 @@ npm run dev
 ```
 
 4. Open http://localhost:3000
-
-Accounts, payments, and a live map are not wired yet. Search and signup are demos.
