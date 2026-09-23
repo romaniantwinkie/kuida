@@ -26,7 +26,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-30 border-b border-border bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto max-w-5xl px-4 sm:px-5">
+      <div className="mx-auto max-w-6xl px-4 sm:px-5">
         <div className="flex justify-center py-2 sm:hidden">
           <LangToggle />
         </div>
@@ -42,7 +42,7 @@ export function Header() {
               </Link>
             ) : null}
             {audience === "agency" ? (
-              <Link href="/for-agencies#pricing" className={linkClass}>
+              <Link href="/pricing" className={linkClass}>
                 {t.nav.pricing}
               </Link>
             ) : null}

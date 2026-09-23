@@ -68,6 +68,12 @@ export type Messages = {
     proItems: string[];
     start: string;
     caregiverCta: string;
+    ribbonLabel: string;
+    ribbon: string[];
+    resultCap: string;
+    faqTitle: string;
+    faqLead: string;
+    faqGroups: { title: string; items: { q: string; a: string }[] }[];
   };
   caregiver: {
     heroKicker: string;
@@ -290,6 +296,51 @@ export const messages: Record<Locale, Messages> = {
       proItems: ["Everything in Search", "Hiring packet and vault"],
       start: "Start",
       caregiverCta: "Caregiver? Join free",
+      ribbonLabel: "SEARCH. REQUEST. HIRE.",
+      ribbon: ["Address", "Schedule", "Map", "Request", "Hiring packet"],
+      resultCap: "Up to {n} results",
+      faqTitle: "Questions from agencies",
+      faqLead: "Pricing is for agencies only. Caregivers join free.",
+      faqGroups: [
+        {
+          title: "The product",
+          items: [
+            {
+              q: "Who is Kuidao for?",
+              a: "Home care, nurse registry, and home health agencies covering their own patients and cases.",
+            },
+            {
+              q: "Can a family hire a caregiver here?",
+              a: "No. Families and private clients do not hire on Kuidao.",
+            },
+            {
+              q: "Do I need a state license number to sign up?",
+              a: "No. Creating an agency account does not ask for a state license number.",
+            },
+            {
+              q: "Is this locked to one Florida county?",
+              a: "No. Kuidao starts in Florida and is built to expand nationwide.",
+            },
+          ],
+        },
+        {
+          title: "Pricing",
+          items: [
+            {
+              q: "Who pays?",
+              a: "Agencies pay a flat monthly plan. Caregivers join free and never see plans or prices.",
+            },
+            {
+              q: "What is Search?",
+              a: "Search is $149 per month: map and schedule search, in-app requests, up to 15 results, and 2 seats.",
+            },
+            {
+              q: "What does Pro add?",
+              a: "Pro is $299 per month. It includes Search, plus your hiring packet and credential vault, with 5 seats.",
+            },
+          ],
+        },
+      ],
     },
     caregiver: {
       heroKicker: "For caregivers",
@@ -558,6 +609,51 @@ export const messages: Record<Locale, Messages> = {
       proItems: ["Todo lo de Búsqueda", "Paquete de contratación y bóveda"],
       start: "Empezar",
       caregiverCta: "¿Eres cuidador? Entra gratis",
+      ribbonLabel: "BUSCA. SOLICITA. CONTRATA.",
+      ribbon: ["Dirección", "Horario", "Mapa", "Solicitud", "Paquete"],
+      resultCap: "Hasta {n} resultados",
+      faqTitle: "Preguntas de las agencias",
+      faqLead: "Los precios son solo para agencias. Los cuidadores entran gratis.",
+      faqGroups: [
+        {
+          title: "El producto",
+          items: [
+            {
+              q: "¿Para quién es Kuidao?",
+              a: "Para agencias de cuidado en el hogar, registros de enfermería y home health que cubren a sus propios pacientes y casos.",
+            },
+            {
+              q: "¿Una familia puede contratar aquí?",
+              a: "No. Las familias y los clientes particulares no contratan en Kuidao.",
+            },
+            {
+              q: "¿Necesito un número de licencia para crear la cuenta?",
+              a: "No. Crear una cuenta de agencia no pide un número de licencia estatal.",
+            },
+            {
+              q: "¿Está limitado a un condado de Florida?",
+              a: "No. Kuidao empieza en Florida y está hecho para crecer en todo el país.",
+            },
+          ],
+        },
+        {
+          title: "Precios",
+          items: [
+            {
+              q: "¿Quién paga?",
+              a: "La agencia paga un plan mensual fijo. Los cuidadores entran gratis y no ven planes ni precios.",
+            },
+            {
+              q: "¿Qué incluye Búsqueda?",
+              a: "Búsqueda cuesta $149 al mes: mapa y horario, solicitudes en la app, hasta 15 resultados y 2 usuarios.",
+            },
+            {
+              q: "¿Qué agrega Pro?",
+              a: "Pro cuesta $299 al mes. Incluye Búsqueda, más el paquete de contratación y la bóveda de credenciales, con 5 usuarios.",
+            },
+          ],
+        },
+      ],
     },
     caregiver: {
       heroKicker: "Para cuidadores",

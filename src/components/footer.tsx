@@ -15,14 +15,14 @@ export function Footer() {
 
   return (
     <footer className="bg-foreground text-primary-foreground">
-      <div className="mx-auto flex max-w-5xl flex-col gap-8 px-5 py-12 md:flex-row md:items-end md:justify-between">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-5 py-12 md:flex-row md:items-end md:justify-between">
         <div>
           <Mark className="text-primary-foreground" />
           <p className="mt-4 max-w-md text-xs leading-relaxed text-primary-foreground/75">{t.footer.legalLine}</p>
         </div>
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs text-primary-foreground/75">
           {audience === "agency" ? (
-            <Link href="/for-agencies#pricing" className={linkClass}>
+            <Link href="/pricing" className={linkClass}>
               {t.footer.pricing}
             </Link>
           ) : null}

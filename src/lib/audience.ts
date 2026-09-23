@@ -12,6 +12,7 @@ export function audienceForPath(pathname: string): Audience {
   }
   if (
     pathname === "/for-agencies" ||
+    pathname === "/pricing" ||
     pathname.startsWith("/signup/agency") ||
     pathname === "/search" ||
     pathname.startsWith("/search/")
