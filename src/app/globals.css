@@ -3,51 +3,51 @@
 @tailwind utilities;
 
 :root {
-  --background: 1 0 0;
-  --foreground: 0.3211 0 0;
+  --background: 0.99 0 0;
+  --foreground: 0 0 0;
   --card: 1 0 0;
-  --card-foreground: 0.3211 0 0;
-  --popover: 1 0 0;
-  --popover-foreground: 0.3211 0 0;
-  --primary: 0.6231 0.188 259.8145;
+  --card-foreground: 0 0 0;
+  --popover: 0.99 0 0;
+  --popover-foreground: 0 0 0;
+  --primary: 0 0 0;
   --primary-foreground: 1 0 0;
-  --secondary: 0.967 0.0029 264.5419;
-  --secondary-foreground: 0.4461 0.0263 256.8018;
-  --muted: 0.9846 0.0017 247.8389;
-  --muted-foreground: 0.551 0.0234 264.3637;
-  --accent: 0.9514 0.025 236.8242;
-  --accent-foreground: 0.3791 0.1378 265.5222;
-  --destructive: 0.6368 0.2078 25.3313;
+  --secondary: 0.94 0 0;
+  --secondary-foreground: 0 0 0;
+  --muted: 0.97 0 0;
+  --muted-foreground: 0.44 0 0;
+  --accent: 0.94 0 0;
+  --accent-foreground: 0 0 0;
+  --destructive: 0.63 0.19 23.03;
   --destructive-foreground: 1 0 0;
-  --border: 0.9276 0.0058 264.5313;
-  --input: 0.9276 0.0058 264.5313;
-  --ring: 0.6231 0.188 259.8145;
-  --radius: 0.375rem;
+  --border: 0.92 0 0;
+  --input: 0.94 0 0;
+  --ring: 0 0 0;
+  --radius: 0.5rem;
   --tracking-normal: 0em;
-  --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+  --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
+  --shadow-md: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 2px 4px -1px hsl(0 0% 0% / 0.18);
 }
 
 .dark {
-  --background: 0.2046 0 0;
-  --foreground: 0.9219 0 0;
-  --card: 0.2686 0 0;
-  --card-foreground: 0.9219 0 0;
-  --popover: 0.2686 0 0;
-  --popover-foreground: 0.9219 0 0;
-  --primary: 0.6231 0.188 259.8145;
-  --primary-foreground: 1 0 0;
-  --secondary: 0.2686 0 0;
-  --secondary-foreground: 0.9219 0 0;
-  --muted: 0.2393 0 0;
-  --muted-foreground: 0.7155 0 0;
-  --accent: 0.3791 0.1378 265.5222;
-  --accent-foreground: 0.8823 0.0571 254.1284;
-  --destructive: 0.6368 0.2078 25.3313;
-  --destructive-foreground: 1 0 0;
-  --border: 0.3715 0 0;
-  --input: 0.3715 0 0;
-  --ring: 0.6231 0.188 259.8145;
+  --background: 0 0 0;
+  --foreground: 1 0 0;
+  --card: 0.14 0 0;
+  --card-foreground: 1 0 0;
+  --popover: 0.18 0 0;
+  --popover-foreground: 1 0 0;
+  --primary: 1 0 0;
+  --primary-foreground: 0 0 0;
+  --secondary: 0.25 0 0;
+  --secondary-foreground: 1 0 0;
+  --muted: 0.23 0 0;
+  --muted-foreground: 0.72 0 0;
+  --accent: 0.32 0 0;
+  --accent-foreground: 1 0 0;
+  --destructive: 0.69 0.2 23.91;
+  --destructive-foreground: 0 0 0;
+  --border: 0.26 0 0;
+  --input: 0.32 0 0;
+  --ring: 0.72 0 0;
 }
 
 body {

@@ -1,6 +1,13 @@
 import type { Metadata } from "next";
+import { Geist } from "next/font/google";
 import { LanguageProvider } from "@/components/language-provider";
 import "./globals.css";
+
+const geist = Geist({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-geist",
+});
 
 export const metadata: Metadata = {
   title: "KUIDAO",
@@ -14,19 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin=""
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={geist.variable}>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         <LanguageProvider>{children}</LanguageProvider>
       </body>
