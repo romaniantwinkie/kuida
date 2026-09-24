@@ -3,7 +3,7 @@
 import { LangToggle } from "@/components/lang-toggle";
 import { Mark } from "@/components/mark";
 import { useI18n } from "@/components/language-provider";
-import { SonarGrid } from "@/components/ui/sonar-grid";
+import { AuroraBackground } from "@/components/ui/aurora-background";
 import { WelcomeScreen } from "@/components/ui/welcome-screen";
 
 export default function Home() {
@@ -12,8 +12,8 @@ export default function Home() {
   const tile = "w-full max-w-sm shrink-0 min-[880px]:w-96";
 
   return (
-    <SonarGrid interactive className="min-h-dvh bg-background text-foreground">
-      <div className="relative z-10 min-h-dvh">
+    <AuroraBackground>
+      <div className="relative min-h-dvh">
         <header className="pointer-events-none fixed inset-x-0 top-0 z-20">
           <div className="flex justify-center px-5 pt-5 sm:pt-6 [&_svg]:h-12 [&_svg]:sm:h-14">
             <div className="pointer-events-auto">
@@ -51,6 +51,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </SonarGrid>
+    </AuroraBackground>
   );
 }
