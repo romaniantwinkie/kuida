@@ -79,10 +79,9 @@ interface Globe3DProps {
 // Constants - Earth Texture URLs (NASA Blue Marble)
 // ============================================================================
 
-const DEFAULT_EARTH_TEXTURE =
-  "https://cdn.21st.dev/assets/localized/228deba2e4b600146bdcb6cfa359b8ead6aacc2b1c13550a29cd82824cfa1c01.jpg";
-const DEFAULT_BUMP_TEXTURE =
-  "https://cdn.21st.dev/assets/localized/839b12da2e4dd346b256cebae72e10c479a102c8980a22084c41275e4b9a0e12.png";
+// Same 21st earth maps, served locally so the canvas is not blocked by CDN CORS.
+const DEFAULT_EARTH_TEXTURE = "/globe/earth.jpg";
+const DEFAULT_BUMP_TEXTURE = "/globe/earth-bump.png";
 
 // ============================================================================
 // Utility Functions
@@ -223,13 +222,9 @@ function Marker({
         >
           <div
             className={cn(
-              "cursor-pointer overflow-hidden rounded-full bg-neutral-900 shadow-lg transition-transform duration-200",
-              hovered && "scale-125 shadow-xl ring-1 ring-white/50",
+              "flex items-center gap-1 rounded-full bg-background px-1.5 py-0.5 text-foreground shadow-sm transition-transform duration-200",
+              hovered && "scale-110",
             )}
-            style={{
-              width: "8px",
-              height: "8px",
-            }}
             onMouseEnter={handlePointerEnter}
             onMouseLeave={handlePointerLeave}
             onClick={handleClick}
@@ -237,9 +232,10 @@ function Marker({
             <img
               src={marker.src}
               alt={marker.label || "Marker"}
-              className="h-full w-full object-cover"
+              className="h-2 w-2 rounded-full object-cover"
               draggable={false}
             />
+            {marker.label ? <span className="whitespace-nowrap text-[10px] leading-none">{marker.label}</span> : null}
           </div>
         </Html>
       </group>
@@ -464,15 +460,7 @@ function Scene({ markers, config, onMarkerClick, onMarkerHover }: SceneProps) {
 // ============================================================================
 
 function LoadingFallback() {
-  return (
-    <Html center>
-      <div className="flex shrink-0 flex-col items-center gap-3">
-        <span className="inline-block shrink-0 text-sm text-neutral-400">
-          Loading globe...
-        </span>
-      </div>
-    </Html>
-  );
+  return null;
 }
 
 // ============================================================================
