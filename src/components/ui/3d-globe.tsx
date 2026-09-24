@@ -210,10 +210,8 @@ function Marker({
       {/* Circular image at the top */}
       <group ref={imageGroupRef} position={topPosition}>
         <Html
-          transform
           center
           sprite
-          distanceFactor={22}
           style={{
             pointerEvents: isVisible ? "auto" : "none",
             opacity: isVisible ? 1 : 0,
@@ -235,7 +233,7 @@ function Marker({
               className="h-1.5 w-1.5 rounded-full object-cover"
               draggable={false}
             />
-            {marker.label ? <span className="whitespace-nowrap text-[9px] leading-none">{marker.label}</span> : null}
+            {marker.label ? <span className="whitespace-nowrap text-[11px] leading-none">{marker.label}</span> : null}
           </div>
         </Html>
       </group>
