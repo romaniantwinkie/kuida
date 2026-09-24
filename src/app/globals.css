@@ -132,6 +132,24 @@ a {
   font-family: inherit;
 }
 
+.agency-map .leaflet-control-attribution {
+  max-width: 14rem;
+  margin: 0;
+  padding: 2px 6px;
+  font-size: 10px;
+  line-height: 1.25;
+  white-space: normal;
+  background: oklch(1 0 0 / 0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blur-fade-target {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .welcome-tile:hover::after,
   .welcome-tile:focus-within::after {

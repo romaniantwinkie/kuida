@@ -38,6 +38,7 @@ export interface PricingTableProps extends React.HTMLAttributes<HTMLDivElement> 
   popularLabel?: string;
   priceSuffix?: string;
   featuresLabel?: string;
+  matrixOnly?: boolean;
 }
 
 export function PricingTable({
@@ -52,6 +53,7 @@ export function PricingTable({
   popularLabel = "Popular",
   priceSuffix = "/mo",
   featuresLabel = "Features",
+  matrixOnly = false,
   ...props
 }: PricingTableProps) {
   const [selectedPlan, setSelectedPlan] = React.useState<PlanLevel>(defaultPlan);
@@ -63,7 +65,8 @@ export function PricingTable({
   return (
     <div className={cn("bg-background text-foreground", className)} {...props}>
       <div className={cn("mx-auto w-full max-w-3xl", containerClassName)}>
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row">
+        {matrixOnly ? null : (
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row">
           {plans.map((plan) => (
             <button
               key={plan.name}
@@ -98,7 +101,8 @@ export function PricingTable({
               )}
             </button>
           ))}
-        </div>
+          </div>
+        )}
 
         <div className="overflow-hidden rounded-xl border border-border">
           <div className="overflow-x-auto">
@@ -142,13 +146,15 @@ export function PricingTable({
           </div>
         </div>
 
-        <div className="mt-8 flex justify-center">
-          <InteractiveHoverButton
-            text={ctaLabel}
-            className={cn("w-auto min-w-44 border-primary px-6", buttonClassName)}
-            onClick={() => onPlanSelect?.(selectedPlan)}
-          />
-        </div>
+        {matrixOnly ? null : (
+          <div className="mt-8 flex justify-center">
+            <InteractiveHoverButton
+              text={ctaLabel}
+              className={cn("w-auto min-w-44 border-primary px-6", buttonClassName)}
+              onClick={() => onPlanSelect?.(selectedPlan)}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
