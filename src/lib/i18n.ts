@@ -61,6 +61,7 @@ export type Messages = {
     proItems: string[];
     start: string;
     caregiverCta: string;
+    globeTitle: string;
     resultCap: string;
     faqTitle: string;
     faqLead: string;
@@ -196,10 +197,10 @@ export const messages: Record<Locale, Messages> = {
     },
     agency: {
       heroKicker: "For agencies",
-      heroTitle: "Staff open cases from thousands of available caregivers.",
+      heroTitle: "Cover open cases from thousands of available caregivers.",
       heroBody:
-        "Cover urgent shifts or staff new patients in minutes. Enter the address and hours, see who’s free nearby, request in the app, hire with your packet.",
-      getStarted: "Start staffing",
+        "Cover urgent shifts or new patients in minutes. Enter the address and hours, see who’s free nearby, request in the app, hire with your packet.",
+      getStarted: "Get started",
       seeSearch: "See who’s nearby",
       nearby: "Caregivers near Miami (demo)",
       mapNote: "Sample caregivers for this preview.",
@@ -233,7 +234,8 @@ export const messages: Record<Locale, Messages> = {
       seats: "{n} seats",
       searchItems: [],
       proItems: ["Everything in Search", "Hiring packet and vault"],
-      start: "Start staffing",
+      start: "Get started",
+      globeTitle: "Nationwide, starting in Florida",
       caregiverCta: "For caregivers",
       resultCap: "Up to {n} results",
       faqTitle: "Questions",
@@ -450,7 +452,7 @@ export const messages: Record<Locale, Messages> = {
       heroTitle: "Cubre casos abiertos con miles de cuidadores disponibles.",
       heroBody:
         "Cubre turnos urgentes o asigna pacientes nuevos en minutos. Ingresa la dirección y las horas, mira quién está libre cerca, solicita en la app y contrata con tu paquete.",
-      getStarted: "Empieza a cubrir",
+      getStarted: "Empezar",
       seeSearch: "Mira quién está cerca",
       nearby: "Cuidadores cerca de Miami (demo)",
       mapNote: "Cuidadores de muestra, solo para esta vista.",
@@ -484,7 +486,8 @@ export const messages: Record<Locale, Messages> = {
       seats: "{n} usuarios",
       searchItems: [],
       proItems: ["Todo lo de Búsqueda", "Paquete de contratación y bóveda"],
-      start: "Empieza a cubrir",
+      start: "Empezar",
+      globeTitle: "En todo el país, empezando en Florida",
       caregiverCta: "Para cuidadores",
       resultCap: "Hasta {n} resultados",
       faqTitle: "Preguntas",

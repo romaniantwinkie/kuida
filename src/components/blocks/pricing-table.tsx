@@ -47,7 +47,7 @@ export function PricingTable({
   className,
   containerClassName,
   buttonClassName,
-  ctaLabel = "Start staffing",
+  ctaLabel = "Get started",
   popularLabel = "Popular",
   priceSuffix = "/mo",
   featuresLabel = "Features",

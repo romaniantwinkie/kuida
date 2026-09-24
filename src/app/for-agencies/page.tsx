@@ -2,6 +2,7 @@ import { AgencyMapLoader } from "@/components/agency-map-loader";
 import {
   AgencyCaregiverLink,
   AgencyFaq,
+  AgencyGlobeSection,
   AgencyHero,
   AgencyHow,
   AgencyMapSection,
@@ -13,12 +14,13 @@ export default function ForAgenciesPage() {
   return (
     <Shell>
       <AgencyHero />
+      <AgencyHow />
       <AgencyMapSection>
         <AgencyMapLoader />
       </AgencyMapSection>
-      <AgencyHow />
       <AgencyPricing />
       <AgencyFaq />
+      <AgencyGlobeSection />
       <AgencyCaregiverLink />
     </Shell>
   );

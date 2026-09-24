@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
+import { AgencyGlobeLoader } from "@/components/agency-globe-loader";
 import { PricingTable } from "@/components/blocks/pricing-table";
 import { Card, CardContent } from "@/components/ui/card";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
@@ -195,6 +196,21 @@ export function AgencyFaq() {
               ))}
             </div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function AgencyGlobeSection() {
+  const { t } = useI18n();
+
+  return (
+    <section id="globe" className="scroll-mt-28 bg-background pb-8 pt-4 lg:pb-12">
+      <div className="mx-auto max-w-6xl px-5">
+        <h2 className="text-3xl tracking-tight md:text-5xl">{t.agency.globeTitle}</h2>
+        <div className="mt-6">
+          <AgencyGlobeLoader />
         </div>
       </div>
     </section>
