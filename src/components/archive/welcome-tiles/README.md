@@ -6,17 +6,9 @@ To put these tiles back on `/`:
 
 1. In `src/app/page.tsx`, import `WelcomeScreen` from `@/components/ui/welcome-screen` (or from this folder).
 2. Keep `SonarGrid` if that is still the page background.
-3. Render one card per role:
+3. Render Caregiver first, then Agency:
 
 ```tsx
-<WelcomeScreen
-  className="w-full max-w-sm shrink-0 min-[880px]:w-96"
-  imageUrl="/roles/agency.jpg"
-  imageAlt={t.home.agencyImageAlt}
-  title={t.home.agencyButton}
-  buttonText={t.home.agencyCta}
-  href="/for-agencies"
-/>
 <WelcomeScreen
   className="w-full max-w-sm shrink-0 min-[880px]:w-96"
   imageUrl="/roles/caregiver.jpg"
@@ -25,6 +17,14 @@ To put these tiles back on `/`:
   title={t.home.caregiverButton}
   buttonText={t.home.caregiverCta}
   href="/for-caregivers"
+/>
+<WelcomeScreen
+  className="w-full max-w-sm shrink-0 min-[880px]:w-96"
+  imageUrl="/roles/agency.jpg"
+  imageAlt={t.home.agencyImageAlt}
+  title={t.home.agencyButton}
+  buttonText={t.home.agencyCta}
+  href="/for-agencies"
 />
 ```
 

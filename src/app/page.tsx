@@ -3,8 +3,8 @@
 import { LangToggle } from "@/components/lang-toggle";
 import { Mark } from "@/components/mark";
 import { useI18n } from "@/components/language-provider";
-import { InteractiveTravelCard } from "@/components/ui/3d-card";
 import { SonarGrid } from "@/components/ui/sonar-grid";
+import { WelcomeScreen } from "@/components/ui/welcome-screen";
 
 export default function Home() {
   const { t } = useI18n();
@@ -27,21 +27,23 @@ export default function Home() {
             <h1 className="mb-6 text-center text-5xl font-bold tracking-tight text-foreground sm:mb-8">
               {t.home.title}
             </h1>
-            <div className="flex w-full flex-col items-center justify-center gap-8 [perspective:1200px] min-[880px]:w-auto min-[880px]:flex-row">
-              <InteractiveTravelCard
-                title={t.home.agencyButton}
-                imageUrl="/roles/agency.jpg"
-                imageAlt={t.home.agencyImageAlt}
-                actionText={t.home.agencyCta}
-                href="/for-agencies"
-              />
-              <InteractiveTravelCard
-                title={t.home.caregiverButton}
+            <div className="flex w-full flex-col items-center justify-center gap-6 min-[880px]:w-auto min-[880px]:flex-row">
+              <WelcomeScreen
+                className="w-full max-w-sm shrink-0 min-[880px]:w-96"
                 imageUrl="/roles/caregiver.jpg"
                 imageAlt={t.home.caregiverImageAlt}
                 imagePosition="center top"
-                actionText={t.home.caregiverCta}
+                title={t.home.caregiverButton}
+                buttonText={t.home.caregiverCta}
                 href="/for-caregivers"
+              />
+              <WelcomeScreen
+                className="w-full max-w-sm shrink-0 min-[880px]:w-96"
+                imageUrl="/roles/agency.jpg"
+                imageAlt={t.home.agencyImageAlt}
+                title={t.home.agencyButton}
+                buttonText={t.home.agencyCta}
+                href="/for-agencies"
               />
             </div>
           </div>
