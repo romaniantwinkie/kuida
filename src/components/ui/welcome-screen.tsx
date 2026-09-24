@@ -70,7 +70,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col items-center justify-between overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-sm",
+        "flex w-full flex-col items-center justify-between overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-sm",
         className,
       )}
     >

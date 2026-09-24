@@ -11,17 +11,26 @@ export default function Home() {
   const { t } = useI18n();
   const router = useRouter();
 
+  const tile =
+    "aspect-[384/812] w-full max-w-sm shrink-0 min-[880px]:w-96";
+
   return (
     <SonarGrid interactive className="min-h-dvh bg-background text-foreground">
       <div className="relative z-10 min-h-dvh">
-        <div className="absolute right-4 top-4 z-20 sm:right-8 sm:top-6">
-          <LangToggle />
-        </div>
-        <div className="mx-auto flex min-h-dvh w-full max-w-5xl flex-col items-center px-5 pb-12 pt-16 sm:px-8 sm:pt-10">
-          <Mark large />
-          <div className="mt-8 grid w-full grid-cols-1 items-stretch gap-5 sm:mt-10 md:grid-cols-2">
+        <header className="pointer-events-none fixed inset-x-0 top-0 z-20">
+          <div className="flex justify-center px-5 pt-5 sm:pt-6 [&_svg]:h-12 [&_svg]:sm:h-14">
+            <div className="pointer-events-auto">
+              <Mark large />
+            </div>
+          </div>
+          <div className="pointer-events-auto absolute right-4 top-4 sm:right-8 sm:top-6">
+            <LangToggle />
+          </div>
+        </header>
+        <div className="flex min-h-dvh flex-col items-center justify-center px-5 py-20">
+          <div className="flex w-full flex-col items-center justify-center gap-6 min-[880px]:w-auto min-[880px]:flex-row">
             <WelcomeScreen
-              className="min-h-[32rem]"
+              className={tile}
               imageUrl="/roles/agency.jpg"
               imageAlt={t.home.agencyImageAlt}
               title={t.home.agencyButton}
@@ -29,7 +38,7 @@ export default function Home() {
               onButtonClick={() => router.push("/for-agencies")}
             />
             <WelcomeScreen
-              className="min-h-[32rem]"
+              className={tile}
               imageUrl="/roles/caregiver.jpg"
               imageAlt={t.home.caregiverImageAlt}
               title={t.home.caregiverButton}
