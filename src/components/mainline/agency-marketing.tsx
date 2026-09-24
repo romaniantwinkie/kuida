@@ -10,7 +10,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { useI18n } from "@/components/language-provider";
 import { caregiverArea, caregiverWindow, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
-import { fill } from "@/lib/i18n";
 import { PLANS } from "@/lib/product";
 import { DashedLine } from "@/components/mainline/dashed-line";
 
@@ -159,10 +158,8 @@ export function AgencyPricing() {
             },
           ]}
           features={[
-            { name: fill(copy.seats, { n: 2 }), included: "search" },
-            { name: fill(copy.resultCap, { n: PLANS.search.resultCap }), included: "all" },
-            { name: fill(copy.seats, { n: 5 }), included: "pro" },
-            { name: copy.proItems[1] ?? copy.proItems[0], included: "pro" },
+            ...copy.searchItems.map((name) => ({ name, included: "all" })),
+            ...copy.proItems.map((name) => ({ name, included: "pro" })),
           ]}
         />
       </div>

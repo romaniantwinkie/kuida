@@ -57,13 +57,11 @@ export type Messages = {
     proName: string;
     proPrice: string;
     perMonth: string;
-    seats: string;
     searchItems: string[];
     proItems: string[];
     start: string;
     caregiverCta: string;
     globeTitle: string;
-    resultCap: string;
     faqTitle: string;
     faqLead: string;
     faqGroups: { title: string; items: { q: string; a: string }[] }[];
@@ -233,13 +231,25 @@ export const messages: Record<Locale, Messages> = {
       proName: "Pro",
       proPrice: "Contact for Pricing",
       perMonth: "/mo",
-      seats: "{n} seats",
-      searchItems: [],
-      proItems: ["Everything in Search", "Hiring packet and vault"],
+      searchItems: [
+        "Address + schedule search",
+        "Map and week view of available caregivers",
+        "In-app requests (first contact in Kuidao)",
+        "Short results list for the case window",
+        "Agency office access",
+        "Email support",
+      ],
+      proItems: [
+        "Everything in Search",
+        "Custom hiring packet sent in-app",
+        "Credential / document vault",
+        "Priority matching for urgent shifts",
+        "Dedicated onboarding help",
+        "Phone + email support",
+      ],
       start: "Get started",
       globeTitle: "Nationwide, starting in Florida",
       caregiverCta: "For caregivers",
-      resultCap: "Up to {n} results",
       faqTitle: "Questions",
       faqLead: "A few answers before you start.",
       faqGroups: [
@@ -486,13 +496,25 @@ export const messages: Record<Locale, Messages> = {
       proName: "Pro",
       proPrice: "Consultar precio",
       perMonth: "/mes",
-      seats: "{n} usuarios",
-      searchItems: [],
-      proItems: ["Todo lo de Búsqueda", "Paquete de contratación y bóveda"],
+      searchItems: [
+        "Búsqueda por dirección y horario",
+        "Mapa y vista semanal de cuidadores disponibles",
+        "Solicitudes en la app (primer contacto en Kuidao)",
+        "Lista corta para el horario del caso",
+        "Acceso para la oficina",
+        "Soporte por correo",
+      ],
+      proItems: [
+        "Todo lo de Búsqueda",
+        "Paquete de contratación a medida, enviado en la app",
+        "Bóveda de credenciales y documentos",
+        "Prioridad para turnos urgentes",
+        "Ayuda de incorporación dedicada",
+        "Soporte por teléfono y correo",
+      ],
       start: "Empezar",
       globeTitle: "En todo el país, empezando en Florida",
       caregiverCta: "Para cuidadores",
-      resultCap: "Hasta {n} resultados",
       faqTitle: "Preguntas",
       faqLead: "Unas respuestas antes de empezar.",
       faqGroups: [

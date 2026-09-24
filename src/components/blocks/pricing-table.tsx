@@ -107,7 +107,7 @@ export function PricingTable({
                 <div className="flex-1 text-sm font-medium">{featuresLabel}</div>
                 <div className="flex items-center gap-8 text-sm">
                   {plans.map((plan) => (
-                    <div key={plan.level} className="w-16 text-center font-medium">
+                    <div key={plan.level} className="w-24 text-center text-sm font-medium">
                       {plan.name}
                     </div>
                   ))}
@@ -126,7 +126,7 @@ export function PricingTable({
                     {plans.map((plan) => (
                       <div
                         key={plan.level}
-                        className={cn("flex w-16 justify-center", plan.level === selectedPlan && "font-medium")}
+                        className={cn("flex w-24 justify-center", plan.level === selectedPlan && "font-medium")}
                       >
                         {shouldShowCheck(feature.included, plan.level) ? (
                           <CheckIcon className="h-5 w-5 text-foreground" />
