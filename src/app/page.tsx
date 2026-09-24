@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { LangToggle } from "@/components/lang-toggle";
 import { Mark } from "@/components/mark";
 import { useI18n } from "@/components/language-provider";
@@ -9,7 +8,6 @@ import { WelcomeScreen } from "@/components/ui/welcome-screen";
 
 export default function Home() {
   const { t } = useI18n();
-  const router = useRouter();
 
   const tile = "w-full max-w-sm shrink-0 min-[880px]:w-96";
 
@@ -38,7 +36,7 @@ export default function Home() {
               imageAlt={t.home.agencyImageAlt}
               title={t.home.agencyButton}
               buttonText={t.home.agencyCta}
-              onButtonClick={() => router.push("/for-agencies")}
+              href="/for-agencies"
             />
             <WelcomeScreen
               className={tile}
@@ -47,7 +45,7 @@ export default function Home() {
               imagePosition="center top"
               title={t.home.caregiverButton}
               buttonText={t.home.caregiverCta}
-              onButtonClick={() => router.push("/for-caregivers")}
+              href="/for-caregivers"
             />
             </div>
           </div>

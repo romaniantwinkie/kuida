@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
 interface WelcomeScreenProps {
   imageUrl: string;
@@ -11,11 +11,9 @@ interface WelcomeScreenProps {
   title: React.ReactNode;
   description?: string;
   buttonText: string;
-  onButtonClick: () => void;
+  href: string;
   /** CSS object-position for the hero crop. Defaults to center. */
   imagePosition?: string;
-  secondaryActionText?: string;
-  onSecondaryActionClick?: () => void;
   className?: string;
 }
 
@@ -29,10 +27,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   title,
   description,
   buttonText,
-  onButtonClick,
+  href,
   imagePosition = "center",
-  secondaryActionText,
-  onSecondaryActionClick,
   className,
 }) => {
   const containerVariants = {
@@ -71,7 +67,19 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   };
 
   return (
-    <div className={cn("welcome-tile relative rounded-3xl", className)}>
+    <Link
+      href={href}
+      onKeyDown={(event) => {
+        if (event.key === " ") {
+          event.preventDefault();
+          event.currentTarget.click();
+        }
+      }}
+      className={cn(
+        "welcome-tile relative block rounded-3xl outline-none focus-visible:outline-none",
+        className,
+      )}
+    >
       <div className="flex w-full flex-col items-start overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-sm">
       <motion.div
         className="relative w-full shrink-0"
@@ -107,29 +115,14 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             {description}
           </motion.p>
         ) : null}
-        <motion.div variants={itemVariants} className="w-full">
-          <Button
-            onClick={onButtonClick}
-            className="h-12 w-full bg-primary text-base text-primary-foreground hover:bg-primary/90"
-            size="lg"
-          >
-            {buttonText}
-          </Button>
-        </motion.div>
-
-        {secondaryActionText && onSecondaryActionClick ? (
-          <motion.div variants={itemVariants} className="text-center">
-            <Button
-              variant="link"
-              onClick={onSecondaryActionClick}
-              className="text-sm text-muted-foreground"
-            >
-              {secondaryActionText}
-            </Button>
-          </motion.div>
-        ) : null}
+        <motion.span
+          variants={itemVariants}
+          className="flex min-h-14 w-full items-center justify-center rounded-md bg-primary px-4 py-3 text-center text-2xl font-semibold leading-tight text-primary-foreground shadow"
+        >
+          {buttonText}
+        </motion.span>
       </motion.div>
       </div>
-    </div>
+    </Link>
   );
 };

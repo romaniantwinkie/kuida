@@ -512,7 +512,7 @@ export const messages: Record<Locale, Messages> = {
       caregiverBody: "Entrar es gratis. Pon tus horas y tu zona. Las agencias te escriben en la app.",
       continue: "Continuar",
       agencyButton: "Soy una agencia.",
-      caregiverButton: "Soy cuidador.",
+      caregiverButton: "Soy un/a cuidador/a.",
       agencyCta: "Encuentra un cuidador ahora.",
       caregiverCta: "Encuentra trabajo ahora.",
       agencySubtitle: "Elige entre cientos de cuidadores disponibles",
