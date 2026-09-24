@@ -53,14 +53,8 @@ const config: Config = {
         sm: "var(--shadow-sm)",
         md: "var(--shadow-md)",
       },
-      keyframes: {
-        aurora: {
-          from: { backgroundPosition: "50% 50%, 50% 50%" },
-          to: { backgroundPosition: "350% 50%, 350% 50%" },
-        },
-      },
-      animation: {
-        aurora: "aurora 60s linear infinite",
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
       },
     },
   },
