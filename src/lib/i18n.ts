@@ -32,6 +32,8 @@ export type Messages = {
     continue: string;
     agencyButton: string;
     caregiverButton: string;
+    agencyCta: string;
+    caregiverCta: string;
     agencySubtitle: string;
     caregiverSubtitle: string;
     agencyImageAlt: string;
@@ -194,8 +196,10 @@ export const messages: Record<Locale, Messages> = {
       caregiverTitle: "I want shifts",
       caregiverBody: "Free to join. Set your hours and area. Agencies message you in the app.",
       continue: "Continue",
-      agencyButton: "I am an Agency",
-      caregiverButton: "I am a Caregiver",
+      agencyButton: "I am an Agency.",
+      caregiverButton: "I am a Caregiver.",
+      agencyCta: "Find a Caregiver now.",
+      caregiverCta: "Find work now.",
       agencySubtitle: "Choose from hundreds of available caregivers",
       caregiverSubtitle: "Find work from multiple agencies at once",
       agencyImageAlt: "Care coordinators reviewing a case together",
@@ -507,8 +511,10 @@ export const messages: Record<Locale, Messages> = {
       caregiverTitle: "Quiero turnos",
       caregiverBody: "Entrar es gratis. Pon tus horas y tu zona. Las agencias te escriben en la app.",
       continue: "Continuar",
-      agencyButton: "Soy una agencia",
-      caregiverButton: "Soy cuidador",
+      agencyButton: "Soy una agencia.",
+      caregiverButton: "Soy cuidador.",
+      agencyCta: "Encuentra un cuidador ahora.",
+      caregiverCta: "Encuentra trabajo ahora.",
       agencySubtitle: "Elige entre cientos de cuidadores disponibles",
       caregiverSubtitle: "Encuentra trabajo con varias agencias a la vez",
       agencyImageAlt: "Coordinadores de cuidado revisando un caso juntos",
