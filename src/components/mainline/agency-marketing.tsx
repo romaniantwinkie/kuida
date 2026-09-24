@@ -6,12 +6,11 @@ import { useRouter } from "next/navigation";
 import { ChevronDown } from "lucide-react";
 import { AgencyGlobeLoader } from "@/components/agency-globe-loader";
 import { PricingTable } from "@/components/blocks/pricing-table";
-import { Card, CardContent } from "@/components/ui/card";
+import { GlowCard } from "@/components/ui/spotlight-card";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { useI18n } from "@/components/language-provider";
 import { caregiverArea, caregiverWindow, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
 import { PLANS } from "@/lib/product";
-import { DashedLine } from "@/components/mainline/dashed-line";
 
 // Mainline-derived agency sections, restyled with Verce tokens. See NOTICE.md.
 
@@ -93,29 +92,17 @@ export function AgencyHow() {
       <div className="mx-auto max-w-6xl px-5">
         <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{copy.howKicker}</p>
         <h2 className="mt-3 text-3xl tracking-tight md:text-5xl">{copy.howTitle}</h2>
-        <Card className="mt-10 rounded-3xl">
-          <CardContent className="flex flex-col p-0 md:flex-row">
-            {copy.steps.map((step, index) => (
-              <div key={step.key} className="flex flex-1 flex-col md:flex-row">
-                <div className="flex-1 p-6 md:p-8">
-                  <p className="text-xs tracking-widest text-muted-foreground">0{index + 1}</p>
-                  <h3 className="mt-4 text-2xl font-semibold tracking-tight">{step.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
-                </div>
-                {index < copy.steps.length - 1 ? (
-                  <>
-                    <div className="relative hidden md:block">
-                      <DashedLine orientation="vertical" />
-                    </div>
-                    <div className="relative block px-6 md:hidden">
-                      <DashedLine />
-                    </div>
-                  </>
-                ) : null}
+        <div className="mt-10 grid items-stretch gap-4 md:grid-cols-3">
+          {copy.steps.map((step, index) => (
+            <GlowCard key={step.key} glowColor="grey" customSize className="h-full min-h-56 w-full">
+              <div className="p-2">
+                <p className="text-xs tracking-widest text-muted-foreground">0{index + 1}</p>
+                <h3 className="mt-4 text-2xl font-semibold tracking-tight">{step.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{step.body}</p>
               </div>
-            ))}
-          </CardContent>
-        </Card>
+            </GlowCard>
+          ))}
+        </div>
         <p className="mt-6 max-w-xl text-sm text-muted-foreground">{copy.clarity}</p>
       </div>
     </section>
