@@ -55,6 +55,7 @@ export type Messages = {
     popular: string;
     searchName: string;
     proName: string;
+    proPrice: string;
     perMonth: string;
     seats: string;
     searchItems: string[];
@@ -226,10 +227,11 @@ export const messages: Record<Locale, Messages> = {
       clarity: "We fill the shift. We are not your EMR, registry, or employer.",
       pricingKicker: "Agencies only",
       pricingTitle: "Pricing",
-      pricingBody: "Two flat monthly plans for the office.",
+      pricingBody: "Search is a flat monthly plan. Pro is quoted for the office.",
       popular: "Popular",
       searchName: "Search",
       proName: "Pro",
+      proPrice: "Contact for Pricing",
       perMonth: "/mo",
       seats: "{n} seats",
       searchItems: [],
@@ -267,7 +269,7 @@ export const messages: Record<Locale, Messages> = {
           items: [
             {
               q: "Who pays?",
-              a: "The agency pays a flat monthly plan. Caregivers join free and never see plans or prices.",
+              a: "The agency pays. Search is $299 a month. Pro is quoted for the office. Caregivers join free and never see plans or prices.",
             },
           ],
         },
@@ -346,7 +348,7 @@ export const messages: Record<Locale, Messages> = {
       email: "Work email",
       plan: "Plan",
       searchPlan: "Search · ${price}",
-      proPlan: "Pro · ${price}",
+      proPlan: "Pro · Contact for Pricing",
       continue: "Continue",
       done: "Request received. This demo does not save accounts yet.",
       openSearch: "Open search preview",
@@ -478,10 +480,11 @@ export const messages: Record<Locale, Messages> = {
       clarity: "Cubrimos el turno. No somos tu EMR, tu registro ni tu empleador.",
       pricingKicker: "Solo agencias",
       pricingTitle: "Precios",
-      pricingBody: "Dos planes mensuales fijos para la oficina.",
+      pricingBody: "Búsqueda es un plan mensual fijo. Pro se cotiza para la oficina.",
       popular: "Destacado",
       searchName: "Búsqueda",
       proName: "Pro",
+      proPrice: "Consultar precio",
       perMonth: "/mes",
       seats: "{n} usuarios",
       searchItems: [],
@@ -519,7 +522,7 @@ export const messages: Record<Locale, Messages> = {
           items: [
             {
               q: "¿Quién paga?",
-              a: "La agencia paga un plan mensual fijo. Los cuidadores entran gratis y no ven planes ni precios.",
+              a: "Paga la agencia. Búsqueda cuesta $299 al mes. Pro se cotiza para la oficina. Los cuidadores entran gratis y no ven planes ni precios.",
             },
           ],
         },
@@ -598,7 +601,7 @@ export const messages: Record<Locale, Messages> = {
       email: "Correo de trabajo",
       plan: "Plan",
       searchPlan: "Búsqueda · ${price}",
-      proPlan: "Pro · ${price}",
+      proPlan: "Pro · Consultar precio",
       continue: "Continuar",
       done: "Recibimos tu solicitud. Esta demo todavía no guarda cuentas.",
       openSearch: "Abrir la búsqueda de prueba",

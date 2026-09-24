@@ -1,4 +1,4 @@
 export const PLANS = {
-  search: { monthly: 149, resultCap: 15 },
-  pro: { monthly: 299 },
+  search: { monthly: 299, resultCap: 15 },
+  pro: {},
 } as const;

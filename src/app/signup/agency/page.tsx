@@ -50,7 +50,7 @@ export default function AgencySignup() {
               </label>
               <label className="flex min-h-11 items-center gap-2">
                 <input type="radio" name="plan" value="pro" />
-                {fill(copy.proPlan, { price: PLANS.pro.monthly })}
+                {copy.proPlan}
               </label>
             </fieldset>
             <button type="submit" className="min-h-11 w-full rounded-md bg-primary text-sm text-primary-foreground hover:bg-foreground">

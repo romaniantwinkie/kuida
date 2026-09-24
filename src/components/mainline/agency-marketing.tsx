@@ -155,7 +155,7 @@ export function AgencyPricing() {
               name: copy.proName,
               level: "pro",
               popular: true,
-              price: { monthly: PLANS.pro.monthly, yearly: PLANS.pro.monthly },
+              priceLabel: copy.proPrice,
             },
           ]}
           features={[

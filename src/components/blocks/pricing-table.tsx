@@ -19,10 +19,11 @@ export interface PricingFeature {
 export interface PricingPlan {
   name: string;
   level: PlanLevel;
-  price: {
+  price?: {
     monthly: number;
     yearly: number;
   };
+  priceLabel?: string;
   popular?: boolean;
 }
 
@@ -79,18 +80,22 @@ export function PricingTable({
                   <span className="rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">{popularLabel}</span>
                 ) : null}
               </div>
-              <div className="flex items-baseline gap-1">
-                <NumberFlow
-                  format={{
-                    style: "currency",
-                    currency: "USD",
-                    trailingZeroDisplay: "stripIfInteger",
-                  }}
-                  value={plan.price.monthly}
-                  className="text-4xl font-medium tracking-tight"
-                />
-                <span className="text-sm font-normal text-muted-foreground">{priceSuffix}</span>
-              </div>
+              {plan.priceLabel ? (
+                <p className="text-2xl font-medium tracking-tight">{plan.priceLabel}</p>
+              ) : (
+                <div className="flex items-baseline gap-1">
+                  <NumberFlow
+                    format={{
+                      style: "currency",
+                      currency: "USD",
+                      trailingZeroDisplay: "stripIfInteger",
+                    }}
+                    value={plan.price?.monthly ?? 0}
+                    className="text-4xl font-medium tracking-tight"
+                  />
+                  <span className="text-sm font-normal text-muted-foreground">{priceSuffix}</span>
+                </div>
+              )}
             </button>
           ))}
         </div>
