@@ -61,7 +61,6 @@ export type Messages = {
     proItems: string[];
     start: string;
     caregiverCta: string;
-    globeTitle: string;
     faqTitle: string;
     faqLead: string;
     faqGroups: { title: string; items: { q: string; a: string }[] }[];
@@ -248,7 +247,6 @@ export const messages: Record<Locale, Messages> = {
         "Phone + email support",
       ],
       start: "Get started",
-      globeTitle: "Nationwide, starting in Florida",
       caregiverCta: "For caregivers",
       faqTitle: "Questions",
       faqLead: "A few answers before you start.",
@@ -513,7 +511,6 @@ export const messages: Record<Locale, Messages> = {
         "Soporte por teléfono y correo",
       ],
       start: "Empezar",
-      globeTitle: "En todo el país, empezando en Florida",
       caregiverCta: "Para cuidadores",
       faqTitle: "Preguntas",
       faqLead: "Unas respuestas antes de empezar.",

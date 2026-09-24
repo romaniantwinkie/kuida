@@ -200,16 +200,9 @@ export function AgencyFaq() {
 }
 
 export function AgencyGlobeSection() {
-  const { t } = useI18n();
-
   return (
-    <section id="globe" className="scroll-mt-28 bg-background pb-8 pt-4 lg:pb-12">
-      <div className="mx-auto max-w-6xl px-5">
-        <h2 className="text-3xl tracking-tight md:text-5xl">{t.agency.globeTitle}</h2>
-        <div className="mt-6">
-          <AgencyGlobeLoader />
-        </div>
-      </div>
+    <section id="globe" className="bg-background">
+      <AgencyGlobeLoader />
     </section>
   );
 }
