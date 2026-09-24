@@ -39,9 +39,14 @@ export const AnimatedList = React.memo(
     }, [childrenArray.length, delay, reduced]);
 
     const itemsToShow = useMemo(() => {
-      if (reduced) return childrenArray.slice(0, cap);
+      if (childrenArray.length === 0) return [];
+      const count = Math.min(cap, childrenArray.length);
+      if (reduced || maxVisible != null) {
+        const start = reduced ? 0 : index % childrenArray.length;
+        return Array.from({ length: count }, (_, offset) => childrenArray[(start + offset) % childrenArray.length]);
+      }
       return childrenArray.slice(0, index + 1).reverse().slice(0, cap);
-    }, [cap, childrenArray, index, reduced]);
+    }, [cap, childrenArray, index, maxVisible, reduced]);
 
     return (
       <div className={`flex flex-col items-center gap-2 ${className ?? ""}`}>
@@ -73,7 +78,7 @@ export function AnimatedListItem({
   return (
     <motion.div
       layout
-      initial={{ scale: 0.96, opacity: 0 }}
+      initial={{ scale: 1, opacity: 1 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ scale: 0.96, opacity: 0 }}
       transition={{ type: "spring", stiffness: 350, damping: 40 }}

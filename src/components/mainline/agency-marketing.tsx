@@ -24,7 +24,7 @@ import { PricingTable } from "@/components/blocks/pricing-table";
 import { LangToggle } from "@/components/lang-toggle";
 import { useI18n } from "@/components/language-provider";
 import { Mark } from "@/components/mark";
-import { caregiverArea, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
+import { caregiverArea, caregiverWindow, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
 import { PLANS } from "@/lib/product";
 import { cn } from "@/lib/utils";
 
@@ -169,64 +169,84 @@ export function AgencyHeader() {
 export function AgencyHero() {
   const { t, locale } = useI18n();
   const copy = t.agency;
-  const feed = MOCK_CAREGIVERS.slice(0, 4);
+  const results = MOCK_CAREGIVERS.slice(0, 4);
 
   return (
-    <section className="relative mx-auto w-full max-w-6xl overflow-hidden pt-16 lg:pt-28">
+    <section className="relative mx-auto w-full max-w-6xl pt-12 lg:pt-24">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 isolate -z-10 bg-[radial-gradient(20%_80%_at_20%_0%,oklch(var(--foreground)/0.08),transparent)]" />
       </div>
       <div className="relative z-10 flex max-w-3xl flex-col gap-5 px-5">
-        <BlurFade inView>
-          <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{copy.heroKicker}</p>
-          <h1 className="mt-4 text-balance text-4xl font-medium leading-tight tracking-tight text-foreground md:text-5xl">
-            <span className="mr-2">{copy.heroLead}</span>
-            <TextRotate
-              texts={copy.heroRotate}
-              mainClassName="inline-flex overflow-hidden text-foreground"
-              rotationInterval={2200}
-            />
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-snug text-muted-foreground">{copy.heroBody}</p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
-            <Button asChild className="min-h-11 px-5">
-              <Link href="/signup/agency">{copy.getStarted}</Link>
-            </Button>
-            <Button asChild variant="outline" className="min-h-11 px-5">
-              <a href="#map">{copy.seeSearch}</a>
-            </Button>
-          </div>
-        </BlurFade>
+        <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{copy.heroKicker}</p>
+        <h1 className="text-balance text-4xl font-medium leading-tight tracking-tight text-foreground md:text-5xl">
+          <span className="mr-2">{copy.heroLead}</span>
+          <TextRotate
+            texts={copy.heroRotate}
+            mainClassName="inline-flex overflow-hidden text-foreground"
+            rotationInterval={2200}
+          />
+        </h1>
+        <p className="max-w-2xl text-lg leading-snug text-muted-foreground">{copy.heroBody}</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <Button asChild className="min-h-11 px-5">
+            <Link href="/signup/agency">{copy.getStarted}</Link>
+          </Button>
+          <Button asChild variant="outline" className="min-h-11 px-5">
+            <a href="#map">{copy.seeSearch}</a>
+          </Button>
+        </div>
       </div>
 
-      <div className="relative mt-10 px-5 pb-16 lg:mt-16 lg:pb-28">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-x-8 top-0 h-40 -translate-y-1/3 rounded-full bg-[radial-gradient(ellipse_at_center,oklch(var(--foreground)/0.08),transparent_70%)] blur-2xl"
-        />
-        <BlurFade inView delay={0.08}>
-          <MockupFrame size="small" className="relative mx-auto max-w-5xl border border-border bg-background shadow-xl md:-mr-8">
-            <div className="mb-2 flex items-center px-2 pt-1">
-              <span className="rounded-sm border border-border bg-card px-1.5 py-0.5 text-xs font-medium">{copy.demoLabel}</span>
+      <div className="relative mt-8 px-5 pb-16 lg:mt-12 lg:pb-28">
+        <MockupFrame size="small" className="mx-auto w-full max-w-5xl border border-border bg-background shadow-xl">
+          <Mockup className="w-full flex-col border-border bg-background">
+            <div className="flex items-center gap-3 border-b border-border bg-muted px-3 py-2">
+              <div className="flex shrink-0 gap-1.5" aria-hidden="true">
+                <span className="size-2.5 rounded-full bg-foreground/20" />
+                <span className="size-2.5 rounded-full bg-foreground/35" />
+                <span className="size-2.5 rounded-full bg-foreground/50" />
+              </div>
+              <div className="flex min-w-0 flex-1 justify-center">
+                <span className="truncate rounded-md border border-border bg-background px-3 py-1 text-xs text-muted-foreground">
+                  {copy.demoUrl}
+                </span>
+              </div>
+              <span className="shrink-0 rounded-sm border border-border bg-card px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide">
+                {copy.demoLabel}
+              </span>
             </div>
-            <Mockup className="w-full border-border bg-muted">
-              <div className="grid gap-3 p-3 md:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
-                <div className="space-y-3">
-                  <div className="rounded-md border border-border bg-background px-3 py-2">
-                    <p className="text-xs text-muted-foreground">{copy.demoAddressLabel}</p>
-                    <p className="text-sm text-foreground">{copy.demoAddress}</p>
-                  </div>
-                  <span className="inline-flex rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground">
-                    {copy.demoHours}
-                  </span>
-                  <div className="h-36 overflow-hidden rounded-md border border-border md:h-44">
-                    <StreetTiles />
-                  </div>
+            <div className="grid min-h-[28rem] md:grid-cols-[18rem_minmax(0,1fr)]">
+              <div className="flex flex-col gap-3 border-b border-border p-3 md:border-b-0 md:border-r">
+                <div className="rounded-md border border-border bg-background px-3 py-2">
+                  <p className="text-xs text-muted-foreground">{copy.demoAddressLabel}</p>
+                  <p className="text-sm text-foreground">{copy.demoAddress}</p>
                 </div>
-                <div className="h-44 overflow-hidden md:h-auto md:max-h-64">
+                <span className="inline-flex w-fit rounded-full border border-border bg-background px-3 py-1 text-xs text-foreground">
+                  {copy.demoHours}
+                </span>
+                <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{copy.resultsLabel}</p>
+                <ul className="grid gap-2">
+                  {results.map((caregiver) => (
+                    <li key={caregiver.id} className="rounded-md border border-border bg-card px-3 py-2">
+                      <p className="text-sm font-medium text-foreground">
+                        {caregiver.firstName} {caregiver.lastInitial}. · {caregiver.role}
+                      </p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">
+                        {caregiver.miles} {t.units.mi} · {caregiverWindow(caregiver, locale)}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="relative min-h-72">
+                <StreetTiles className="absolute inset-0 h-full" />
+                <div className="absolute inset-x-3 bottom-3 z-10 max-h-[16rem] overflow-hidden md:left-auto md:w-64">
                   <AnimatedList delay={1800} maxVisible={3} className="items-stretch">
-                    {feed.map((caregiver) => (
-                      <div key={caregiver.id} className="rounded-lg border border-border bg-background px-3 py-2 text-left">
+                    {results.map((caregiver) => (
+                      <div
+                        key={caregiver.id}
+                        className="rounded-lg border border-border bg-background/95 px-3 py-2 text-left shadow-sm"
+                      >
                         <p className="text-xs font-medium text-foreground">{copy.requestSent}</p>
                         <p className="mt-1 text-xs text-muted-foreground">
                           {caregiver.firstName} {caregiver.lastInitial}. · {caregiver.role} · {caregiverArea(caregiver, locale)}
@@ -237,9 +257,9 @@ export function AgencyHero() {
                   </AnimatedList>
                 </div>
               </div>
-            </Mockup>
-          </MockupFrame>
-        </BlurFade>
+            </div>
+          </Mockup>
+        </MockupFrame>
       </div>
     </section>
   );

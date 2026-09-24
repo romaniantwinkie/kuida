@@ -45,6 +45,8 @@ export type Messages = {
     getStarted: string;
     seeSearch: string;
     demoLabel: string;
+    demoUrl: string;
+    resultsLabel: string;
     demoAddressLabel: string;
     demoAddress: string;
     demoHours: string;
@@ -234,6 +236,8 @@ export const messages: Record<Locale, Messages> = {
       getStarted: "Get started",
       seeSearch: "See who’s nearby",
       demoLabel: "Demo",
+      demoUrl: "kuidao.app/search",
+      resultsLabel: "Results",
       demoAddressLabel: "Address",
       demoAddress: "Brickell, Miami",
       demoHours: "Tue 8:00 AM–2:00 PM",
@@ -587,6 +591,8 @@ export const messages: Record<Locale, Messages> = {
       getStarted: "Empezar",
       seeSearch: "Mira quién está cerca",
       demoLabel: "Demo",
+      demoUrl: "kuidao.app/search",
+      resultsLabel: "Resultados",
       demoAddressLabel: "Dirección",
       demoAddress: "Brickell, Miami",
       demoHours: "Mar 8:00 a. m.–2:00 p. m.",
