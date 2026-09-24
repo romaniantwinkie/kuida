@@ -77,3 +77,58 @@ a {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+@property --tile-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes tile-border-spin {
+  to {
+    --tile-angle: 360deg;
+  }
+}
+
+/* Black segment travels the phone-tile outline. Static border stays underneath. */
+.welcome-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 1.5rem;
+  padding: 3px;
+  background: conic-gradient(
+    from var(--tile-angle),
+    transparent 0deg,
+    transparent 230deg,
+    oklch(0 0 0 / 0.28) 285deg,
+    oklch(0 0 0) 325deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.welcome-tile:hover::after,
+.welcome-tile:focus-within::after {
+  opacity: 1;
+  animation: tile-border-spin 2.6s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-tile:hover::after,
+  .welcome-tile:focus-within::after {
+    animation: none;
+    background: oklch(0 0 0);
+  }
+}

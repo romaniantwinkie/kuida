@@ -12,6 +12,8 @@ interface WelcomeScreenProps {
   description?: string;
   buttonText: string;
   onButtonClick: () => void;
+  /** CSS object-position for the hero crop. Defaults to center. */
+  imagePosition?: string;
   secondaryActionText?: string;
   onSecondaryActionClick?: () => void;
   className?: string;
@@ -28,6 +30,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   description,
   buttonText,
   onButtonClick,
+  imagePosition = "center",
   secondaryActionText,
   onSecondaryActionClick,
   className,
@@ -68,12 +71,8 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   };
 
   return (
-    <div
-      className={cn(
-        "flex w-full flex-col items-center justify-between overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-sm",
-        className,
-      )}
-    >
+    <div className={cn("welcome-tile relative rounded-3xl", className)}>
+      <div className="flex h-full w-full flex-col items-start overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-sm">
       <motion.div
         className="relative w-full shrink-0"
         initial="hidden"
@@ -84,12 +83,15 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           src={imageUrl}
           alt={imageAlt}
           className="h-56 w-full object-cover sm:h-64"
-          style={{ clipPath: "ellipse(100% 60% at 50% 40%)" }}
+          style={{
+            clipPath: "ellipse(100% 60% at 50% 40%)",
+            objectPosition: imagePosition,
+          }}
         />
       </motion.div>
 
       <motion.div
-        className="flex flex-1 flex-col items-center justify-center space-y-4 px-6 py-4 text-center"
+        className="flex w-full flex-col items-center gap-4 px-6 pb-6 pt-3 text-center"
         initial="hidden"
         animate="visible"
         variants={containerVariants}
@@ -105,15 +107,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
             {description}
           </motion.p>
         ) : null}
-      </motion.div>
-
-      <motion.div
-        className="w-full space-y-4 p-6 pt-0"
-        initial="hidden"
-        animate="visible"
-        variants={containerVariants}
-      >
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className="w-full">
           <Button
             onClick={onButtonClick}
             className="h-12 w-full bg-primary text-base text-primary-foreground hover:bg-primary/90"
@@ -135,6 +129,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
           </motion.div>
         ) : null}
       </motion.div>
+      </div>
     </div>
   );
 };

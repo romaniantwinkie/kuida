@@ -28,7 +28,11 @@ export default function Home() {
           </div>
         </header>
         <div className="flex min-h-dvh flex-col items-center justify-center px-5 py-20">
-          <div className="flex w-full flex-col items-center justify-center gap-6 min-[880px]:w-auto min-[880px]:flex-row">
+          <div className="flex w-full flex-col items-center">
+            <h1 className="mb-5 text-center text-xl font-semibold tracking-tight text-foreground sm:mb-6 sm:text-2xl">
+              {t.home.title}
+            </h1>
+            <div className="flex w-full flex-col items-center justify-center gap-6 min-[880px]:w-auto min-[880px]:flex-row">
             <WelcomeScreen
               className={tile}
               imageUrl="/roles/agency.jpg"
@@ -41,10 +45,12 @@ export default function Home() {
               className={tile}
               imageUrl="/roles/caregiver.jpg"
               imageAlt={t.home.caregiverImageAlt}
+              imagePosition="center top"
               title={t.home.caregiverButton}
               buttonText={t.home.caregiverCta}
               onButtonClick={() => router.push("/for-caregivers")}
             />
+            </div>
           </div>
         </div>
       </div>
