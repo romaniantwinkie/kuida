@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { messages, type Locale, type Messages } from "@/lib/i18n";
 
 const STORAGE_KEY = "kuidao-locale";
@@ -14,12 +14,20 @@ type LanguageContextValue = {
 const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocaleState] = useState<Locale>("en");
   const [hydrated, setHydrated] = useState(false);
+  const chosen = useRef(false);
+
+  function setLocale(next: Locale) {
+    chosen.current = true;
+    setLocaleState(next);
+  }
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "en" || stored === "es") setLocale(stored);
+    if (!chosen.current) {
+      const stored = window.localStorage.getItem(STORAGE_KEY);
+      if (stored === "en" || stored === "es") setLocaleState(stored);
+    }
     setHydrated(true);
   }, []);
 
