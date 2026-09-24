@@ -343,11 +343,12 @@ export const AdvancedMap = ({
         scrollWheelZoom={false}
       >
         {currentLayers.openstreetmap ? (
-          // Official OSM tiles return an access-denied image from this network.
-          // CARTO light still serves free OpenStreetMap data.
+          // CARTO basemaps now require an API key, and tile.openstreetmap.org
+          // returns an access-denied image from this network. Esri World Street
+          // Map is a free raster basemap with no key. Tile order is {z}/{y}/{x}.
           <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+            attribution='Tiles &copy; <a href="https://www.esri.com/">Esri</a> — Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, &copy; OpenStreetMap contributors, and the GIS User Community'
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}"
           />
         ) : null}
 
