@@ -11,8 +11,7 @@ export default function Home() {
   const { t } = useI18n();
   const router = useRouter();
 
-  const tile =
-    "aspect-[384/812] w-full max-w-sm shrink-0 min-[880px]:w-96";
+  const tile = "w-full max-w-sm shrink-0 min-[880px]:w-96";
 
   return (
     <SonarGrid interactive className="min-h-dvh bg-background text-foreground">
@@ -29,7 +28,7 @@ export default function Home() {
         </header>
         <div className="flex min-h-dvh flex-col items-center justify-center px-5 py-20">
           <div className="flex w-full flex-col items-center">
-            <h1 className="mb-5 text-center text-xl font-semibold tracking-tight text-foreground sm:mb-6 sm:text-2xl">
+            <h1 className="mb-6 text-center text-5xl font-bold tracking-tight text-foreground sm:mb-8">
               {t.home.title}
             </h1>
             <div className="flex w-full flex-col items-center justify-center gap-6 min-[880px]:w-auto min-[880px]:flex-row">

@@ -72,7 +72,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
 
   return (
     <div className={cn("welcome-tile relative rounded-3xl", className)}>
-      <div className="flex h-full w-full flex-col items-start overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-sm">
+      <div className="flex w-full flex-col items-start overflow-hidden rounded-3xl border border-border bg-card text-card-foreground shadow-sm">
       <motion.div
         className="relative w-full shrink-0"
         initial="hidden"
@@ -82,7 +82,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         <img
           src={imageUrl}
           alt={imageAlt}
-          className="h-56 w-full object-cover sm:h-64"
+          className="h-80 w-full object-cover sm:h-96"
           style={{
             clipPath: "ellipse(100% 60% at 50% 40%)",
             objectPosition: imagePosition,
