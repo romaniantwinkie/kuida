@@ -105,7 +105,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         variants={containerVariants}
       >
         <motion.h2
-          className="text-3xl font-bold tracking-tight text-foreground"
+          className="text-3xl font-normal tracking-tight text-foreground"
           variants={itemVariants}
         >
           {title}
@@ -117,7 +117,7 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
         ) : null}
         <motion.span
           variants={itemVariants}
-          className="flex min-h-14 w-full items-center justify-center rounded-md bg-primary px-4 py-3 text-center text-2xl font-semibold leading-tight text-primary-foreground shadow"
+          className="flex min-h-14 w-full items-center justify-center rounded-md bg-primary px-4 py-3 text-center text-2xl font-normal leading-tight text-primary-foreground shadow"
         >
           {buttonText}
         </motion.span>
