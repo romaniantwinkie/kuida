@@ -1,7 +1,6 @@
 "use client";
 
-import { CircleMarker, MapContainer, Popup, TileLayer } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { AdvancedMap } from "@/components/ui/interactive-map";
 import { useI18n } from "@/components/language-provider";
 import { caregiverArea, caregiverWindow, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
 
@@ -11,35 +10,24 @@ export function AgencyMap() {
   const { locale } = useI18n();
 
   return (
-    <MapContainer
+    <AdvancedMap
       center={MIAMI}
       zoom={11}
-      scrollWheelZoom={false}
+      enableClustering={false}
+      enableSearch={false}
+      enableControls={false}
       className="h-full w-full"
       style={{ height: "100%", width: "100%" }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-      />
-      {MOCK_CAREGIVERS.map((caregiver) => (
-        <CircleMarker
-          key={caregiver.id}
-          center={[caregiver.lat, caregiver.lng]}
-          radius={8}
-          pathOptions={{ color: "#000", weight: 1, fillColor: "#000", fillOpacity: 0.9 }}
-        >
-          <Popup>
-            <strong>
-              {caregiver.firstName} {caregiver.lastInitial}. · {caregiver.role}
-            </strong>
-            <br />
-            {caregiverArea(caregiver, locale)}
-            <br />
-            {caregiverWindow(caregiver, locale)}
-          </Popup>
-        </CircleMarker>
-      ))}
-    </MapContainer>
+      markers={MOCK_CAREGIVERS.map((caregiver) => ({
+        id: caregiver.id,
+        position: [caregiver.lat, caregiver.lng],
+        color: "black",
+        size: "medium" as const,
+        popup: {
+          title: `${caregiver.firstName} ${caregiver.lastInitial}. · ${caregiver.role}`,
+          content: `${caregiverArea(caregiver, locale)} · ${caregiverWindow(caregiver, locale)}`,
+        },
+      }))}
+    />
   );
 }

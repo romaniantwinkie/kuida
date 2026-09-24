@@ -3,7 +3,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Check, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
+import { PricingTable } from "@/components/blocks/pricing-table";
 import { Card, CardContent } from "@/components/ui/card";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 import { useI18n } from "@/components/language-provider";
@@ -123,21 +124,8 @@ export function AgencyHow() {
 
 export function AgencyPricing() {
   const { t } = useI18n();
+  const router = useRouter();
   const copy = t.agency;
-  const plans = [
-    {
-      name: copy.searchName,
-      price: PLANS.search.monthly,
-      featured: false,
-      items: [fill(copy.seats, { n: 2 }), fill(copy.resultCap, { n: PLANS.search.resultCap }), ...copy.searchItems],
-    },
-    {
-      name: copy.proName,
-      price: PLANS.pro.monthly,
-      featured: true,
-      items: [fill(copy.seats, { n: 5 }), ...copy.proItems],
-    },
-  ];
 
   return (
     <section id="pricing" className="scroll-mt-28 bg-background py-20 lg:py-28">
@@ -147,38 +135,35 @@ export function AgencyPricing() {
           <h2 className="text-3xl tracking-tight md:text-5xl">{copy.pricingTitle}</h2>
           <p className="mx-auto max-w-xl text-balance leading-snug text-muted-foreground">{copy.pricingBody}</p>
         </div>
-        <div className="mt-12 grid items-stretch gap-5 text-start md:grid-cols-2">
-          {plans.map((plan) => (
-            <Card
-              key={plan.name}
-              className={plan.featured ? "relative border-primary shadow-md outline outline-4 outline-primary" : "relative"}
-            >
-              <CardContent className="flex h-full flex-col gap-7 px-6 py-7">
-                <div>
-                  <div className="flex items-center justify-between gap-3">
-                    <h3 className="text-lg font-semibold">{plan.name}</h3>
-                    {plan.featured ? (
-                      <span className="rounded-full bg-primary px-2.5 py-1 text-xs text-primary-foreground">{copy.popular}</span>
-                    ) : null}
-                  </div>
-                  <p className="mt-4 text-5xl font-medium tracking-tight text-foreground">
-                    ${plan.price}
-                    <span className="ml-1 text-base font-normal text-muted-foreground">{copy.perMonth}</span>
-                  </p>
-                </div>
-                <ul className="flex-1 space-y-3">
-                  {plan.items.map((item) => (
-                    <li key={item} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Check className="size-4 shrink-0 text-foreground" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <StaffingButton label={copy.start} />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        <PricingTable
+          className="mt-12"
+          containerClassName="max-w-5xl"
+          featuresLabel={t.nav.features}
+          popularLabel={copy.popular}
+          priceSuffix={copy.perMonth}
+          ctaLabel={copy.start}
+          defaultPlan="pro"
+          onPlanSelect={() => router.push("/signup/agency")}
+          plans={[
+            {
+              name: copy.searchName,
+              level: "search",
+              price: { monthly: PLANS.search.monthly, yearly: PLANS.search.monthly },
+            },
+            {
+              name: copy.proName,
+              level: "pro",
+              popular: true,
+              price: { monthly: PLANS.pro.monthly, yearly: PLANS.pro.monthly },
+            },
+          ]}
+          features={[
+            { name: fill(copy.seats, { n: 2 }), included: "search" },
+            { name: fill(copy.resultCap, { n: PLANS.search.resultCap }), included: "all" },
+            { name: fill(copy.seats, { n: 5 }), included: "pro" },
+            { name: copy.proItems[1] ?? copy.proItems[0], included: "pro" },
+          ]}
+        />
       </div>
     </section>
   );
