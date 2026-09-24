@@ -1,8 +1,6 @@
 export type Locale = "en" | "es";
 
 export type AgencyStepKey = "search" | "message" | "hire";
-export type AgencyFeatureKey = "address" | "week" | "message" | "packet" | "capped";
-export type AgencyTrustKey = "patients" | "caregivers" | "families" | "software";
 export type CaregiverStepKey = "profile" | "hours" | "requests";
 export type CaregiverFeatureKey = "free" | "hours" | "requests" | "documents";
 
@@ -43,25 +41,18 @@ export type Messages = {
     heroKicker: string;
     heroTitle: string;
     heroBody: string;
-    families: string;
-    freeLine: string;
-    geo: string;
     getStarted: string;
     seeSearch: string;
     nearby: string;
-    radius: string;
+    mapNote: string;
     howKicker: string;
     howTitle: string;
     steps: CopyBlock<AgencyStepKey>[];
-    featuresKicker: string;
-    featuresTitle: string;
-    features: CopyBlock<AgencyFeatureKey>[];
-    trustKicker: string;
-    trustTitle: string;
-    trust: CopyBlock<AgencyTrustKey>[];
+    clarity: string;
     pricingKicker: string;
     pricingTitle: string;
     pricingBody: string;
+    popular: string;
     searchName: string;
     proName: string;
     perMonth: string;
@@ -70,8 +61,6 @@ export type Messages = {
     proItems: string[];
     start: string;
     caregiverCta: string;
-    ribbonLabel: string;
-    ribbon: string[];
     resultCap: string;
     faqTitle: string;
     faqLead: string;
@@ -207,111 +196,55 @@ export const messages: Record<Locale, Messages> = {
     },
     agency: {
       heroKicker: "For agencies",
-      heroTitle: "Cover the shift when your roster is empty.",
+      heroTitle: "Staff open cases from thousands of available caregivers.",
       heroBody:
-        "Kuidao is software for home care, nurse registry, and home health agencies. Search by address and hours, message in the app, and hire with your own packet.",
-      families: "Families and private clients do not hire here.",
-      freeLine: "Caregivers join free. Agencies pay monthly.",
-      geo: "Starting in Florida. Built to expand nationwide.",
-      getStarted: "Get started",
-      seeSearch: "See search",
-      nearby: "Nearby now",
-      radius: "3 mi",
+        "Cover urgent shifts or staff new patients in minutes. Enter the address and hours, see who’s free nearby, request in the app, hire with your packet.",
+      getStarted: "Start staffing",
+      seeSearch: "See who’s nearby",
+      nearby: "Caregivers near Miami (demo)",
+      mapNote: "Sample caregivers for this preview.",
       howKicker: "How it works",
-      howTitle: "Three steps to fill a case",
+      howTitle: "Three steps to cover a case",
       steps: [
         {
           key: "search",
-          title: "Search by address and schedule",
-          body: "Enter where the case is and the hours you need covered.",
+          title: "Search by address & hours",
+          body: "The case location and the window that needs covering.",
         },
         {
           key: "message",
-          title: "Message in the app",
-          body: "First contact stays in Kuidao. There is no public phone book.",
+          title: "Request in the app",
+          body: "They get the request on their phone and reply there.",
         },
         {
           key: "hire",
           title: "Hire with your packet",
-          body: "On Pro, send your contract and keep credentials in the vault.",
+          body: "Send your documents for them to complete.",
         },
       ],
-      featuresKicker: "Features",
-      featuresTitle: "Built for a short lookup",
-      features: [
-        {
-          key: "address",
-          title: "Address and hours",
-          body: "See who is free near the case, for that window.",
-        },
-        {
-          key: "week",
-          title: "Map and week grid",
-          body: "Pins and a 7-day view, made for a quick lookup.",
-        },
-        {
-          key: "message",
-          title: "In-app first contact",
-          body: "Phone numbers stay private. Contact starts in the app.",
-        },
-        {
-          key: "packet",
-          title: "Pro packet and vault",
-          body: "Your hiring packet, signed on their phone, with a credential vault.",
-        },
-        {
-          key: "capped",
-          title: "Capped results",
-          body: "A short list for the shift. We do not dump the whole book.",
-        },
-      ],
-      trustKicker: "Who it is for",
-      trustTitle: "Agencies staffing their own cases",
-      trust: [
-        {
-          key: "patients",
-          title: "Your patients, your cases",
-          body: "Home care, nurse registry, and home health teams covering people they already serve.",
-        },
-        {
-          key: "caregivers",
-          title: "Caregivers join free",
-          body: "They set hours and area, then get requests in the app. They do not pay Kuidao.",
-        },
-        {
-          key: "families",
-          title: "Not for private families",
-          body: "Families and private clients do not hire caregivers on Kuidao.",
-        },
-        {
-          key: "software",
-          title: "Not a registry or employer",
-          body: "Kuidao is software. Caregivers contract with your agency, not with us.",
-        },
-      ],
+      clarity: "We fill the shift. We are not your EMR, registry, or employer.",
       pricingKicker: "Agencies only",
       pricingTitle: "Pricing",
-      pricingBody: "Per office. Unlimited fills. Caregivers join free.",
+      pricingBody: "Two flat monthly plans for the office.",
+      popular: "Popular",
       searchName: "Search",
       proName: "Pro",
       perMonth: "/mo",
       seats: "{n} seats",
-      searchItems: ["Map and schedule search", "In-app requests"],
+      searchItems: [],
       proItems: ["Everything in Search", "Hiring packet and vault"],
-      start: "Start",
-      caregiverCta: "Caregiver? Join free",
-      ribbonLabel: "SEARCH. REQUEST. HIRE.",
-      ribbon: ["Address", "Schedule", "Map", "Request", "Hiring packet"],
+      start: "Start staffing",
+      caregiverCta: "For caregivers",
       resultCap: "Up to {n} results",
-      faqTitle: "Questions from agencies",
-      faqLead: "Pricing is for agencies only. Caregivers join free.",
+      faqTitle: "Questions",
+      faqLead: "A few answers before you start.",
       faqGroups: [
         {
           title: "The product",
           items: [
             {
-              q: "Who is Kuidao for?",
-              a: "Home care, nurse registry, and home health agencies covering their own patients and cases.",
+              q: "Who is this for?",
+              a: "Florida nurse registries, home health, and home care agencies staffing their own patients.",
             },
             {
               q: "Can a family hire a caregiver here?",
@@ -322,7 +255,7 @@ export const messages: Record<Locale, Messages> = {
               a: "No. Creating an agency account does not ask for a state license number.",
             },
             {
-              q: "Is this locked to one Florida county?",
+              q: "Is this only for one part of Florida?",
               a: "No. Kuidao starts in Florida and is built to expand nationwide.",
             },
           ],
@@ -332,15 +265,7 @@ export const messages: Record<Locale, Messages> = {
           items: [
             {
               q: "Who pays?",
-              a: "Agencies pay a flat monthly plan. Caregivers join free and never see plans or prices.",
-            },
-            {
-              q: "What is Search?",
-              a: "Search is $149 per month: map and schedule search, in-app requests, up to 15 results, and 2 seats.",
-            },
-            {
-              q: "What does Pro add?",
-              a: "Pro is $299 per month. It includes Search, plus your hiring packet and credential vault, with 5 seats.",
+              a: "The agency pays a flat monthly plan. Caregivers join free and never see plans or prices.",
             },
           ],
         },
@@ -522,111 +447,55 @@ export const messages: Record<Locale, Messages> = {
     },
     agency: {
       heroKicker: "Para agencias",
-      heroTitle: "Cubre el turno cuando tu lista está vacía.",
+      heroTitle: "Cubre casos abiertos con miles de cuidadores disponibles.",
       heroBody:
-        "Kuidao es software para agencias de cuidado en el hogar, registros de enfermería y home health. Busca por dirección y horario, escribe en la app y contrata con tu propio paquete.",
-      families: "Las familias y los clientes particulares no contratan aquí.",
-      freeLine: "Los cuidadores entran gratis. La agencia paga un plan mensual.",
-      geo: "Empezamos en Florida. Hecho para crecer en todo el país.",
-      getStarted: "Empezar",
-      seeSearch: "Ver búsqueda",
-      nearby: "Cerca ahora",
-      radius: "3 mi",
+        "Cubre turnos urgentes o asigna pacientes nuevos en minutos. Ingresa la dirección y las horas, mira quién está libre cerca, solicita en la app y contrata con tu paquete.",
+      getStarted: "Empieza a cubrir",
+      seeSearch: "Mira quién está cerca",
+      nearby: "Cuidadores cerca de Miami (demo)",
+      mapNote: "Cuidadores de muestra, solo para esta vista.",
       howKicker: "Cómo funciona",
       howTitle: "Tres pasos para cubrir un caso",
       steps: [
         {
           key: "search",
-          title: "Busca por dirección y horario",
-          body: "Indica dónde es el caso y las horas que necesitas cubrir.",
+          title: "Busca por dirección y horas",
+          body: "La ubicación del caso y el horario que hay que cubrir.",
         },
         {
           key: "message",
-          title: "Escribe en la app",
-          body: "El primer contacto queda en Kuidao. No hay un directorio público de teléfonos.",
+          title: "Solicita en la app",
+          body: "Les llega al teléfono y responden ahí.",
         },
         {
           key: "hire",
           title: "Contrata con tu paquete",
-          body: "En Pro, envía tu contrato y guarda las credenciales en la bóveda.",
+          body: "Envía tus documentos para que los completen.",
         },
       ],
-      featuresKicker: "Funciones",
-      featuresTitle: "Hecho para una búsqueda corta",
-      features: [
-        {
-          key: "address",
-          title: "Dirección y horas",
-          body: "Mira quién está libre cerca del caso, en ese horario.",
-        },
-        {
-          key: "week",
-          title: "Mapa y semana",
-          body: "Pines y una vista de 7 días, para una búsqueda rápida.",
-        },
-        {
-          key: "message",
-          title: "Primer contacto en la app",
-          body: "Los teléfonos siguen privados. El contacto empieza en la app.",
-        },
-        {
-          key: "packet",
-          title: "Paquete y bóveda en Pro",
-          body: "Tu paquete de contratación, firmado en el teléfono, con bóveda de credenciales.",
-        },
-        {
-          key: "capped",
-          title: "Resultados limitados",
-          body: "Una lista corta para el turno. No mostramos todo el directorio.",
-        },
-      ],
-      trustKicker: "Para quién es",
-      trustTitle: "Agencias que cubren sus propios casos",
-      trust: [
-        {
-          key: "patients",
-          title: "Tus pacientes, tus casos",
-          body: "Equipos de cuidado en el hogar, registro de enfermería y home health que cubren a quienes ya atienden.",
-        },
-        {
-          key: "caregivers",
-          title: "Los cuidadores entran gratis",
-          body: "Ponen horas y zona, y reciben solicitudes en la app. No le pagan a Kuidao.",
-        },
-        {
-          key: "families",
-          title: "No es para familias",
-          body: "Las familias y los clientes particulares no contratan cuidadores en Kuidao.",
-        },
-        {
-          key: "software",
-          title: "No somos un registro ni un empleador",
-          body: "Kuidao es software. El cuidador contrata con tu agencia, no con nosotros.",
-        },
-      ],
+      clarity: "Cubrimos el turno. No somos tu EMR, tu registro ni tu empleador.",
       pricingKicker: "Solo agencias",
       pricingTitle: "Precios",
-      pricingBody: "Por oficina. Coberturas sin límite. Los cuidadores entran gratis.",
+      pricingBody: "Dos planes mensuales fijos para la oficina.",
+      popular: "Destacado",
       searchName: "Búsqueda",
       proName: "Pro",
       perMonth: "/mes",
       seats: "{n} usuarios",
-      searchItems: ["Búsqueda en mapa y horario", "Solicitudes en la app"],
+      searchItems: [],
       proItems: ["Todo lo de Búsqueda", "Paquete de contratación y bóveda"],
-      start: "Empezar",
-      caregiverCta: "¿Eres cuidador? Entra gratis",
-      ribbonLabel: "BUSCA. SOLICITA. CONTRATA.",
-      ribbon: ["Dirección", "Horario", "Mapa", "Solicitud", "Paquete"],
+      start: "Empieza a cubrir",
+      caregiverCta: "Para cuidadores",
       resultCap: "Hasta {n} resultados",
-      faqTitle: "Preguntas de las agencias",
-      faqLead: "Los precios son solo para agencias. Los cuidadores entran gratis.",
+      faqTitle: "Preguntas",
+      faqLead: "Unas respuestas antes de empezar.",
       faqGroups: [
         {
           title: "El producto",
           items: [
             {
-              q: "¿Para quién es Kuidao?",
-              a: "Para agencias de cuidado en el hogar, registros de enfermería y home health que cubren a sus propios pacientes y casos.",
+              q: "¿Para quién es?",
+              a: "Para registros de enfermería, home health y agencias de cuidado en el hogar de Florida que cubren a sus propios pacientes.",
             },
             {
               q: "¿Una familia puede contratar aquí?",
@@ -637,7 +506,7 @@ export const messages: Record<Locale, Messages> = {
               a: "No. Crear una cuenta de agencia no pide un número de licencia estatal.",
             },
             {
-              q: "¿Está limitado a un condado de Florida?",
+              q: "¿Es solo para una parte de Florida?",
               a: "No. Kuidao empieza en Florida y está hecho para crecer en todo el país.",
             },
           ],
@@ -648,14 +517,6 @@ export const messages: Record<Locale, Messages> = {
             {
               q: "¿Quién paga?",
               a: "La agencia paga un plan mensual fijo. Los cuidadores entran gratis y no ven planes ni precios.",
-            },
-            {
-              q: "¿Qué incluye Búsqueda?",
-              a: "Búsqueda cuesta $149 al mes: mapa y horario, solicitudes en la app, hasta 15 resultados y 2 usuarios.",
-            },
-            {
-              q: "¿Qué agrega Pro?",
-              a: "Pro cuesta $299 al mes. Incluye Búsqueda, más el paquete de contratación y la bóveda de credenciales, con 5 usuarios.",
             },
           ],
         },

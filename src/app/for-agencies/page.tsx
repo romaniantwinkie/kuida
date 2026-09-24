@@ -1,14 +1,11 @@
-"use client";
-
+import { AgencyMapLoader } from "@/components/agency-map-loader";
 import {
-  AgencyBento,
   AgencyCaregiverLink,
   AgencyFaq,
-  AgencyFeatures,
   AgencyHero,
+  AgencyHow,
+  AgencyMapSection,
   AgencyPricing,
-  AgencyRibbon,
-  AgencyTrust,
 } from "@/components/mainline/agency-marketing";
 import { Shell } from "@/components/shell";
 
@@ -16,10 +13,10 @@ export default function ForAgenciesPage() {
   return (
     <Shell>
       <AgencyHero />
-      <AgencyRibbon />
-      <AgencyFeatures />
-      <AgencyBento />
-      <AgencyTrust />
+      <AgencyMapSection>
+        <AgencyMapLoader />
+      </AgencyMapSection>
+      <AgencyHow />
       <AgencyPricing />
       <AgencyFaq />
       <AgencyCaregiverLink />
