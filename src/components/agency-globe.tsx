@@ -30,10 +30,10 @@ const MARKERS: GlobeMarker[] = MOCK_CAREGIVERS.map((caregiver, index) => {
 export function AgencyGlobe() {
   return (
     <Globe3D
-      className="h-[78vh] min-h-[36rem] w-full"
+      className="mx-auto h-80 w-full max-w-3xl sm:h-96"
       markers={MARKERS}
       config={{
-        radius: 2.4,
+        radius: 2,
         autoRotateSpeed: 0.2,
         enableZoom: false,
         enablePan: false,

@@ -213,7 +213,7 @@ function Marker({
           transform
           center
           sprite
-          distanceFactor={10}
+          distanceFactor={22}
           style={{
             pointerEvents: isVisible ? "auto" : "none",
             opacity: isVisible ? 1 : 0,
@@ -222,7 +222,7 @@ function Marker({
         >
           <div
             className={cn(
-              "flex items-center gap-1 rounded-full bg-background px-1.5 py-0.5 text-foreground shadow-sm transition-transform duration-200",
+              "flex items-center gap-0.5 rounded-full bg-background px-1 py-px text-foreground shadow-sm transition-transform duration-200",
               hovered && "scale-110",
             )}
             onMouseEnter={handlePointerEnter}
@@ -232,10 +232,10 @@ function Marker({
             <img
               src={marker.src}
               alt={marker.label || "Marker"}
-              className="h-2 w-2 rounded-full object-cover"
+              className="h-1.5 w-1.5 rounded-full object-cover"
               draggable={false}
             />
-            {marker.label ? <span className="whitespace-nowrap text-[10px] leading-none">{marker.label}</span> : null}
+            {marker.label ? <span className="whitespace-nowrap text-[9px] leading-none">{marker.label}</span> : null}
           </div>
         </Html>
       </group>
@@ -401,7 +401,7 @@ function Scene({ markers, config, onMarkerClick, onMarkerHover }: SceneProps) {
 
   // Set initial camera position (pulled back to accommodate markers)
   React.useEffect(() => {
-    camera.position.set(0, 0, config.radius * 2.55);
+    camera.position.set(0, 0, config.radius * 3.4);
     camera.lookAt(0, 0, 0);
   }, [camera, config.radius]);
 
@@ -516,7 +516,7 @@ export function Globe3D({
           fov: 45,
           near: 0.1,
           far: 1000,
-          position: [0, 0, mergedConfig.radius * 2.55],
+          position: [0, 0, mergedConfig.radius * 3.4],
         }}
         style={{
           background: mergedConfig.backgroundColor || "transparent",

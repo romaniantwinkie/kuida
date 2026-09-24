@@ -188,7 +188,7 @@ export function AgencyFaq() {
 
 export function AgencyGlobeSection() {
   return (
-    <section id="globe" className="bg-background">
+    <section id="globe" className="bg-background px-5 py-10">
       <AgencyGlobeLoader />
     </section>
   );
