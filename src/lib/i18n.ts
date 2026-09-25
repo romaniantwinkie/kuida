@@ -1,8 +1,6 @@
 export type Locale = "en" | "es";
 
 export type AgencyStepKey = "search" | "message" | "hire";
-export type CaregiverStepKey = "profile" | "hours" | "requests";
-export type CaregiverFeatureKey = "free" | "hours" | "requests" | "documents";
 
 type CopyBlock<K extends string> = { key: K; title: string; body: string };
 
@@ -95,21 +93,50 @@ export type Messages = {
     footerCaregivers: string;
   };
   caregiver: {
-    heroKicker: string;
+    menu: string;
+    signUpFree: string;
+    forAgencies: string;
+    howLink: string;
+    badge: string;
     heroTitle: string;
     heroBody: string;
-    families: string;
-    signup: string;
-    preview: string;
+    seeHow: string;
+    demo: string;
+    feed: { title: string; detail: string; time: string }[];
+    benefitsTitle: string;
+    benefits: { title: string; body: string }[];
     howKicker: string;
     howTitle: string;
-    steps: CopyBlock<CaregiverStepKey>[];
-    featuresKicker: string;
-    featuresTitle: string;
-    features: CopyBlock<CaregiverFeatureKey>[];
-    bandKicker: string;
-    bandBody: string;
-    bandCta: string;
+    howBody: string;
+    steps: { title: string; body: string }[];
+    compareKicker: string;
+    compareTitle: string;
+    compareBody: string;
+    kuidaoName: string;
+    kuidaoBody: string;
+    kuidaoPoints: string[];
+    oldName: string;
+    oldBody: string;
+    oldPoints: string[];
+    docsKicker: string;
+    docsTitle: string;
+    docsBody: string;
+    docsHint: string;
+    areaKicker: string;
+    areaTitle: string;
+    areaBody: string;
+    areaPlace: string;
+    days: string[];
+    shifts: string[];
+    ctaTitle: string;
+    ctaBody: string;
+    footerProduct: string;
+    footerCompany: string;
+    footerLegalCol: string;
+    footerTerms: string;
+    footerPrivacy: string;
+    footerCopyright: string;
+    footerHome: string;
   };
   signIn: {
     title: string;
@@ -491,59 +518,77 @@ export const messages: Record<Locale, Messages> = {
       footerCaregivers: "For caregivers",
     },
     caregiver: {
-      heroKicker: "For caregivers",
-      heroTitle: "Find shifts. Always free.",
+      menu: "Menu",
+      signUpFree: "Sign up free",
+      forAgencies: "For agencies",
+      howLink: "How it works",
+      badge: "Always free for caregivers",
+      heroTitle: "Get found by every agency near you — without calling one by one",
       heroBody:
-        "Set your hours and your zone. Agencies message you in the app. Your phone number stays private.",
-      families: "Families do not hire here. Agencies staff their own cases.",
-      signup: "Create your profile",
-      preview: "See the app",
+        "Complete your profile once. Set your area and schedule. Upload your documents. Then apply in one tap when a case fits.",
+      seeHow: "See how it works",
+      demo: "Demo",
+      feed: [
+        { title: "Profile viewed", detail: "An agency near you viewed your profile", time: "2m ago" },
+        { title: "New case nearby", detail: "New live-in case near Hialeah", time: "8m ago" },
+        { title: "Schedule saved", detail: "Your schedule preferences saved", time: "Just now" },
+        { title: "A match", detail: "A weekend case matches your area", time: "14m ago" },
+      ],
+      benefitsTitle: "One profile. Nearby agencies.",
+      benefits: [
+        { title: "Seen at once", body: "Be seen by all the agencies in your area at once." },
+        { title: "No more calling around", body: "No more calling agency after agency to find a case." },
+        { title: "Apply in one tap", body: "Fill your profile and upload documents once — apply in one tap." },
+        { title: "Area and schedule", body: "Set your area and schedule preferences from the start." },
+      ],
       howKicker: "How it works",
-      howTitle: "Three steps",
+      howTitle: "Up and running in four steps",
+      howBody: "From a free account to one-tap apply. Built for a phone.",
       steps: [
-        {
-          key: "profile",
-          title: "Create your profile",
-          body: "Name, role, area, and languages. Free.",
-        },
-        {
-          key: "hours",
-          title: "Set hours and zone",
-          body: "Show when you can work and how far you can go.",
-        },
-        {
-          key: "requests",
-          title: "Get requests in the app",
-          body: "Accept or decline. There is no public phone list.",
-        },
+        { title: "Create your free account", body: "Sign up on your phone. Caregivers never pay." },
+        { title: "Set your area and schedule", body: "Tell agencies where you work and when you are free." },
+        { title: "Upload your documents once", body: "Keep your ID and certificates ready for every apply." },
+        { title: "Get seen, then apply", body: "Agencies near you can view you. Apply in one tap when a case fits." },
       ],
-      featuresKicker: "For you",
-      featuresTitle: "Simple on a phone",
-      features: [
-        {
-          key: "free",
-          title: "Free forever",
-          body: "Caregivers do not pay to join or to use Kuidao.",
-        },
-        {
-          key: "hours",
-          title: "Hours and zone",
-          body: "You decide when you are free and where you can go.",
-        },
-        {
-          key: "requests",
-          title: "Requests in the app",
-          body: "Agencies contact you here first.",
-        },
-        {
-          key: "documents",
-          title: "Documents on your phone",
-          body: "Keep your ID and certificates ready.",
-        },
+      compareKicker: "Why Kuidao",
+      compareTitle: "One profile, not another phone call",
+      compareBody: "The old way is a stack of calls and the same paperwork. Kuidao keeps it in one place.",
+      kuidaoName: "Kuidao",
+      kuidaoBody: "One profile that nearby agencies can see.",
+      kuidaoPoints: [
+        "One profile for every nearby agency",
+        "Documents uploaded once",
+        "Apply in one tap",
+        "Area and schedule set up front",
+        "Free for caregivers",
       ],
-      bandKicker: "On your phone",
-      bandBody: "Requests, hours, and documents — on your phone.",
-      bandCta: "Open preview",
+      oldName: "The old way",
+      oldBody: "Calling each office and waiting to hear back.",
+      oldPoints: [
+        "Call each office one by one",
+        "Resend the same paperwork",
+        "Wait on callbacks",
+        "No clear schedule fit",
+      ],
+      docsKicker: "Documents",
+      docsTitle: "Upload once. Reuse on every apply.",
+      docsBody: "A preview of the document card. Nothing is uploaded or saved.",
+      docsHint: "Drag a file here, or tap to choose one.",
+      areaKicker: "Area and schedule",
+      areaTitle: "Tell agencies where you work and when you’re free.",
+      areaBody: "A preview. Tap a day or a shift. Nothing is saved.",
+      areaPlace: "Hialeah",
+      days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      shifts: ["Day", "Evening", "Overnight", "Live-in"],
+      ctaTitle: "Ready to get found?",
+      ctaBody: "Always free for caregivers. Create your profile on your phone.",
+      footerProduct: "Product",
+      footerCompany: "Company",
+      footerLegalCol: "Legal",
+      footerTerms: "Terms",
+      footerPrivacy: "Privacy",
+      footerCopyright: "© 2026 Kuidao",
+      footerHome: "Home",
     },
     signIn: {
       title: "Log in",
@@ -933,59 +978,77 @@ export const messages: Record<Locale, Messages> = {
       footerCaregivers: "Para cuidadores",
     },
     caregiver: {
-      heroKicker: "Para cuidadores",
-      heroTitle: "Encuentra turnos. Siempre gratis.",
+      menu: "Menú",
+      signUpFree: "Regístrate gratis",
+      forAgencies: "Para agencias",
+      howLink: "Cómo funciona",
+      badge: "Siempre gratis para cuidadores",
+      heroTitle: "Que te encuentren las agencias cerca de ti — sin llamar una por una",
       heroBody:
-        "Pon tus horas y tu zona. Las agencias te escriben en la app. Tu celular no se publica.",
-      families: "Las familias no contratan aquí. Las agencias cubren sus propios casos.",
-      signup: "Crear tu perfil",
-      preview: "Ver la app",
+        "Completa tu perfil una vez. Indica tu zona y tu horario. Sube tus documentos. Luego postúlate con un toque cuando un caso encaje.",
+      seeHow: "Ver cómo funciona",
+      demo: "Demo",
+      feed: [
+        { title: "Vieron tu perfil", detail: "Una agencia cerca de ti vio tu perfil", time: "hace 2 min" },
+        { title: "Caso nuevo cerca", detail: "Nuevo caso interno cerca de Hialeah", time: "hace 8 min" },
+        { title: "Horario guardado", detail: "Tus preferencias de horario quedaron listas", time: "ahora" },
+        { title: "Una coincidencia", detail: "Un caso de fin de semana coincide con tu zona", time: "hace 14 min" },
+      ],
+      benefitsTitle: "Un perfil. Agencias cercanas.",
+      benefits: [
+        { title: "Te ven a la vez", body: "Que te vean todas las agencias de tu zona al mismo tiempo." },
+        { title: "Sin llamar de oficina en oficina", body: "Ya no llamas a una agencia tras otra para encontrar un caso." },
+        { title: "Postúlate con un toque", body: "Llena tu perfil y sube tus documentos una vez. Luego postúlate con un toque." },
+        { title: "Zona y horario", body: "Indica tu zona y tu horario desde el principio." },
+      ],
       howKicker: "Cómo funciona",
-      howTitle: "Tres pasos",
+      howTitle: "Listo en cuatro pasos",
+      howBody: "De una cuenta gratis a postularte con un toque. Hecho para el teléfono.",
       steps: [
-        {
-          key: "profile",
-          title: "Crea tu perfil",
-          body: "Nombre, rol, zona e idiomas. Gratis.",
-        },
-        {
-          key: "hours",
-          title: "Pon tus horas y tu zona",
-          body: "Muestra cuándo puedes trabajar y hasta dónde llegas.",
-        },
-        {
-          key: "requests",
-          title: "Recibe solicitudes en la app",
-          body: "Acepta o di que no. No hay una lista pública de teléfonos.",
-        },
+        { title: "Crea tu cuenta gratis", body: "Regístrate en el teléfono. El cuidador nunca paga." },
+        { title: "Indica tu zona y tu horario", body: "Diles a las agencias dónde trabajas y cuándo estás libre." },
+        { title: "Sube tus documentos una vez", body: "Ten a mano tu identificación y tus certificados para cada postulación." },
+        { title: "Que te vean, y postúlate", body: "Las agencias cerca de ti pueden verte. Postúlate con un toque cuando un caso encaje." },
       ],
-      featuresKicker: "Para ti",
-      featuresTitle: "Simple en el teléfono",
-      features: [
-        {
-          key: "free",
-          title: "Gratis siempre",
-          body: "El cuidador no paga por entrar ni por usar Kuidao.",
-        },
-        {
-          key: "hours",
-          title: "Horas y zona",
-          body: "Tú decides cuándo estás libre y hasta dónde puedes ir.",
-        },
-        {
-          key: "requests",
-          title: "Solicitudes en la app",
-          body: "Las agencias te contactan primero aquí.",
-        },
-        {
-          key: "documents",
-          title: "Documentos en el teléfono",
-          body: "Ten a mano tu identificación y tus certificados.",
-        },
+      compareKicker: "Por qué Kuidao",
+      compareTitle: "Un perfil, no otra llamada",
+      compareBody: "Lo de antes es una pila de llamadas y los mismos papeles. Kuidao lo deja en un solo lugar.",
+      kuidaoName: "Kuidao",
+      kuidaoBody: "Un perfil que las agencias cercanas pueden ver.",
+      kuidaoPoints: [
+        "Un perfil para cada agencia cercana",
+        "Documentos subidos una vez",
+        "Postularte con un toque",
+        "Zona y horario desde el inicio",
+        "Gratis para cuidadores",
       ],
-      bandKicker: "En tu teléfono",
-      bandBody: "Solicitudes, horas y documentos — en el teléfono.",
-      bandCta: "Abrir vista previa",
+      oldName: "Lo de antes",
+      oldBody: "Llamar a cada oficina y esperar respuesta.",
+      oldPoints: [
+        "Llamar a cada oficina una por una",
+        "Reenviar los mismos papeles",
+        "Esperar que devuelvan la llamada",
+        "Sin un horario claro",
+      ],
+      docsKicker: "Documentos",
+      docsTitle: "Súbelos una vez. Úsalos en cada postulación.",
+      docsBody: "Una vista previa de la tarjeta de documentos. No se sube ni se guarda nada.",
+      docsHint: "Arrastra un archivo aquí, o toca para elegirlo.",
+      areaKicker: "Zona y horario",
+      areaTitle: "Diles a las agencias dónde trabajas y cuándo estás libre.",
+      areaBody: "Una vista previa. Toca un día o un turno. No se guarda nada.",
+      areaPlace: "Hialeah",
+      days: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
+      shifts: ["Día", "Tarde", "Noche", "Interno"],
+      ctaTitle: "¿Quieres que te encuentren?",
+      ctaBody: "Siempre gratis para cuidadores. Crea tu perfil en el teléfono.",
+      footerProduct: "Producto",
+      footerCompany: "Compañía",
+      footerLegalCol: "Legal",
+      footerTerms: "Términos",
+      footerPrivacy: "Privacidad",
+      footerCopyright: "© 2026 Kuidao",
+      footerHome: "Inicio",
     },
     signIn: {
       title: "Entrar",
