@@ -23,6 +23,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
 import { useScroll } from "@/components/ui/use-scroll";
+import { Iphone16Pro } from "@/components/ui/iphone-16-pro";
 import { LangToggle } from "@/components/lang-toggle";
 import { useI18n } from "@/components/language-provider";
 import { Mark } from "@/components/mark";
@@ -163,7 +164,7 @@ function CaregiverHero() {
 
   return (
     <section className="mx-auto w-full max-w-6xl px-5 pb-4 pt-8 lg:pt-12">
-      <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-12">
+      <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-12">
         <div className="flex max-w-xl flex-col gap-5">
           <Badge variant="outline" className="w-fit px-3 py-1 text-xs font-medium">
             {copy.badge}
@@ -190,33 +191,36 @@ function PhoneFeed() {
   const copy = t.caregiver;
 
   return (
-    <div className="mx-auto w-[260px] rounded-[2.4rem] border-4 border-foreground bg-foreground p-1.5 shadow-2xl">
-      <div className="overflow-hidden rounded-[2rem] bg-background">
-        <div className="mx-auto mt-2 h-5 w-24 rounded-full bg-foreground" aria-hidden="true" />
-        <div className="flex items-center justify-between px-3 pb-2 pt-3">
-          <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">{copy.demo}</p>
-        </div>
-        <div className="px-2 pb-4">
-          <AnimatedList delay={1800} maxVisible={3} className="items-stretch gap-2">
-            {copy.feed.map((item, index) => {
-              const Icon = feedIcons[index % feedIcons.length];
-              return (
-                <article key={item.title} className="w-full rounded-2xl border border-border bg-card p-3 shadow-sm">
-                  <div className="flex items-start gap-2">
-                    <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-background">
-                      <Icon className="size-3.5" aria-hidden="true" />
-                    </span>
-                    <div className="min-w-0">
-                      <p className="text-xs font-medium leading-4">
-                        {item.title} <span className="font-normal text-muted-foreground">· {item.time}</span>
-                      </p>
-                      <p className="mt-1 text-xs leading-4 text-muted-foreground">{item.detail}</p>
+    <div className="relative mx-auto w-fit shrink-0">
+      <Iphone16Pro aria-hidden="true" className="block text-background" />
+      <div
+        className="absolute overflow-hidden"
+        style={{ left: 14.08, top: 12.81, width: 171.98, height: 374.37, borderRadius: 24.62 }}
+      >
+        <div className="absolute inset-x-0 bottom-3 top-7 overflow-hidden px-2">
+          <p className="px-1 pb-2 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">{copy.demo}</p>
+          <div className="overflow-hidden">
+            <AnimatedList delay={1800} maxVisible={3} className="items-stretch gap-2">
+              {copy.feed.map((item, index) => {
+                const Icon = feedIcons[index % feedIcons.length];
+                return (
+                  <article key={item.title} className="w-full rounded-2xl border border-border bg-card p-2.5 shadow-sm">
+                    <div className="flex items-start gap-2">
+                      <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-foreground text-background">
+                        <Icon className="size-3.5" aria-hidden="true" />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[11px] font-medium leading-4">
+                          {item.title} <span className="font-normal text-muted-foreground">· {item.time}</span>
+                        </p>
+                        <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">{item.detail}</p>
+                      </div>
                     </div>
-                  </div>
-                </article>
-              );
-            })}
-          </AnimatedList>
+                  </article>
+                );
+              })}
+            </AnimatedList>
+          </div>
         </div>
       </div>
     </div>
