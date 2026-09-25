@@ -1,4 +1,0 @@
-# Production deploys of this branch were cancelled before the build started
-# whenever a deploy preview of the same commit ran first. Always build.
-[build]
-  ignore = "exit 1"
