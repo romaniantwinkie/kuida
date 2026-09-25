@@ -121,6 +121,34 @@ export type Messages = {
     new: string;
     doors: string;
   };
+  auth: {
+    loginTab: string;
+    signupTab: string;
+    agencyTitle: string;
+    caregiverTitle: string;
+    agencyBody: string;
+    caregiverBody: string;
+    email: string;
+    emailPlaceholder: string;
+    password: string;
+    showPassword: string;
+    hidePassword: string;
+    remember: string;
+    forgot: string;
+    signIn: string;
+    agencyName: string;
+    agencyNamePlaceholder: string;
+    fullName: string;
+    fullNamePlaceholder: string;
+    termsLead: string;
+    terms: string;
+    termsAnd: string;
+    privacy: string;
+    create: string;
+    help: string;
+    backHome: string;
+    soon: string;
+  };
   agencySignup: {
     kicker: string;
     title: string;
@@ -526,6 +554,34 @@ export const messages: Record<Locale, Messages> = {
       openSearch: "Open search",
       new: "New?",
       doors: "Agency or caregiver",
+    },
+    auth: {
+      loginTab: "Log in",
+      signupTab: "Sign up",
+      agencyTitle: "Agency account",
+      caregiverTitle: "Caregiver account",
+      agencyBody: "Log in or create an account.",
+      caregiverBody: "Log in or create an account.",
+      email: "Email",
+      emailPlaceholder: "you@email.com",
+      password: "Password",
+      showPassword: "Show password",
+      hidePassword: "Hide password",
+      remember: "Remember me",
+      forgot: "Forgot password?",
+      signIn: "Sign in",
+      agencyName: "Agency name",
+      agencyNamePlaceholder: "Your agency",
+      fullName: "Full name",
+      fullNamePlaceholder: "Your name",
+      termsLead: "I agree to the",
+      terms: "Terms",
+      termsAnd: "and",
+      privacy: "Privacy",
+      create: "Create account",
+      help: "Need help?",
+      backHome: "Back home",
+      soon: "Coming soon. This preview does not save accounts.",
     },
     agencySignup: {
       kicker: "Agency",
@@ -940,6 +996,34 @@ export const messages: Record<Locale, Messages> = {
       openSearch: "Abrir búsqueda",
       new: "¿Primera vez?",
       doors: "Agencia o cuidador",
+    },
+    auth: {
+      loginTab: "Entrar",
+      signupTab: "Registro",
+      agencyTitle: "Cuenta de agencia",
+      caregiverTitle: "Cuenta de cuidador",
+      agencyBody: "Entra o crea una cuenta.",
+      caregiverBody: "Entra o crea una cuenta.",
+      email: "Correo",
+      emailPlaceholder: "tu@correo.com",
+      password: "Contraseña",
+      showPassword: "Mostrar contraseña",
+      hidePassword: "Ocultar contraseña",
+      remember: "Recordarme",
+      forgot: "¿Olvidaste tu contraseña?",
+      signIn: "Entrar",
+      agencyName: "Nombre de la agencia",
+      agencyNamePlaceholder: "Tu agencia",
+      fullName: "Nombre completo",
+      fullNamePlaceholder: "Tu nombre",
+      termsLead: "Acepto los",
+      terms: "Términos",
+      termsAnd: "y la",
+      privacy: "Privacidad",
+      create: "Crear cuenta",
+      help: "¿Necesitas ayuda?",
+      backHome: "Volver al inicio",
+      soon: "Pronto. Esta vista previa no guarda cuentas.",
     },
     agencySignup: {
       kicker: "Agencia",
