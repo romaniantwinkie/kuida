@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -16,7 +17,6 @@ import {
   UserPlus,
   X,
 } from "lucide-react";
-import { AnimatedList } from "@/components/ui/animated-list";
 import { Badge } from "@/components/ui/badge";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -164,7 +164,7 @@ function CaregiverHero() {
 
   return (
     <section className="mx-auto w-full max-w-6xl px-5 pb-4 pt-8 lg:pt-12">
-      <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-12">
+      <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_28rem] lg:gap-10">
         <div className="flex max-w-xl flex-col gap-5">
           <Badge variant="outline" className="w-fit px-3 py-1 text-xs font-medium">
             {copy.badge}
@@ -186,40 +186,80 @@ function CaregiverHero() {
   );
 }
 
+function PhoneNotification({ items }: { items: { title: string; detail: string; time: string }[] }) {
+  const [index, setIndex] = useState(0);
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const apply = () => setReduced(media.matches);
+    apply();
+    media.addEventListener("change", apply);
+    return () => media.removeEventListener("change", apply);
+  }, []);
+
+  useEffect(() => {
+    if (reduced || items.length < 2) return;
+    const timer = window.setInterval(() => {
+      setIndex((current) => (current + 1) % items.length);
+    }, 1800);
+    return () => window.clearInterval(timer);
+  }, [items.length, reduced]);
+
+  const item = items[index];
+  const Icon = feedIcons[index % feedIcons.length];
+
+  return (
+    <div className="overflow-hidden">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.article
+          key={item.title}
+          initial={reduced ? false : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reduced ? undefined : { opacity: 0, y: -24 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+          className="w-full rounded-2xl border border-border bg-card p-3 shadow-sm sm:p-3.5"
+        >
+          <div className="flex items-start gap-2.5">
+            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-foreground text-background">
+              <Icon className="size-4" aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
+              <p className="text-sm font-medium leading-5">
+                {item.title} <span className="font-normal text-muted-foreground">· {item.time}</span>
+              </p>
+              <p className="mt-0.5 text-xs leading-5 text-muted-foreground sm:text-sm">{item.detail}</p>
+            </div>
+          </div>
+        </motion.article>
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function PhoneFeed() {
   const { t } = useI18n();
   const copy = t.caregiver;
 
   return (
-    <div className="relative mx-auto w-fit shrink-0">
-      <Iphone16Pro aria-hidden="true" className="block text-background" />
-      <div
-        className="absolute overflow-hidden"
-        style={{ left: 14.08, top: 12.81, width: 171.98, height: 374.37, borderRadius: 24.62 }}
-      >
-        <div className="absolute inset-x-0 bottom-3 top-7 overflow-hidden px-2">
-          <p className="px-1 pb-2 text-[10px] font-medium uppercase tracking-widest text-muted-foreground">{copy.demo}</p>
-          <div className="overflow-hidden">
-            <AnimatedList delay={1800} maxVisible={3} className="items-stretch gap-2">
-              {copy.feed.map((item, index) => {
-                const Icon = feedIcons[index % feedIcons.length];
-                return (
-                  <article key={item.title} className="w-full rounded-2xl border border-border bg-card p-2.5 shadow-sm">
-                    <div className="flex items-start gap-2">
-                      <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-foreground text-background">
-                        <Icon className="size-3.5" aria-hidden="true" />
-                      </span>
-                      <div className="min-w-0">
-                        <p className="text-[11px] font-medium leading-4">
-                          {item.title} <span className="font-normal text-muted-foreground">· {item.time}</span>
-                        </p>
-                        <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">{item.detail}</p>
-                      </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </AnimatedList>
+    <div className="relative mx-auto h-[17.5rem] w-full overflow-hidden sm:h-[22rem] lg:mx-0 lg:h-[24rem]">
+      <div className="absolute inset-x-[-3%] top-[-6%]" style={{ aspectRatio: "1 / 2" }}>
+        <Iphone16Pro aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full text-background" />
+        <div
+          className="absolute overflow-hidden"
+          style={{
+            left: "7.04%",
+            top: "3.2025%",
+            width: "85.99%",
+            height: "93.5925%",
+            borderRadius: "14.32% / 6.58%",
+          }}
+        >
+          <div className="absolute inset-x-[8%] top-[9%]">
+            <p className="px-1 pb-2 text-[10px] font-medium uppercase tracking-widest text-muted-foreground sm:text-xs">
+              {copy.demo}
+            </p>
+            <PhoneNotification items={copy.feed} />
           </div>
         </div>
       </div>
