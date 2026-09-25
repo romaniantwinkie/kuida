@@ -1,9 +1,8 @@
 "use client";
 
-import type { ReactNode } from "react";
 import React from "react";
 import Link from "next/link";
-import { CheckIcon, ChevronDown, FileCheck, FolderLock, MapPinned, PlusIcon, Zap } from "lucide-react";
+import { CheckIcon, ChevronDown, FileCheck, FolderLock, MapPinned, Zap } from "lucide-react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { AnimatedList } from "@/components/ui/animated-list";
 import { Badge } from "@/components/ui/badge";
@@ -11,12 +10,10 @@ import { BentoCard, BentoGrid } from "@/components/ui/bento-grid";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { BorderBeam } from "@/components/ui/border-beam";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Marquee } from "@/components/ui/marquee";
 import { MenuToggleIcon } from "@/components/ui/menu-toggle-icon";
 import { Mockup, MockupFrame } from "@/components/ui/mockup";
-import { NumberTicker } from "@/components/ui/number-ticker";
+import { TestimonialsColumns } from "@/components/ui/testimonials-columns";
 import { TextRotate } from "@/components/ui/text-rotate";
 import { useScroll } from "@/components/ui/use-scroll";
 import { GlowCard } from "@/components/ui/spotlight-card";
@@ -28,7 +25,7 @@ import { caregiverArea, caregiverWindow, MOCK_CAREGIVERS } from "@/lib/mock-care
 import { PLANS } from "@/lib/product";
 import { cn } from "@/lib/utils";
 
-const sectionY = "scroll-mt-28 py-16 lg:py-28";
+const sectionY = "scroll-mt-24 py-10 lg:py-12";
 
 const HERO_TILES = [
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/11/871/566",
@@ -172,7 +169,7 @@ export function AgencyHero() {
   const results = MOCK_CAREGIVERS.slice(0, 4);
 
   return (
-    <section className="relative mx-auto w-full max-w-6xl pt-12 lg:pt-24">
+    <section className="relative mx-auto w-full max-w-6xl pt-8 lg:pt-12">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute inset-0 isolate -z-10 bg-[radial-gradient(20%_80%_at_20%_0%,oklch(var(--foreground)/0.08),transparent)]" />
       </div>
@@ -197,7 +194,7 @@ export function AgencyHero() {
         </div>
       </div>
 
-      <div className="relative mt-8 px-5 pb-16 lg:mt-12 lg:pb-28">
+      <div id="map" className="relative mt-6 scroll-mt-24 px-5 pb-2 lg:mt-8">
         <MockupFrame size="small" className="mx-auto w-full max-w-5xl border border-border bg-background shadow-xl">
           <Mockup className="w-full flex-col border-border bg-background">
             <div className="flex items-center gap-3 border-b border-border bg-muted px-3 py-2">
@@ -265,29 +262,6 @@ export function AgencyHero() {
   );
 }
 
-export function AgencyMarquee() {
-  const { t } = useI18n();
-  const copy = t.agency;
-
-  return (
-    <section aria-label={copy.marqueeLabel} className="py-16 lg:py-24">
-      <Marquee
-        pauseOnHover
-        className="[--duration:40s] [--gap:0.75rem] [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
-      >
-        {copy.marquee.map((item) => (
-          <span
-            key={item}
-            className="whitespace-nowrap rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground"
-          >
-            {item}
-          </span>
-        ))}
-      </Marquee>
-    </section>
-  );
-}
-
 export function AgencyHow() {
   const { t } = useI18n();
   const copy = t.agency;
@@ -315,7 +289,7 @@ export function AgencyHow() {
         </BlurFade>
         <p className="mt-6 max-w-xl text-sm text-muted-foreground">{copy.clarity}</p>
 
-        <BlurFade inView delay={0.05} className="mt-16 lg:mt-24">
+        <BlurFade inView delay={0.05} className="mt-10 lg:mt-12">
           <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{copy.bentoKicker}</p>
           <h2 className="mt-3 text-3xl tracking-tight md:text-4xl">{copy.bentoTitle}</h2>
         </BlurFade>
@@ -394,76 +368,6 @@ export function AgencyHow() {
               }
             />
           </BentoGrid>
-        </BlurFade>
-      </div>
-    </section>
-  );
-}
-
-export function AgencyMapSection({ children }: { children: ReactNode }) {
-  const { t, locale } = useI18n();
-  const copy = t.agency;
-  const nearby = MOCK_CAREGIVERS.slice(0, 6);
-
-  return (
-    <section id="map" className={sectionY}>
-      <div className="mx-auto max-w-6xl px-5">
-        <BlurFade inView>
-          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <h2 className="text-3xl tracking-tight md:text-4xl">{copy.nearby}</h2>
-            <Badge variant="outline">{copy.demoData}</Badge>
-          </div>
-        </BlurFade>
-        <div className="agency-map relative isolate h-[28rem] overflow-hidden rounded-2xl border border-border bg-muted">
-          {children}
-        </div>
-        <ul className="mt-4 grid gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
-          {nearby.map((caregiver, index) => (
-            <li key={caregiver.id} className={cn("bg-card px-4 py-3 text-sm", index >= 3 && "hidden sm:block")}>
-              <p className="font-medium text-foreground">
-                {caregiver.firstName} {caregiver.lastInitial}. · {caregiver.role}
-              </p>
-              <p className="mt-1 text-muted-foreground">
-                {caregiverArea(caregiver, locale)} · {locale === "es" ? caregiver.windowEs : caregiver.window}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
-export function AgencyStats() {
-  const { t } = useI18n();
-  const copy = t.agency;
-  const facts = [
-    { value: copy.steps.length, prefix: "", label: copy.statSteps },
-    { value: 2, prefix: "", label: copy.statLanguages },
-    { value: PLANS.search.monthly, prefix: "$", label: copy.statMonthly },
-  ];
-
-  return (
-    <section aria-label={copy.statsLabel} className={sectionY}>
-      <div className="mx-auto w-full max-w-5xl px-5">
-        <BlurFade inView>
-          <h2 className="mb-8 text-3xl tracking-tight md:text-4xl">{copy.statsLabel}</h2>
-        </BlurFade>
-        <BlurFade inView delay={0.08}>
-          <Card role="list" aria-label={copy.statsLabel} className="grid grid-cols-1 divide-y p-0 shadow-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-            {facts.map((fact) => (
-              <div key={fact.label} role="listitem" className="flex flex-col items-center justify-center px-4 py-8 text-center">
-                <div className="text-[clamp(1.75rem,5vw,2.5rem)] font-semibold leading-none tracking-tight text-foreground">
-                  {fact.prefix}
-                  <NumberTicker
-                    value={fact.value}
-                    className="text-[clamp(1.75rem,5vw,2.5rem)] font-semibold leading-none"
-                  />
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{fact.label}</p>
-              </div>
-            ))}
-          </Card>
         </BlurFade>
       </div>
     </section>
@@ -605,36 +509,22 @@ export function AgencyFaq() {
   );
 }
 
-export function AgencyCta() {
+export function AgencyTestimonials() {
   const { t } = useI18n();
   const copy = t.agency;
 
   return (
-    <section className={sectionY}>
-      <div className="mx-auto w-full max-w-5xl px-5">
+    <section className={sectionY} aria-label={copy.testimonialsTitle}>
+      <div className="mx-auto max-w-6xl px-5">
         <BlurFade inView>
-          <div className="relative flex w-full flex-col justify-between gap-y-6 border-y bg-[radial-gradient(35%_80%_at_25%_0%,oklch(var(--foreground)/0.08),transparent)] px-4 py-8">
-            <PlusIcon className="absolute left-[-11.5px] top-[-12.5px] z-[1] size-6" strokeWidth={1} />
-            <PlusIcon className="absolute right-[-11.5px] top-[-12.5px] z-[1] size-6" strokeWidth={1} />
-            <PlusIcon className="absolute bottom-[-12.5px] left-[-11.5px] z-[1] size-6" strokeWidth={1} />
-            <PlusIcon className="absolute bottom-[-12.5px] right-[-11.5px] z-[1] size-6" strokeWidth={1} />
-            <div className="pointer-events-none absolute -inset-y-6 left-0 w-px border-l" />
-            <div className="pointer-events-none absolute -inset-y-6 right-0 w-px border-r" />
-            <div className="absolute left-1/2 top-0 -z-10 h-full border-l border-dashed" />
-            <div className="space-y-1">
-              <h2 className="text-center text-2xl font-semibold tracking-tight md:text-3xl">{copy.ctaTitle}</h2>
-              <p className="text-center text-muted-foreground">{copy.ctaBody}</p>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-              <Button asChild className="min-h-11">
-                <Link href="/signup/agency">{copy.getStarted}</Link>
-              </Button>
-              <Button asChild variant="outline" className="min-h-11">
-                <Link href="/signup/agency">{copy.talkToUs}</Link>
-              </Button>
-            </div>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{copy.testimonialsKicker}</p>
+            <h2 className="mt-3 text-3xl tracking-tight md:text-4xl">{copy.testimonialsTitle}</h2>
           </div>
         </BlurFade>
+        <div className="mt-8">
+          <TestimonialsColumns testimonials={copy.testimonials} />
+        </div>
       </div>
     </section>
   );
@@ -666,7 +556,7 @@ export function AgencyFooter() {
   ];
 
   return (
-    <footer className="border-t border-border py-16 lg:py-28">
+    <footer className="border-t border-border py-10 lg:py-12">
       <div className="mx-auto w-full max-w-6xl px-5">
         <div className="flex w-full flex-col justify-between gap-10 lg:flex-row lg:items-start">
           <div className="flex w-full max-w-md flex-col gap-4">

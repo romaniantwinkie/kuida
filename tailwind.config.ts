@@ -57,10 +57,6 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
       },
       keyframes: {
-        marquee: {
-          from: { transform: "translateX(0)" },
-          to: { transform: "translateX(calc(-100% - var(--gap)))" },
-        },
         "border-beam": {
           "100%": { "offset-distance": "100%" },
         },
@@ -74,7 +70,6 @@ const config: Config = {
         },
       },
       animation: {
-        marquee: "marquee var(--duration) linear infinite",
         "border-beam": "border-beam calc(var(--duration) * 1s) infinite linear",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",

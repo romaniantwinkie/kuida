@@ -1,15 +1,11 @@
-import { AgencyMapLoader } from "@/components/agency-map-loader";
 import {
-  AgencyCta,
   AgencyFaq,
   AgencyFooter,
   AgencyHeader,
   AgencyHero,
   AgencyHow,
-  AgencyMapSection,
-  AgencyMarquee,
   AgencyPricing,
-  AgencyStats,
+  AgencyTestimonials,
 } from "@/components/mainline/agency-marketing";
 
 export default function ForAgenciesPage() {
@@ -18,15 +14,10 @@ export default function ForAgenciesPage() {
       <AgencyHeader />
       <main className="flex flex-1 flex-col">
         <AgencyHero />
-        <AgencyMarquee />
-        <AgencyHow />
-        <AgencyMapSection>
-          <AgencyMapLoader />
-        </AgencyMapSection>
-        <AgencyStats />
         <AgencyPricing />
+        <AgencyHow />
         <AgencyFaq />
-        <AgencyCta />
+        <AgencyTestimonials />
       </main>
       <AgencyFooter />
     </div>

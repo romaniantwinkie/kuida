@@ -53,8 +53,6 @@ export type Messages = {
     requestSent: string;
     accepted: string;
     menu: string;
-    marqueeLabel: string;
-    marquee: string[];
     howKicker: string;
     howTitle: string;
     steps: CopyBlock<AgencyStepKey>[];
@@ -68,10 +66,6 @@ export type Messages = {
     urgentPill: string;
     nearby: string;
     demoData: string;
-    statsLabel: string;
-    statSteps: string;
-    statLanguages: string;
-    statMonthly: string;
     pricingKicker: string;
     pricingTitle: string;
     pricingBody: string;
@@ -89,8 +83,9 @@ export type Messages = {
     faqTitle: string;
     faqLead: string;
     faqItems: { id: string; q: string; a: string }[];
-    ctaTitle: string;
-    ctaBody: string;
+    testimonialsKicker: string;
+    testimonialsTitle: string;
+    testimonials: { quote: string; name: string; role: string; initials: string }[];
     footerProduct: string;
     footerCompany: string;
     footerLegalCol: string;
@@ -244,17 +239,6 @@ export const messages: Record<Locale, Messages> = {
       requestSent: "Request sent",
       accepted: "Accepted",
       menu: "Menu",
-      marqueeLabel: "Who it’s for",
-      marquee: [
-        "Nurse registries",
-        "Home health agencies",
-        "HHA",
-        "CNA",
-        "Miami-Dade",
-        "Broward",
-        "Palm Beach",
-        "English / Español",
-      ],
       howKicker: "How it works",
       howTitle: "Three steps to cover a case",
       steps: [
@@ -310,10 +294,6 @@ export const messages: Record<Locale, Messages> = {
       urgentPill: "Urgent",
       nearby: "See who’s free near your case",
       demoData: "Demo data",
-      statsLabel: "The product, in numbers we can stand behind",
-      statSteps: "Steps to cover a case",
-      statLanguages: "Languages, English and Spanish",
-      statMonthly: "Flat monthly for Search",
       pricingKicker: "Agencies only",
       pricingTitle: "Pricing",
       pricingBody: "Search is a flat monthly plan. Pro is quoted for the office.",
@@ -398,8 +378,82 @@ export const messages: Record<Locale, Messages> = {
           a: "No. Creating an agency account does not ask for a state license number.",
         },
       ],
-      ctaTitle: "Open case tonight? Cover it in minutes.",
-      ctaBody: "Search is $299 a month. Pro is quoted for the office.",
+      testimonialsKicker: "Illustrative stories",
+      testimonialsTitle: "Agencies covering cases with Kuidao",
+      testimonials: [
+        {
+          quote: "A caregiver called out at 6 a.m. We had someone for that case before lunch.",
+          name: "Marisol Vega",
+          role: "Owner, Bayshore Nurse Registry",
+          initials: "MV",
+        },
+        {
+          quote: "We needed a weekend HHA with almost no notice. The request went out and we covered Saturday.",
+          name: "Andre Cole",
+          role: "Scheduler, Coral Way Home Health",
+          initials: "AC",
+        },
+        {
+          quote: "The address was hard to staff. We still found a caregiver who would take it.",
+          name: "Lila Ortiz",
+          role: "Owner, Snapper Creek Home Care",
+          initials: "LO",
+        },
+        {
+          quote: "The household spoke Spanish and English. We matched a caregiver who could use both.",
+          name: "James Okonkwo",
+          role: "Director, Venetian Home Health",
+          initials: "JO",
+        },
+        {
+          quote: "The same HHA came back for the next three cases. The office already knew her.",
+          name: "Carmen Duarte",
+          role: "Scheduler, Riverside Nurse Registry",
+          initials: "CD",
+        },
+        {
+          quote: "A new patient started the same week. We had a CNA on the schedule before the first visit.",
+          name: "Elena Brooks",
+          role: "Intake, Hammock Home Care",
+          initials: "EB",
+        },
+        {
+          quote: "Evening coverage used to sit open. We filled a 5-to-9 window the day we posted it.",
+          name: "Pedro Alvarez",
+          role: "Owner, Sailboat Home Health",
+          initials: "PA",
+        },
+        {
+          quote: "We asked for Spanish and English on a short list. The match spoke both.",
+          name: "Naomi Chen",
+          role: "Scheduler, Flamingo Park Home Care",
+          initials: "NC",
+        },
+        {
+          quote: "One caregiver stayed reliable across later cases, so we stopped starting from zero.",
+          name: "Rosa Melendez",
+          role: "Owner, Pinecrest Lane Nurse Registry",
+          initials: "RM",
+        },
+        {
+          quote: "A last-minute call-out on a Friday. We covered the shift before the day slipped.",
+          name: "David Shah",
+          role: "Coordinator, Biscayne Office Home Health",
+          initials: "DS",
+        },
+        {
+          quote: "The zone was outside our usual loop. We still saw someone who could get there.",
+          name: "Irene Palacios",
+          role: "Scheduler, Grove Landing Home Care",
+          initials: "IP",
+        },
+        {
+          quote: "Weekend intake for a new patient used to wait until Monday. We covered Sunday.",
+          name: "Luis Ferrer",
+          role: "Owner, Flagler Home Care Office",
+          initials: "LF",
+        },
+      ],
       footerProduct: "Product",
       footerCompany: "Company",
       footerLegalCol: "Legal",
@@ -599,17 +653,6 @@ export const messages: Record<Locale, Messages> = {
       requestSent: "Solicitud enviada",
       accepted: "Aceptada",
       menu: "Menú",
-      marqueeLabel: "Para quién es",
-      marquee: [
-        "Registros de enfermería",
-        "Agencias de home health",
-        "HHA",
-        "CNA",
-        "Miami-Dade",
-        "Broward",
-        "Palm Beach",
-        "English / Español",
-      ],
       howKicker: "Cómo funciona",
       howTitle: "Tres pasos para cubrir un caso",
       steps: [
@@ -665,10 +708,6 @@ export const messages: Record<Locale, Messages> = {
       urgentPill: "Urgente",
       nearby: "Mira quién está libre cerca de tu caso",
       demoData: "Datos de demostración",
-      statsLabel: "El producto, en cifras que sí podemos sostener",
-      statSteps: "Pasos para cubrir un caso",
-      statLanguages: "Idiomas, inglés y español",
-      statMonthly: "Mensual fijo de Búsqueda",
       pricingKicker: "Solo agencias",
       pricingTitle: "Precios",
       pricingBody: "Búsqueda es un plan mensual fijo. Pro se cotiza para la oficina.",
@@ -753,8 +792,82 @@ export const messages: Record<Locale, Messages> = {
           a: "No. Crear una cuenta de agencia no pide un número de licencia estatal.",
         },
       ],
-      ctaTitle: "¿Caso abierto esta noche? Cúbrelo en minutos.",
-      ctaBody: "Búsqueda cuesta $299 al mes. Pro se cotiza para la oficina.",
+      testimonialsKicker: "Historias ilustrativas",
+      testimonialsTitle: "Agencias que cubren casos con Kuidao",
+      testimonials: [
+        {
+          quote: "Una cuidadora avisó a las 6 a. m. Tuvimos a alguien para ese caso antes del almuerzo.",
+          name: "Marisol Vega",
+          role: "Dueña, Bayshore Nurse Registry",
+          initials: "MV",
+        },
+        {
+          quote: "Necesitábamos una HHA de fin de semana casi sin aviso. Enviamos la solicitud y cubrimos el sábado.",
+          name: "Andre Cole",
+          role: "Coordinador, Coral Way Home Health",
+          initials: "AC",
+        },
+        {
+          quote: "La dirección era difícil de cubrir. Aun así encontramos a alguien que la aceptó.",
+          name: "Lila Ortiz",
+          role: "Dueña, Snapper Creek Home Care",
+          initials: "LO",
+        },
+        {
+          quote: "En la casa hablaban español e inglés. Emparejamos a una cuidadora que usaba los dos.",
+          name: "James Okonkwo",
+          role: "Director, Venetian Home Health",
+          initials: "JO",
+        },
+        {
+          quote: "La misma HHA volvió en los tres casos siguientes. La oficina ya la conocía.",
+          name: "Carmen Duarte",
+          role: "Coordinadora, Riverside Nurse Registry",
+          initials: "CD",
+        },
+        {
+          quote: "Un paciente nuevo empezó la misma semana. Teníamos una CNA en el horario antes de la primera visita.",
+          name: "Elena Brooks",
+          role: "Admisión, Hammock Home Care",
+          initials: "EB",
+        },
+        {
+          quote: "La cobertura de tarde se quedaba abierta. Llenamos un horario de 5 a 9 el mismo día.",
+          name: "Pedro Alvarez",
+          role: "Dueño, Sailboat Home Health",
+          initials: "PA",
+        },
+        {
+          quote: "Pedimos español e inglés en una lista corta. La persona hablaba los dos.",
+          name: "Naomi Chen",
+          role: "Coordinadora, Flamingo Park Home Care",
+          initials: "NC",
+        },
+        {
+          quote: "Una cuidadora siguió siendo confiable en casos posteriores, y dejamos de empezar de cero.",
+          name: "Rosa Melendez",
+          role: "Dueña, Pinecrest Lane Nurse Registry",
+          initials: "RM",
+        },
+        {
+          quote: "Una ausencia de último minuto un viernes. Cubrimos el turno antes de que se pasara el día.",
+          name: "David Shah",
+          role: "Coordinador, Biscayne Office Home Health",
+          initials: "DS",
+        },
+        {
+          quote: "La zona quedaba fuera de nuestro recorrido habitual. Igual vimos a alguien que podía llegar.",
+          name: "Irene Palacios",
+          role: "Coordinadora, Grove Landing Home Care",
+          initials: "IP",
+        },
+        {
+          quote: "El ingreso de un paciente nuevo en fin de semana esperaba al lunes. Cubrimos el domingo.",
+          name: "Luis Ferrer",
+          role: "Dueño, Flagler Home Care Office",
+          initials: "LF",
+        },
+      ],
       footerProduct: "Producto",
       footerCompany: "Compañía",
       footerLegalCol: "Legal",
