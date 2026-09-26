@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Bell, ClipboardList, LayoutDashboard, Search, Settings, Users } from "lucide-react";
+import { Bell, ClipboardList, LayoutDashboard, MessageSquare, Search, Settings, Users } from "lucide-react";
+import { MessageToasts } from "@/components/agency/message-toasts";
+import { unreadTotal, useMessageStore } from "@/components/agency/message-store";
 import { LangToggle } from "@/components/lang-toggle";
 import { useI18n } from "@/components/language-provider";
 import {
@@ -15,18 +17,21 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarProvider,
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 
 const nav = [
   { href: "/agency", key: "dashboard", icon: LayoutDashboard },
   { href: "/agency/find", key: "find", icon: Search },
   { href: "/agency/requests", key: "requests", icon: ClipboardList },
+  { href: "/agency/messages", key: "messages", icon: MessageSquare },
   { href: "/agency/caregivers", key: "caregivers", icon: Users },
   { href: "/agency/settings", key: "settings", icon: Settings },
 ] as const;
@@ -35,6 +40,7 @@ export function AgencyShell({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
       <AgencyFrame>{children}</AgencyFrame>
+      <Toaster />
     </SidebarProvider>
   );
 }
@@ -45,6 +51,8 @@ function AgencyFrame({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { open, isMobile, mobileOpen, setMobileOpen } = useSidebar();
   const showLabels = isMobile || open;
+  const { threads } = useMessageStore();
+  const unread = unreadTotal(threads);
 
   useEffect(() => {
     setMobileOpen(false);
@@ -66,14 +74,16 @@ function AgencyFrame({ children }: { children: React.ReactNode }) {
                 const active = item.href === "/agency" ? pathname === "/agency" : pathname.startsWith(item.href);
                 const Icon = item.icon;
                 const label = copy.nav[item.key];
+                const badge = item.key === "messages" && unread > 0 ? unread : 0;
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={active} title={label}>
+                    <SidebarMenuButton asChild isActive={active} title={badge ? `${label} (${badge})` : label} className={badge && showLabels ? "pr-8" : undefined}>
                       <Link href={item.href}>
                         <Icon className="size-4 shrink-0" aria-hidden />
                         {showLabels ? <span className="truncate">{label}</span> : <span className="sr-only">{label}</span>}
                       </Link>
                     </SidebarMenuButton>
+                    {badge ? <SidebarMenuBadge>{badge}</SidebarMenuBadge> : null}
                   </SidebarMenuItem>
                 );
               })}
@@ -110,6 +120,7 @@ function AgencyFrame({ children }: { children: React.ReactNode }) {
         </header>
         <div className="flex-1 p-4 md:p-6">{children}</div>
       </SidebarInset>
+      <MessageToasts />
     </>
   );
 }

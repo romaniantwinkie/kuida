@@ -42,14 +42,14 @@ function covers(person: MockCaregiver, day: DayKey, start: string, end: string) 
 
 const AVATAR_COLORS = ["#0c1e33", "#1d4e89", "#3d5a40", "#6b3f3f", "#3f4a6b", "#245c4a"];
 
-export function CaregiverAvatar({ person, size = "md" }: { person: MockCaregiver; size?: "md" | "lg" }) {
+export function CaregiverAvatar({ person, size = "md" }: { person: MockCaregiver; size?: "sm" | "md" | "lg" }) {
   const color = AVATAR_COLORS[Number(person.id.replace(/\D/g, "")) % AVATAR_COLORS.length];
   return (
     <span
       aria-hidden
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-md font-medium text-white",
-        size === "lg" ? "size-16 text-lg" : "size-12 text-sm",
+        size === "lg" ? "size-16 text-lg" : size === "sm" ? "size-8 text-xs" : "size-12 text-sm",
       )}
       style={{ backgroundColor: color }}
     >

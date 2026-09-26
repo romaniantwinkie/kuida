@@ -129,7 +129,24 @@ export function SidebarMenu({ className, children }: { className?: string; child
 }
 
 export function SidebarMenuItem({ className, children }: { className?: string; children: React.ReactNode }) {
-  return <li className={cn("list-none", className)}>{children}</li>;
+  return <li className={cn("relative list-none", className)}>{children}</li>;
+}
+
+export function SidebarMenuBadge({ className, children }: { className?: string; children: React.ReactNode }) {
+  const { open, isMobile } = useSidebar();
+  const collapsed = !isMobile && !open;
+  return (
+    <span
+      data-slot="sidebar-menu-badge"
+      className={cn(
+        "pointer-events-none absolute right-2 top-1/2 z-10 inline-flex h-5 min-w-5 -translate-y-1/2 items-center justify-center rounded-full bg-red-600 px-1 text-[11px] font-semibold tabular-nums text-white",
+        collapsed && "right-1 top-1 h-4 min-w-4 translate-y-0 px-0.5 text-[10px]",
+        className,
+      )}
+    >
+      {children}
+    </span>
+  );
 }
 
 export function SidebarMenuButton({

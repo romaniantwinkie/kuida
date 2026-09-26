@@ -253,8 +253,18 @@ export type Messages = {
       dashboard: string;
       find: string;
       requests: string;
+      messages: string;
       caregivers: string;
       settings: string;
+    };
+    inbox: {
+      title: string;
+      search: string;
+      empty: string;
+      placeholder: string;
+      send: string;
+      open: string;
+      you: string;
     };
     dashboard: {
       title: string;
@@ -794,8 +804,18 @@ export const messages: Record<Locale, Messages> = {
         dashboard: "Dashboard",
         find: "Find caregivers",
         requests: "Requests",
+        messages: "Messages",
         caregivers: "Caregivers",
         settings: "Settings",
+      },
+      inbox: {
+        title: "Messages",
+        search: "Search conversations",
+        empty: "No conversations match.",
+        placeholder: "Write a message",
+        send: "Send",
+        open: "Open",
+        you: "You",
       },
       dashboard: {
         title: "Dashboard",
@@ -1353,8 +1373,18 @@ export const messages: Record<Locale, Messages> = {
         dashboard: "Inicio",
         find: "Buscar cuidadores",
         requests: "Solicitudes",
+        messages: "Mensajes",
         caregivers: "Cuidadores",
         settings: "Ajustes",
+      },
+      inbox: {
+        title: "Mensajes",
+        search: "Buscar conversaciones",
+        empty: "Ninguna conversación coincide.",
+        placeholder: "Escribe un mensaje",
+        send: "Enviar",
+        open: "Abrir",
+        you: "Tú",
       },
       dashboard: {
         title: "Inicio",
