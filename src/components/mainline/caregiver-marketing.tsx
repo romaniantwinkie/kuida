@@ -27,6 +27,7 @@ import { Iphone16Pro } from "@/components/ui/iphone-16-pro";
 import { LangToggle } from "@/components/lang-toggle";
 import { useI18n } from "@/components/language-provider";
 import { Mark } from "@/components/mark";
+import { motionOffset, motionTween, usePrefersReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const sectionY = "scroll-mt-24 py-10 lg:py-12";
@@ -75,7 +76,7 @@ function CaregiverHeader({ open, setOpen }: { open: boolean; setOpen: (value: bo
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 mx-auto w-full max-w-6xl border-b border-transparent lg:rounded-md lg:border lg:transition-all lg:ease-out",
+        "sticky top-0 z-50 mx-auto w-full max-w-6xl border-b border-transparent lg:rounded-md lg:border lg:transition-all lg:duration-medium lg:ease-motion-out motion-reduce:lg:transition-none",
         {
           "border-border bg-background/95 shadow-sm backdrop-blur-lg supports-[backdrop-filter]:bg-background/70 lg:top-4 lg:max-w-5xl":
             scrolled && !open,
@@ -113,7 +114,7 @@ function CaregiverHeader({ open, setOpen }: { open: boolean; setOpen: (value: bo
             aria-label={copy.menu}
             onClick={() => setOpen(!open)}
           >
-            <MenuToggleIcon open={open} className="size-5" duration={300} />
+            <MenuToggleIcon open={open} className="size-5" />
           </Button>
         </div>
       </nav>
@@ -188,21 +189,13 @@ function CaregiverHero() {
 
 function PhoneNotification({ items }: { items: { title: string; detail: string; time: string }[] }) {
   const [index, setIndex] = useState(0);
-  const [reduced, setReduced] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const apply = () => setReduced(media.matches);
-    apply();
-    media.addEventListener("change", apply);
-    return () => media.removeEventListener("change", apply);
-  }, []);
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     if (reduced || items.length < 2) return;
     const timer = window.setInterval(() => {
       setIndex((current) => (current + 1) % items.length);
-    }, 1800);
+    }, 2800);
     return () => window.clearInterval(timer);
   }, [items.length, reduced]);
 
@@ -214,10 +207,10 @@ function PhoneNotification({ items }: { items: { title: string; detail: string; 
       <AnimatePresence mode="wait" initial={false}>
         <motion.article
           key={item.title}
-          initial={reduced ? false : { opacity: 0, y: 24 }}
+          initial={reduced ? false : { opacity: 0, y: motionOffset.swap }}
           animate={{ opacity: 1, y: 0 }}
-          exit={reduced ? undefined : { opacity: 0, y: -24 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
+          exit={reduced ? undefined : { opacity: 0, y: -motionOffset.swap }}
+          transition={motionTween("long")}
           className="w-full rounded-2xl border border-border bg-card p-3 shadow-sm sm:p-3.5"
         >
           <div className="flex items-start gap-2.5">
@@ -572,7 +565,7 @@ function CaregiverFooter() {
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   {column.links.map((link) => (
                     <li key={link.name}>
-                      <Link href={link.href} className="inline-flex min-h-11 items-center hover:text-foreground">
+                      <Link href={link.href} className="inline-flex min-h-11 items-center transition-colors duration-short ease-motion-out motion-reduce:transition-none hover:text-foreground">
                         {link.name}
                       </Link>
                     </li>

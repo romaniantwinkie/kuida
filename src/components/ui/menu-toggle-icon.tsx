@@ -16,7 +16,7 @@ export function MenuToggleIcon({
   strokeWidth = 2.5,
   strokeLinecap = "round",
   strokeLinejoin = "round",
-  duration = 500,
+  duration = 480,
   ...props
 }: MenuToggleProps) {
   return (
@@ -27,13 +27,13 @@ export function MenuToggleIcon({
       viewBox="0 0 32 32"
       strokeLinecap={strokeLinecap}
       strokeLinejoin={strokeLinejoin}
-      className={cn("transition-transform ease-in-out motion-reduce:transition-none", open && "-rotate-45", className)}
+      className={cn("transition-transform ease-motion-out motion-reduce:transition-none", open && "-rotate-45", className)}
       style={{ transitionDuration: `${duration}ms` }}
       {...props}
     >
       <path
         className={cn(
-          "transition-all ease-in-out motion-reduce:transition-none",
+          "transition-all ease-motion-out motion-reduce:transition-none",
           open ? "[stroke-dasharray:20_300] [stroke-dashoffset:-32.42px]" : "[stroke-dasharray:12_63]",
         )}
         style={{ transitionDuration: `${duration}ms` }}

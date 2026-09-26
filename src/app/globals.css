@@ -23,6 +23,11 @@
   --input: 0.94 0 0;
   --ring: 0 0 0;
   --radius: 0.5rem;
+  --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --motion-duration-short: 180ms;
+  --motion-duration-medium: 480ms;
+  --motion-duration-long: 720ms;
   --tracking-normal: 0em;
   --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
   --shadow-md: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 2px 4px -1px hsl(0 0% 0% / 0.18);
@@ -116,7 +121,7 @@ a {
   mask-composite: exclude;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 200ms ease;
+  transition: opacity var(--motion-duration-short) var(--motion-ease-out);
 }
 
 .welcome-tile:hover::after,
@@ -143,6 +148,12 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-short: 1ms;
+    --motion-duration-medium: 1ms;
+    --motion-duration-long: 1ms;
+  }
+
   .blur-fade-target {
     transform: none !important;
     filter: none !important;

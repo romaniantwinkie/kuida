@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { motionOffset, motionTween, usePrefersReducedMotion } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 interface WelcomeScreenProps {
@@ -31,38 +32,32 @@ export const WelcomeScreen: React.FC<WelcomeScreenProps> = ({
   imagePosition = "center",
   className,
 }) => {
+  const reduced = usePrefersReducedMotion();
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
+        staggerChildren: reduced ? 0 : 0.08,
       },
     },
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: reduced ? 0 : motionOffset.reveal, opacity: reduced ? 1 : 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: {
-        type: "spring" as const,
-        stiffness: 100,
-        damping: 15,
-      },
+      transition: motionTween("medium"),
     },
   };
 
   const imageVariants = {
-    hidden: { y: -50, opacity: 0 },
+    hidden: { y: reduced ? 0 : motionOffset.reveal, opacity: reduced ? 1 : 0 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: {
-        type: "spring" as const,
-        duration: 0.8,
-      },
+      transition: motionTween("long"),
     },
   };
 

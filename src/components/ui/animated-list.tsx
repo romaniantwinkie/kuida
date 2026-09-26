@@ -2,6 +2,7 @@
 
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { motionOffset, motionTween, usePrefersReducedMotion } from "@/lib/motion";
 
 export interface AnimatedListProps {
   className?: string;
@@ -10,28 +11,15 @@ export interface AnimatedListProps {
   maxVisible?: number;
 }
 
-function prefersReducedMotion() {
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
 export const AnimatedList = React.memo(
   ({ className, children, delay = 1000, maxVisible }: AnimatedListProps) => {
     const childrenArray = React.Children.toArray(children);
     const cap = maxVisible ?? childrenArray.length;
     const [index, setIndex] = useState(0);
-    const [reduced, setReduced] = useState(false);
-
-    useEffect(() => {
-      const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-      const apply = () => setReduced(media.matches);
-      apply();
-      media.addEventListener("change", apply);
-      return () => media.removeEventListener("change", apply);
-    }, []);
+    const reduced = usePrefersReducedMotion();
 
     useEffect(() => {
       if (reduced || childrenArray.length === 0) return;
-      if (prefersReducedMotion()) return;
       const interval = setInterval(() => {
         setIndex((prevIndex) => (prevIndex + 1) % childrenArray.length);
       }, delay);
@@ -78,10 +66,10 @@ export function AnimatedListItem({
   return (
     <motion.div
       layout
-      initial={{ scale: 1, opacity: 1 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.96, opacity: 0 }}
-      transition={{ type: "spring", stiffness: 350, damping: 40 }}
+      initial={{ opacity: 0, y: motionOffset.swap }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -motionOffset.swap }}
+      transition={motionTween("medium")}
       className="mx-auto w-full"
     >
       {children}

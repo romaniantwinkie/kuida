@@ -69,10 +69,19 @@ const config: Config = {
           to: { height: "0" },
         },
       },
+      transitionDuration: {
+        short: "var(--motion-duration-short)",
+        medium: "var(--motion-duration-medium)",
+        long: "var(--motion-duration-long)",
+      },
+      transitionTimingFunction: {
+        "motion-out": "var(--motion-ease-out)",
+        "motion-in-out": "var(--motion-ease-in-out)",
+      },
       animation: {
         "border-beam": "border-beam calc(var(--duration) * 1s) infinite linear",
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
+        "accordion-down": "accordion-down var(--motion-duration-medium) var(--motion-ease-out)",
+        "accordion-up": "accordion-up var(--motion-duration-medium) var(--motion-ease-out)",
       },
     },
   },

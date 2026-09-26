@@ -76,7 +76,7 @@ export function AgencyHeader() {
   return (
     <header
       className={cn(
-        "sticky top-0 z-50 mx-auto w-full max-w-6xl border-b border-transparent lg:rounded-md lg:border lg:transition-all lg:ease-out",
+        "sticky top-0 z-50 mx-auto w-full max-w-6xl border-b border-transparent lg:rounded-md lg:border lg:transition-all lg:duration-medium lg:ease-motion-out motion-reduce:lg:transition-none",
         {
           "border-border bg-background/95 shadow-sm backdrop-blur-lg supports-[backdrop-filter]:bg-background/70 lg:top-4 lg:max-w-5xl":
             scrolled && !open,
@@ -114,7 +114,7 @@ export function AgencyHeader() {
             aria-label={copy.menu}
             onClick={() => setOpen((value) => !value)}
           >
-            <MenuToggleIcon open={open} className="size-5" duration={300} />
+            <MenuToggleIcon open={open} className="size-5" />
           </Button>
         </div>
       </nav>
@@ -570,7 +570,7 @@ export function AgencyFooter() {
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   {column.links.map((link) => (
                     <li key={link.name}>
-                      <Link href={link.href} className="inline-flex min-h-11 items-center hover:text-foreground">
+                      <Link href={link.href} className="inline-flex min-h-11 items-center transition-colors duration-short ease-motion-out motion-reduce:transition-none hover:text-foreground">
                         {link.name}
                       </Link>
                     </li>

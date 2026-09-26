@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { AnimatePresence, motion, useInView, type UseInViewOptions, type Variants } from "framer-motion";
+import { motionDuration, motionEaseOut, motionOffset, usePrefersReducedMotion } from "@/lib/motion";
 
 type MarginType = UseInViewOptions["margin"];
 
@@ -24,21 +25,27 @@ export function BlurFade({
   children,
   className,
   variant,
-  duration = 0.4,
+  duration = motionDuration.medium,
   delay = 0,
-  yOffset = 6,
+  yOffset = motionOffset.reveal,
   inView = false,
   inViewMargin = "-50px",
-  blur = "6px",
+  blur = "0px",
 }: BlurFadeProps) {
   const ref = useRef(null);
+  const reduced = usePrefersReducedMotion();
   const inViewResult = useInView(ref, { once: true, margin: inViewMargin });
   const isInView = !inView || inViewResult;
+  const useBlur = blur !== "0px";
   const defaultVariants: Variants = {
-    hidden: { y: yOffset, opacity: 0, filter: `blur(${blur})` },
-    visible: { y: 0, opacity: 1, filter: "blur(0px)" },
+    hidden: useBlur ? { y: yOffset, opacity: 0, filter: `blur(${blur})` } : { y: yOffset, opacity: 0 },
+    visible: useBlur ? { y: 0, opacity: 1, filter: "blur(0px)" } : { y: 0, opacity: 1 },
   };
   const combinedVariants = variant || defaultVariants;
+
+  if (reduced) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <AnimatePresence>
@@ -51,7 +58,7 @@ export function BlurFade({
         transition={{
           delay: 0.04 + delay,
           duration,
-          ease: "easeOut",
+          ease: motionEaseOut,
         }}
         className={`blur-fade-target ${className ?? ""}`}
       >
