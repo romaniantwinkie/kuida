@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Bell, ClipboardList, LayoutDashboard, MessageSquare, Search, Settings, Users } from "lucide-react";
+import { Bell, ClipboardList, LayoutDashboard, LogOut, MessageSquare, Search, Settings, Users } from "lucide-react";
+import { useAgencyAccount } from "@/components/agency/agency-account";
 import { MessageToasts } from "@/components/agency/message-toasts";
 import { unreadTotal, useMessageStore } from "@/components/agency/message-store";
 import { LangToggle } from "@/components/lang-toggle";
@@ -25,6 +26,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { initials } from "@/lib/auth-role";
 import { cn } from "@/lib/utils";
 
 const nav = [
@@ -48,6 +50,7 @@ export function AgencyShell({ children }: { children: React.ReactNode }) {
 function AgencyFrame({ children }: { children: React.ReactNode }) {
   const { t } = useI18n();
   const copy = t.shell;
+  const account = useAgencyAccount();
   const pathname = usePathname();
   const { open, isMobile, mobileOpen, setMobileOpen } = useSidebar();
   const showLabels = isMobile || open;
@@ -68,7 +71,7 @@ function AgencyFrame({ children }: { children: React.ReactNode }) {
         </SidebarHeader>
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>{copy.demo}</SidebarGroupLabel>
+            <SidebarGroupLabel>{account.demo ? copy.demo : account.name}</SidebarGroupLabel>
             <SidebarMenu>
               {nav.map((item) => {
                 const active = item.href === "/agency" ? pathname === "/agency" : pathname.startsWith(item.href);
@@ -91,7 +94,11 @@ function AgencyFrame({ children }: { children: React.ReactNode }) {
           </SidebarGroup>
         </SidebarContent>
         <SidebarFooter>
-          {showLabels ? <p className="text-xs leading-5 text-white/55">{copy.demoNote}</p> : null}
+          {showLabels && account.demo ? <p className="text-xs leading-5 text-white/55">{copy.demoNote}</p> : null}
+          <a href="/auth/sign-out" className="inline-flex min-h-9 items-center gap-2 px-2 text-xs text-white/70 underline-offset-4 hover:underline" aria-label={copy.signOut}>
+            <LogOut className="size-4 shrink-0" aria-hidden />
+            {showLabels ? copy.signOut : <span className="sr-only">{copy.signOut}</span>}
+          </a>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
@@ -104,16 +111,18 @@ function AgencyFrame({ children }: { children: React.ReactNode }) {
             <LangToggle />
             <div className="hidden items-center gap-2 pl-1 sm:flex">
               <span className="inline-flex size-8 items-center justify-center rounded-full bg-[#0c1e33] text-xs font-medium text-white">
-                AR
+                {account.demo ? "AR" : initials(account.name || account.email)}
               </span>
               <span className="leading-tight">
                 <span className="flex items-center gap-1.5 text-sm font-medium">
-                  {copy.agencyName}
-                  <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
-                    {copy.demo}
-                  </span>
+                  {account.demo ? copy.agencyName : account.name}
+                  {account.demo ? (
+                    <span className="rounded border border-border px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                      {copy.demo}
+                    </span>
+                  ) : null}
                 </span>
-                <span className="block text-xs text-muted-foreground">{copy.userName}</span>
+                <span className="block text-xs text-muted-foreground">{account.demo ? copy.userName : account.email}</span>
               </span>
             </div>
           </div>

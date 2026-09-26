@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { useAgencyAccount } from "@/components/agency/agency-account";
 import { useI18n } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import { caregiverArea, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
@@ -143,8 +144,10 @@ export function CaregiversScreen() {
 
 export function SettingsScreen() {
   const { t } = useI18n();
+  const account = useAgencyAccount();
   const copy = t.shell.settings;
   const [saved, setSaved] = useState(false);
+  const demo = account.demo;
 
   function submit(event: FormEvent) {
     event.preventDefault();
@@ -152,20 +155,20 @@ export function SettingsScreen() {
   }
 
   return (
-    <AgencyPage title={copy.title} body={copy.body}>
+    <AgencyPage title={copy.title} body={demo ? copy.body : copy.liveBody}>
       <form onSubmit={submit} className="max-w-lg rounded-lg border border-border bg-white p-4">
         <div className="grid gap-3">
-          <Field id="agency-name" label={copy.name} defaultValue={t.shell.agencyName} />
-          <Field id="agency-email" label={copy.email} defaultValue="office@lumen.example" type="email" />
-          <Field id="agency-phone" label={copy.phone} defaultValue="(305) 555-0148" />
-          <Field id="agency-area" label={copy.area} defaultValue="Miami" />
+          <Field id="agency-name" label={copy.name} defaultValue={demo ? t.shell.agencyName : account.name} />
+          <Field id="agency-email" label={copy.email} defaultValue={demo ? "office@lumen.example" : account.email} type="email" />
+          <Field id="agency-phone" label={copy.phone} defaultValue={demo ? "(305) 555-0148" : ""} />
+          <Field id="agency-area" label={copy.area} defaultValue={demo ? "Miami" : ""} />
         </div>
         <Button type="submit" className="mt-4">
           {copy.save}
         </Button>
         {saved ? (
           <p role="status" className="mt-3 text-sm text-muted-foreground">
-            {copy.saved}
+            {demo ? copy.saved : copy.liveSaved}
           </p>
         ) : null}
       </form>

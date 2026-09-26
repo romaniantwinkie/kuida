@@ -176,6 +176,24 @@ export type Messages = {
     help: string;
     backHome: string;
     soon: string;
+    missingConfig: string;
+    checkEmail: string;
+    invalidLogin: string;
+    alreadyRegistered: string;
+    passwordShort: string;
+    emailRequired: string;
+    termsRequired: string;
+    otherCaregiver: string;
+    otherAgency: string;
+    working: string;
+    resetSent: string;
+  };
+  caregiverHome: {
+    title: string;
+    body: string;
+    shiftLabel: string;
+    shift: string;
+    signOut: string;
   };
   agencySignup: {
     kicker: string;
@@ -241,6 +259,7 @@ export type Messages = {
   shell: {
     demo: string;
     demoNote: string;
+    signOut: string;
     notifications: string;
     notificationsEmpty: string;
     agencyName: string;
@@ -332,6 +351,8 @@ export type Messages = {
       area: string;
       save: string;
       saved: string;
+      liveBody: string;
+      liveSaved: string;
     };
     cases: { title: string; role: string; when: string; area: string; status: "open" | "filled" }[];
     threads: { from: string; topic: string }[];
@@ -727,6 +748,24 @@ export const messages: Record<Locale, Messages> = {
       help: "Need help?",
       backHome: "Back home",
       soon: "Coming soon. This preview does not save accounts.",
+      missingConfig: "Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to turn on accounts.",
+      checkEmail: "Check your email to confirm the account, then sign in.",
+      invalidLogin: "That email and password did not match.",
+      alreadyRegistered: "An account with that email already exists. Sign in instead.",
+      passwordShort: "Use at least 6 characters.",
+      emailRequired: "Enter your email first.",
+      termsRequired: "Agree to the terms to create an account.",
+      otherCaregiver: "I am a caregiver",
+      otherAgency: "I am an agency",
+      working: "Working…",
+      resetSent: "Check your email for a link to reset your password.",
+    },
+    caregiverHome: {
+      title: "Your shifts",
+      body: "A simple home for this caregiver account. No agency plans are shown here.",
+      shiftLabel: "Next",
+      shift: "No shifts assigned yet.",
+      signOut: "Sign out",
     },
     agencySignup: {
       kicker: "Agency",
@@ -802,6 +841,7 @@ export const messages: Record<Locale, Messages> = {
     shell: {
       demo: "Demo",
       demoNote: "Sample office. This is not a real agency or a live account.",
+      signOut: "Sign out",
       notifications: "Notifications",
       notificationsEmpty: "No new notifications.",
       agencyName: "Lumen Home Care",
@@ -906,6 +946,8 @@ export const messages: Record<Locale, Messages> = {
         area: "Service area",
         save: "Save",
         saved: "Demo only. Nothing was stored.",
+        liveBody: "Signed in to this office.",
+        liveSaved: "This form does not update the account yet.",
       },
       cases: [
         { title: "Weekday mornings", role: "HHA", when: "Mon–Fri · 8:00–2:00", area: "Hialeah", status: "open" },
@@ -1306,6 +1348,24 @@ export const messages: Record<Locale, Messages> = {
       help: "¿Necesitas ayuda?",
       backHome: "Volver al inicio",
       soon: "Pronto. Esta vista previa no guarda cuentas.",
+      missingConfig: "Agrega NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_ANON_KEY para activar las cuentas.",
+      checkEmail: "Revisa tu correo para confirmar la cuenta y luego entra.",
+      invalidLogin: "Ese correo y contraseña no coinciden.",
+      alreadyRegistered: "Ya existe una cuenta con ese correo. Entra en su lugar.",
+      passwordShort: "Usa al menos 6 caracteres.",
+      emailRequired: "Escribe tu correo primero.",
+      termsRequired: "Acepta los términos para crear la cuenta.",
+      otherCaregiver: "Soy cuidador/a",
+      otherAgency: "Soy una agencia",
+      working: "Trabajando…",
+      resetSent: "Revisa tu correo para restablecer la contraseña.",
+    },
+    caregiverHome: {
+      title: "Tus turnos",
+      body: "Un inicio sencillo para esta cuenta de cuidador. Aquí no se muestran planes de agencia.",
+      shiftLabel: "Siguiente",
+      shift: "Todavía no hay turnos asignados.",
+      signOut: "Salir",
     },
     agencySignup: {
       kicker: "Agencia",
@@ -1381,6 +1441,7 @@ export const messages: Record<Locale, Messages> = {
     shell: {
       demo: "Demo",
       demoNote: "Oficina de muestra. No es una agencia real ni una cuenta activa.",
+      signOut: "Salir",
       notifications: "Avisos",
       notificationsEmpty: "No hay avisos nuevos.",
       agencyName: "Lumen Home Care",
@@ -1485,6 +1546,8 @@ export const messages: Record<Locale, Messages> = {
         area: "Zona de servicio",
         save: "Guardar",
         saved: "Solo demo. No se guardó nada.",
+        liveBody: "Sesión iniciada en esta oficina.",
+        liveSaved: "Este formulario todavía no actualiza la cuenta.",
       },
       cases: [
         { title: "Mañanas entre semana", role: "HHA", when: "Lun–Vie · 8:00–14:00", area: "Hialeah", status: "open" },

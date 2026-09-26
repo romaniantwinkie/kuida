@@ -47,7 +47,7 @@ export function Header() {
               </Link>
             ) : null}
             <Link
-              href="/sign-in"
+              href={audience === "caregiver" ? "/sign-in?role=caregiver" : "/sign-in"}
               className="inline-flex min-h-11 items-center rounded-md px-2 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {t.nav.logIn}

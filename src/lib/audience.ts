@@ -6,7 +6,9 @@ export function audienceForPath(pathname: string): Audience {
     pathname === "/for-caregivers" ||
     pathname.startsWith("/signup/caregiver") ||
     pathname === "/c" ||
-    pathname.startsWith("/c/")
+    pathname.startsWith("/c/") ||
+    pathname === "/caregiver" ||
+    pathname.startsWith("/caregiver/")
   ) {
     return "caregiver";
   }

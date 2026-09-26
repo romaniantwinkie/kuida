@@ -2,281 +2,303 @@
 
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { FormEvent, useState, type ReactNode } from "react";
-import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
+import { FormEvent, useState } from "react";
 import { LangToggle } from "@/components/lang-toggle";
 import { Mark } from "@/components/mark";
 import { useI18n } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { SonarGrid } from "@/components/ui/sonar-grid";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 
 type Role = "agency" | "caregiver";
 type Tab = "login" | "signup";
 
-const fieldClass =
-  "h-11 w-full rounded-md border border-input bg-white pl-10 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring";
-
-export function AuthScreen({ role, defaultTab }: { role: Role; defaultTab: Tab }) {
+export function AuthScreen({
+  role,
+  defaultTab,
+  configured,
+}: {
+  role: Role;
+  defaultTab: Tab;
+  configured: boolean;
+}) {
   const { t } = useI18n();
   const router = useRouter();
   const copy = t.auth;
   const [tab, setTab] = useState<Tab>(defaultTab);
-  const [showLoginPw, setShowLoginPw] = useState(false);
-  const [showSignupPw, setShowSignupPw] = useState(false);
-  const [note, setNote] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [terms, setTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [status, setStatus] = useState("");
+  const [working, setWorking] = useState(false);
 
-  function soon(event: FormEvent) {
-    event.preventDefault();
-    if (role === "agency") {
-      router.push("/agency");
-      return;
-    }
-    setNote(copy.soon);
+  const home = role === "agency" ? "/agency" : "/caregiver";
+  const otherHref = role === "agency" ? "/signup/caregiver" : "/signup/agency";
+  const otherLabel = role === "agency" ? copy.otherCaregiver : copy.otherAgency;
+  const compact = role === "caregiver";
+  const inputClass = compact ? "h-12 text-base" : undefined;
+
+  function clearNotes() {
+    setError("");
+    setStatus("");
   }
 
-  const nameLabel = role === "agency" ? copy.agencyName : copy.fullName;
-  const namePlaceholder = role === "agency" ? copy.agencyNamePlaceholder : copy.fullNamePlaceholder;
+  function requireConfig() {
+    if (configured) return true;
+    setError(copy.missingConfig);
+    setStatus("");
+    return false;
+  }
+
+  function mapError(message: string) {
+    const lower = message.toLowerCase();
+    if (lower.includes("invalid login") || lower.includes("invalid credentials")) return copy.invalidLogin;
+    if (lower.includes("already registered") || lower.includes("already been registered")) return copy.alreadyRegistered;
+    if (lower.includes("password") && (lower.includes("least") || lower.includes("short") || lower.includes("6"))) {
+      return copy.passwordShort;
+    }
+    return message;
+  }
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    clearNotes();
+    if (!requireConfig()) return;
+
+    if (tab === "signup") {
+      if (password.length < 6) {
+        setError(copy.passwordShort);
+        return;
+      }
+      if (!terms) {
+        setError(copy.termsRequired);
+        return;
+      }
+    }
+
+    setWorking(true);
+    const supabase = createClient();
+    const origin = window.location.origin;
+
+    if (tab === "login") {
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      setWorking(false);
+      if (signInError) {
+        setError(mapError(signInError.message));
+        return;
+      }
+      router.push(home);
+      router.refresh();
+      return;
+    }
+
+    const data = role === "agency" ? { role, agency_name: name.trim() } : { role, full_name: name.trim() };
+    const { data: signed, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data,
+        emailRedirectTo: `${origin}/auth/callback`,
+      },
+    });
+    setWorking(false);
+    if (signUpError) {
+      setError(mapError(signUpError.message));
+      return;
+    }
+    if (signed.session) {
+      router.push(home);
+      router.refresh();
+      return;
+    }
+    setStatus(copy.checkEmail);
+  }
+
+  async function onForgot() {
+    clearNotes();
+    if (!requireConfig()) return;
+    if (!email.trim()) {
+      setError(copy.emailRequired);
+      return;
+    }
+    setWorking(true);
+    const supabase = createClient();
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${window.location.origin}/auth/callback`,
+    });
+    setWorking(false);
+    if (resetError) {
+      setError(mapError(resetError.message));
+      return;
+    }
+    setStatus(copy.resetSent);
+  }
 
   return (
-    <SonarGrid interactive className="min-h-dvh bg-background text-foreground">
-      <style>{`
-        .auth-card-animate { opacity: 0; transform: translateY(12px); animation: authFadeUp .6s ease .25s forwards; }
-        @keyframes authFadeUp { to { opacity: 1; transform: translateY(0); } }
-        .auth-tab-shell { position: relative; }
-        .auth-tab-panel { transition: opacity .22s ease, filter .22s ease; }
-        .auth-tab-panel[data-state="inactive"] {
-          position: absolute; inset: 0;
-          opacity: 0; filter: blur(8px);
-          pointer-events: none;
-        }
-        .auth-tab-panel[data-state="active"] {
-          position: relative;
-          opacity: 1; filter: blur(0px);
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .auth-card-animate { animation: none; opacity: 1; transform: none; }
-          .auth-tab-panel { transition: none; }
-          .auth-tab-panel[data-state="inactive"] { filter: none; }
-        }
-      `}</style>
-      <div className="relative z-10 flex min-h-dvh cursor-auto flex-col">
-        <header className="flex items-center justify-between px-5 py-4 sm:px-8">
-          <Mark />
-          <LangToggle />
-        </header>
-        <div className="grid flex-1 place-items-center px-4 py-8">
-          <Card className="auth-card-animate w-full max-w-md cursor-auto border-border bg-white/85 shadow-sm backdrop-blur-md">
-            <CardHeader className="space-y-1">
-              <CardTitle className="text-2xl font-medium tracking-tight">
-                {role === "agency" ? copy.agencyTitle : copy.caregiverTitle}
-              </CardTitle>
-              <CardDescription>{role === "agency" ? copy.agencyBody : copy.caregiverBody}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-1 rounded-[10px] border border-border bg-muted p-1">
-                {(["login", "signup"] as const).map((value) => (
-                  <button
-                    key={value}
-                    type="button"
-                    role="tab"
-                    aria-selected={tab === value}
-                    className={`min-h-11 rounded-lg text-sm font-medium tracking-wide ${
-                      tab === value ? "bg-white text-foreground shadow-sm" : "text-muted-foreground"
-                    }`}
-                    onClick={() => {
-                      setTab(value);
-                      setNote("");
-                    }}
-                  >
-                    {value === "login" ? copy.loginTab : copy.signupTab}
-                  </button>
-                ))}
-              </div>
-              <div className="auth-tab-shell mt-6">
-                <form
-                  role="tabpanel"
-                  data-state={tab === "login" ? "active" : "inactive"}
-                  aria-hidden={tab !== "login"}
-                  inert={tab !== "login"}
-                  className="auth-tab-panel space-y-5"
-                  onSubmit={soon}
-                >
-                  <Field id={`${role}-login-email`} label={copy.email} icon={<Mail className="h-4 w-4" />}>
-                    <input
-                      id={`${role}-login-email`}
-                      type="email"
-                      autoComplete="email"
-                      placeholder={copy.emailPlaceholder}
-                      className={fieldClass}
-                    />
-                  </Field>
-                  <PasswordField
-                    id={`${role}-login-password`}
-                    label={copy.password}
-                    shown={showLoginPw}
-                    showLabel={copy.showPassword}
-                    hideLabel={copy.hidePassword}
-                    onToggle={() => setShowLoginPw((value) => !value)}
-                  />
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <label className="flex min-h-11 items-center gap-2 text-sm text-muted-foreground">
-                      <input type="checkbox" className="size-4 accent-foreground" />
-                      {copy.remember}
-                    </label>
-                    <button type="button" className="min-h-11 text-sm text-foreground underline-offset-4 hover:underline" onClick={soon}>
-                      {copy.forgot}
+    <div className={cn("flex min-h-svh flex-col", role === "agency" ? "bg-[#eef0f3]" : "bg-white")}>
+      <header className="flex items-center justify-between px-5 py-4 sm:px-8">
+        <Mark />
+        <LangToggle />
+      </header>
+      <div className="flex flex-1 items-center justify-center p-6 md:p-10">
+        <div className="w-full max-w-sm">
+          <div className="flex flex-col gap-6">
+            {!configured ? (
+              <p role="status" className="rounded-lg border border-border bg-white p-3 text-sm text-foreground">
+                {copy.missingConfig}
+              </p>
+            ) : null}
+            <Card className="bg-white shadow-sm">
+              <CardHeader>
+                <CardTitle className="text-2xl">{role === "agency" ? copy.agencyTitle : copy.caregiverTitle}</CardTitle>
+                <CardDescription>{role === "agency" ? copy.agencyBody : copy.caregiverBody}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-6 grid grid-cols-2 gap-1 rounded-lg bg-muted p-1">
+                  {(["login", "signup"] as const).map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      role="tab"
+                      aria-selected={tab === value}
+                      className={cn(
+                        "min-h-11 rounded-md text-sm font-medium",
+                        tab === value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground",
+                      )}
+                      onClick={() => {
+                        setTab(value);
+                        clearNotes();
+                      }}
+                    >
+                      {value === "login" ? copy.loginTab : copy.signupTab}
                     </button>
+                  ))}
+                </div>
+                <form onSubmit={onSubmit}>
+                  <div className="flex flex-col gap-6">
+                    {tab === "signup" ? (
+                      <div className="grid gap-2">
+                        <Label htmlFor={`${role}-name`}>{role === "agency" ? copy.agencyName : copy.fullName}</Label>
+                        <Input
+                          id={`${role}-name`}
+                          className={inputClass}
+                          value={name}
+                          onChange={(event) => setName(event.target.value)}
+                          placeholder={role === "agency" ? copy.agencyNamePlaceholder : copy.fullNamePlaceholder}
+                          autoComplete={role === "agency" ? "organization" : "name"}
+                          required
+                        />
+                      </div>
+                    ) : null}
+                    <div className="grid gap-2">
+                      <Label htmlFor={`${role}-email`}>{copy.email}</Label>
+                      <Input
+                        id={`${role}-email`}
+                        className={inputClass}
+                        type="email"
+                        value={email}
+                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder={copy.emailPlaceholder}
+                        autoComplete="email"
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <div className="flex items-center">
+                        <Label htmlFor={`${role}-password`}>{copy.password}</Label>
+                        {tab === "login" ? (
+                          <button
+                            type="button"
+                            className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                            onClick={onForgot}
+                          >
+                            {copy.forgot}
+                          </button>
+                        ) : null}
+                      </div>
+                      <div className="relative">
+                        <Input
+                          id={`${role}-password`}
+                          className={cn(inputClass, "pr-16")}
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(event) => setPassword(event.target.value)}
+                          autoComplete={tab === "signup" ? "new-password" : "current-password"}
+                          required
+                          minLength={tab === "signup" ? 6 : undefined}
+                        />
+                        <button
+                          type="button"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground underline-offset-4 hover:underline"
+                          onClick={() => setShowPassword((value) => !value)}
+                        >
+                          {showPassword ? copy.hidePassword : copy.showPassword}
+                        </button>
+                      </div>
+                    </div>
+                    {tab === "signup" ? (
+                      <label className="flex items-start gap-2 text-sm text-muted-foreground">
+                        <input
+                          type="checkbox"
+                          className="mt-0.5 size-4 accent-foreground"
+                          checked={terms}
+                          onChange={(event) => setTerms(event.target.checked)}
+                        />
+                        <span>
+                          {copy.termsLead}{" "}
+                          <Link href="/legal" className="text-foreground underline underline-offset-4">
+                            {copy.terms}
+                          </Link>{" "}
+                          {copy.termsAnd}{" "}
+                          <Link href="/legal" className="text-foreground underline underline-offset-4">
+                            {copy.privacy}
+                          </Link>
+                        </span>
+                      </label>
+                    ) : null}
+                    <Button type="submit" className={cn("w-full", compact ? "h-12 text-base" : "h-11")} disabled={working}>
+                      {working ? copy.working : tab === "login" ? copy.signIn : copy.create}
+                    </Button>
                   </div>
-                  <Button type="submit" className="h-11 w-full">
-                    {copy.signIn}
-                  </Button>
+                  {error ? (
+                    <p role="alert" className="mt-4 text-sm text-destructive">
+                      {error}
+                    </p>
+                  ) : null}
+                  {status ? (
+                    <p role="status" className="mt-4 text-sm text-muted-foreground">
+                      {status}
+                    </p>
+                  ) : null}
+                  <div className="mt-4 text-center text-sm">
+                    <Link href={otherHref} className="underline underline-offset-4">
+                      {otherLabel}
+                    </Link>
+                  </div>
                 </form>
-                <form
-                  role="tabpanel"
-                  data-state={tab === "signup" ? "active" : "inactive"}
-                  aria-hidden={tab !== "signup"}
-                  inert={tab !== "signup"}
-                  className="auth-tab-panel space-y-5"
-                  onSubmit={soon}
-                >
-                  <Field id={`${role}-name`} label={nameLabel} icon={<User className="h-4 w-4" />}>
-                    <input
-                      id={`${role}-name`}
-                      type="text"
-                      autoComplete={role === "agency" ? "organization" : "name"}
-                      placeholder={namePlaceholder}
-                      className={fieldClass}
-                    />
-                  </Field>
-                  <Field id={`${role}-signup-email`} label={copy.email} icon={<Mail className="h-4 w-4" />}>
-                    <input
-                      id={`${role}-signup-email`}
-                      type="email"
-                      autoComplete="email"
-                      placeholder={copy.emailPlaceholder}
-                      className={fieldClass}
-                    />
-                  </Field>
-                  <PasswordField
-                    id={`${role}-signup-password`}
-                    label={copy.password}
-                    shown={showSignupPw}
-                    showLabel={copy.showPassword}
-                    hideLabel={copy.hidePassword}
-                    onToggle={() => setShowSignupPw((value) => !value)}
-                    autoComplete="new-password"
-                  />
-                  <label className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <input type="checkbox" className="mt-0.5 size-4 accent-foreground" />
-                    <span>
-                      {copy.termsLead}{" "}
-                      <Link href="/legal" className="text-foreground underline-offset-4 hover:underline">
-                        {copy.terms}
-                      </Link>{" "}
-                      {copy.termsAnd}{" "}
-                      <Link href="/legal" className="text-foreground underline-offset-4 hover:underline">
-                        {copy.privacy}
-                      </Link>
-                    </span>
-                  </label>
-                  <Button type="submit" className="h-11 w-full">
-                    {copy.create}
-                  </Button>
-                </form>
-              </div>
-              {note ? (
-                <p role="status" className="mt-4 text-sm text-muted-foreground">
-                  {note}
-                </p>
-              ) : null}
-            </CardContent>
-            <CardFooter className="flex flex-col items-center gap-2 text-sm text-muted-foreground">
-              <div>
-                {copy.help}{" "}
-                <Link href="/" className="text-foreground underline-offset-4 hover:underline">
-                  {copy.backHome}
-                </Link>
-              </div>
-            </CardFooter>
-          </Card>
+              </CardContent>
+            </Card>
+            <p className="text-center text-sm text-muted-foreground">
+              <Link href="/" className="underline underline-offset-4">
+                {copy.backHome}
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
-    </SonarGrid>
+    </div>
   );
 }
 
-export function SignInGate() {
+export function SignInGate({ configured }: { configured: boolean }) {
   const params = useSearchParams();
   const role: Role = params.get("role") === "caregiver" ? "caregiver" : "agency";
   const tab: Tab = params.get("tab") === "signup" ? "signup" : "login";
-  return <AuthScreen role={role} defaultTab={tab} />;
-}
-
-function Field({
-  id,
-  label,
-  icon,
-  children,
-}: {
-  id: string;
-  label: string;
-  icon: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <div className="grid gap-2">
-      <label htmlFor={id} className="text-sm font-medium text-foreground">
-        {label}
-      </label>
-      <div className="relative">
-        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">{icon}</span>
-        {children}
-      </div>
-    </div>
-  );
-}
-
-function PasswordField({
-  id,
-  label,
-  shown,
-  showLabel,
-  hideLabel,
-  onToggle,
-  autoComplete = "current-password",
-}: {
-  id: string;
-  label: string;
-  shown: boolean;
-  showLabel: string;
-  hideLabel: string;
-  onToggle: () => void;
-  autoComplete?: string;
-}) {
-  return (
-    <div className="grid gap-2">
-      <label htmlFor={id} className="text-sm font-medium text-foreground">
-        {label}
-      </label>
-      <div className="relative">
-        <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-        <input
-          id={id}
-          type={shown ? "text" : "password"}
-          autoComplete={autoComplete}
-          placeholder="••••••••"
-          className={`${fieldClass} pr-12`}
-        />
-        <button
-          type="button"
-          className="absolute right-0 top-0 inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
-          onClick={onToggle}
-          aria-label={shown ? hideLabel : showLabel}
-        >
-          {shown ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-        </button>
-      </div>
-    </div>
-  );
+  return <AuthScreen role={role} defaultTab={tab} configured={configured} />;
 }

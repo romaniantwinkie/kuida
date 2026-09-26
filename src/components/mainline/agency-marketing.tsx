@@ -189,7 +189,7 @@ export function AgencyHero() {
             <Link href="/signup/agency">{copy.getStarted}</Link>
           </Button>
           <Button asChild variant="secondary" className="min-h-11 px-5">
-            <Link href="/agency">{copy.tryDemo}</Link>
+            <Link href="/agency?demo=1">{copy.tryDemo}</Link>
           </Button>
           <Button asChild variant="outline" className="min-h-11 px-5">
             <a href="#map">{copy.seeSearch}</a>
