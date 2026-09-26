@@ -1,11 +1,16 @@
 import type { Locale } from "@/lib/i18n";
 
+export type DayKey = "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
+
+export type ShiftWindow = { start: string; end: string };
+
 export type MockCaregiver = {
   id: string;
   firstName: string;
   lastInitial: string;
   miles: number;
-  languages: string[];
+  languages: Array<"English" | "Spanish" | "Creole">;
+  drives: boolean;
   role: "HHA" | "CNA";
   window: string;
   windowEs: string;
@@ -13,6 +18,8 @@ export type MockCaregiver = {
   areaEs: string;
   lat: number;
   lng: number;
+  /** 24-hour HH:MM windows. A real schedule API can replace this shape. */
+  availability: Partial<Record<DayKey, ShiftWindow>>;
 };
 
 export const MOCK_CAREGIVERS: MockCaregiver[] = [
@@ -22,7 +29,15 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     lastInitial: "R",
     miles: 1.2,
     languages: ["Spanish", "English"],
+    drives: true,
     role: "HHA",
+    availability: {
+      mon: { start: "08:00", end: "14:00" },
+      tue: { start: "08:00", end: "14:00" },
+      wed: { start: "08:00", end: "14:00" },
+      thu: { start: "08:00", end: "14:00" },
+      fri: { start: "08:00", end: "14:00" },
+    },
     window: "Tue 8:00 AM – 2:00 PM",
     windowEs: "Mar 8:00 a. m. – 2:00 p. m.",
     area: "Brickell",
@@ -36,7 +51,13 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     lastInitial: "D",
     miles: 2.1,
     languages: ["Spanish"],
+    drives: false,
     role: "HHA",
+    availability: {
+      tue: { start: "07:00", end: "15:00" },
+      wed: { start: "07:00", end: "15:00" },
+      thu: { start: "07:00", end: "15:00" },
+    },
     window: "Tue 7:00 AM – 3:00 PM",
     windowEs: "Mar 7:00 a. m. – 3:00 p. m.",
     area: "Little Havana",
@@ -50,7 +71,9 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     lastInitial: "L",
     miles: 3.4,
     languages: ["English", "Spanish"],
+    drives: true,
     role: "CNA",
+    availability: { tue: { start: "17:00", end: "21:00" } },
     window: "Tue 5:00 PM – 9:00 PM",
     windowEs: "Mar 5:00 p. m. – 9:00 p. m.",
     area: "Wynwood",
@@ -64,7 +87,9 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     lastInitial: "A",
     miles: 6.2,
     languages: ["Spanish"],
+    drives: false,
     role: "HHA",
+    availability: { wed: { start: "08:00", end: "14:00" } },
     window: "Wed 8:00 AM – 2:00 PM",
     windowEs: "Mié 8:00 a. m. – 2:00 p. m.",
     area: "Coral Gables",
@@ -77,8 +102,10 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     firstName: "Ana",
     lastInitial: "P",
     miles: 8.4,
-    languages: ["Spanish", "English"],
+    languages: ["Spanish", "English", "Creole"],
+    drives: true,
     role: "CNA",
+    availability: { thu: { start: "09:00", end: "13:00" } },
     window: "Thu 9:00 AM – 1:00 PM",
     windowEs: "Jue 9:00 a. m. – 1:00 p. m.",
     area: "Kendall",
@@ -92,7 +119,9 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     lastInitial: "M",
     miles: 7.1,
     languages: ["Spanish"],
+    drives: true,
     role: "HHA",
+    availability: { mon: { start: "06:00", end: "14:00" } },
     window: "Mon 6:00 AM – 2:00 PM",
     windowEs: "Lun 6:00 a. m. – 2:00 p. m.",
     area: "Hialeah",
@@ -106,7 +135,9 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     lastInitial: "S",
     miles: 9.0,
     languages: ["Spanish", "English"],
+    drives: false,
     role: "HHA",
+    availability: { fri: { start: "08:00", end: "16:00" } },
     window: "Fri 8:00 AM – 4:00 PM",
     windowEs: "Vie 8:00 a. m. – 4:00 p. m.",
     area: "North Miami",
@@ -120,7 +151,9 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     lastInitial: "T",
     miles: 5.5,
     languages: ["English"],
+    drives: true,
     role: "CNA",
+    availability: { wed: { start: "12:00", end: "20:00" } },
     window: "Wed 12:00 PM – 8:00 PM",
     windowEs: "Mié 12:00 p. m. – 8:00 p. m.",
     area: "Coconut Grove",
@@ -133,8 +166,10 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     firstName: "Elena",
     lastInitial: "V",
     miles: 4.8,
-    languages: ["Spanish", "English"],
+    languages: ["Spanish", "English", "Creole"],
+    drives: true,
     role: "HHA",
+    availability: { sat: { start: "09:00", end: "15:00" } },
     window: "Sat 9:00 AM – 3:00 PM",
     windowEs: "Sáb 9:00 a. m. – 3:00 p. m.",
     area: "Miami Beach",
@@ -148,7 +183,9 @@ export const MOCK_CAREGIVERS: MockCaregiver[] = [
     lastInitial: "G",
     miles: 10.2,
     languages: ["Spanish"],
+    drives: false,
     role: "CNA",
+    availability: { thu: { start: "07:00", end: "15:00" } },
     window: "Thu 7:00 AM – 3:00 PM",
     windowEs: "Jue 7:00 a. m. – 3:00 p. m.",
     area: "Doral",

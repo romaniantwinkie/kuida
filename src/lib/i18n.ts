@@ -240,8 +240,6 @@ export type Messages = {
   shell: {
     demo: string;
     demoNote: string;
-    search: string;
-    searchPlaceholder: string;
     notifications: string;
     notificationsEmpty: string;
     agencyName: string;
@@ -267,7 +265,33 @@ export type Messages = {
       recent: string;
       viewAll: string;
     };
-    find: { title: string; body: string; list: string; empty: string; request: string; requested: string };
+    find: {
+      title: string;
+      body: string;
+      list: string;
+      empty: string;
+      request: string;
+      requested: string;
+      address: string;
+      addressPlaceholder: string;
+      schedule: string;
+      from: string;
+      to: string;
+      days: { key: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"; label: string }[];
+      languages: string;
+      anyLanguage: string;
+      languageEnglish: string;
+      languageSpanish: string;
+      languageCreole: string;
+      hideNoDrive: string;
+      drives: string;
+      doesNotDrive: string;
+      yes: string;
+      no: string;
+      clear: string;
+      close: string;
+      availability: string;
+    };
     requests: {
       title: string;
       body: string;
@@ -757,8 +781,6 @@ export const messages: Record<Locale, Messages> = {
     shell: {
       demo: "Demo",
       demoNote: "Sample office. This is not a real agency or a live account.",
-      search: "Search caregivers",
-      searchPlaceholder: "Name, area, or role",
       notifications: "Notifications",
       notificationsEmpty: "No new notifications.",
       agencyName: "Lumen Home Care",
@@ -788,9 +810,36 @@ export const messages: Record<Locale, Messages> = {
         title: "Find caregivers",
         body: "Demo pins around Miami. Not a live search.",
         list: "Nearby",
-        empty: "No one matches that search.",
+        empty: "No one matches these filters.",
         request: "Request",
         requested: "Requested",
+        address: "Address",
+        addressPlaceholder: "Start typing a Miami address",
+        schedule: "Schedule",
+        from: "From",
+        to: "To",
+        days: [
+          { key: "mon", label: "Mon" },
+          { key: "tue", label: "Tue" },
+          { key: "wed", label: "Wed" },
+          { key: "thu", label: "Thu" },
+          { key: "fri", label: "Fri" },
+          { key: "sat", label: "Sat" },
+          { key: "sun", label: "Sun" },
+        ],
+        languages: "Languages",
+        anyLanguage: "Any language",
+        languageEnglish: "English",
+        languageSpanish: "Spanish",
+        languageCreole: "Creole",
+        hideNoDrive: "Hide caregivers who do not drive",
+        drives: "Drives",
+        doesNotDrive: "Does not drive",
+        yes: "Yes",
+        no: "No",
+        clear: "Clear filters",
+        close: "Close",
+        availability: "Availability",
       },
       requests: {
         title: "Requests",
@@ -1291,8 +1340,6 @@ export const messages: Record<Locale, Messages> = {
     shell: {
       demo: "Demo",
       demoNote: "Oficina de muestra. No es una agencia real ni una cuenta activa.",
-      search: "Buscar cuidadores",
-      searchPlaceholder: "Nombre, zona o rol",
       notifications: "Avisos",
       notificationsEmpty: "No hay avisos nuevos.",
       agencyName: "Lumen Home Care",
@@ -1322,9 +1369,36 @@ export const messages: Record<Locale, Messages> = {
         title: "Buscar cuidadores",
         body: "Pines de demostración en Miami. No es una búsqueda en vivo.",
         list: "Cerca",
-        empty: "Nadie coincide con esa búsqueda.",
+        empty: "Nadie coincide con estos filtros.",
         request: "Solicitar",
         requested: "Solicitado",
+        address: "Dirección",
+        addressPlaceholder: "Empieza a escribir una dirección en Miami",
+        schedule: "Horario",
+        from: "De",
+        to: "A",
+        days: [
+          { key: "mon", label: "Lun" },
+          { key: "tue", label: "Mar" },
+          { key: "wed", label: "Mié" },
+          { key: "thu", label: "Jue" },
+          { key: "fri", label: "Vie" },
+          { key: "sat", label: "Sáb" },
+          { key: "sun", label: "Dom" },
+        ],
+        languages: "Idiomas",
+        anyLanguage: "Cualquier idioma",
+        languageEnglish: "Inglés",
+        languageSpanish: "Español",
+        languageCreole: "Criollo",
+        hideNoDrive: "Ocultar cuidadores que no conducen",
+        drives: "Conduce",
+        doesNotDrive: "No conduce",
+        yes: "Sí",
+        no: "No",
+        clear: "Quitar filtros",
+        close: "Cerrar",
+        availability: "Disponibilidad",
       },
       requests: {
         title: "Solicitudes",

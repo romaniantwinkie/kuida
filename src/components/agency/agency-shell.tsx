@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Bell, ClipboardList, LayoutDashboard, Search, Settings, Users } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
 import { useI18n } from "@/components/language-provider";
@@ -89,7 +89,6 @@ function AgencyFrame({ children }: { children: React.ReactNode }) {
           <SidebarTrigger
             label={isMobile ? (mobileOpen ? copy.closeMenu : copy.openMenu) : open ? copy.collapse : copy.expand}
           />
-          <HeaderSearch />
           <div className="ml-auto flex items-center gap-2">
             <Notifications />
             <LangToggle />
@@ -112,35 +111,6 @@ function AgencyFrame({ children }: { children: React.ReactNode }) {
         <div className="flex-1 p-4 md:p-6">{children}</div>
       </SidebarInset>
     </>
-  );
-}
-
-function HeaderSearch() {
-  const { t } = useI18n();
-  const router = useRouter();
-
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const q = String(data.get("q") ?? "").trim();
-    router.push(q ? `/agency/find?q=${encodeURIComponent(q)}` : "/agency/find");
-  }
-
-  return (
-    <form onSubmit={submit} className="min-w-0 flex-1 max-w-md">
-      <label className="sr-only" htmlFor="agency-search">
-        {t.shell.search}
-      </label>
-      <div className="relative">
-        <Search className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-        <input
-          id="agency-search"
-          name="q"
-          placeholder={t.shell.searchPlaceholder}
-          className="h-9 w-full rounded-md border border-input bg-[#f7f7f8] pl-8 pr-3 text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
-        />
-      </div>
-    </form>
   );
 }
 

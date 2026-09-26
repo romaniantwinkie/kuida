@@ -1,10 +1,5 @@
-import { Suspense } from "react";
-import { FindScreen } from "@/components/agency/screens";
+import { FindScreen } from "@/components/agency/find-caregivers";
 
 export default function AgencyFindPage() {
-  return (
-    <Suspense>
-      <FindScreen />
-    </Suspense>
-  );
+  return <FindScreen />;
 }

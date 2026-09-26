@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { FormEvent, useMemo, useState } from "react";
-import { AgencyMapLoader } from "@/components/agency-map-loader";
+import { FormEvent, useState } from "react";
 import { useI18n } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
-import { caregiverArea, caregiverWindow, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
+import { caregiverArea, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
 
 export function AgencyPage({
   title,
@@ -82,65 +80,6 @@ export function DashboardScreen() {
                 <p className="text-xs text-muted-foreground">{thread.from}</p>
               </li>
             ))}
-          </ul>
-        </section>
-      </div>
-    </AgencyPage>
-  );
-}
-
-export function FindScreen() {
-  const { t, locale } = useI18n();
-  const copy = t.shell;
-  const params = useSearchParams();
-  const q = (params.get("q") ?? "").trim().toLowerCase();
-  const [requested, setRequested] = useState<string[]>([]);
-  const people = useMemo(
-    () =>
-      MOCK_CAREGIVERS.filter((person) => {
-        if (!q) return true;
-        const haystack = `${person.firstName} ${person.lastInitial} ${person.role} ${caregiverArea(person, locale)}`.toLowerCase();
-        return haystack.includes(q);
-      }),
-    [locale, q],
-  );
-
-  return (
-    <AgencyPage title={copy.find.title} body={copy.find.body}>
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className="h-[420px] overflow-hidden rounded-lg border border-border bg-white">
-          <AgencyMapLoader />
-        </div>
-        <section className="rounded-lg border border-border bg-white">
-          <h2 className="border-b border-border px-4 py-3 text-sm font-medium">
-            {copy.find.list} · {people.length}
-          </h2>
-          {people.length === 0 ? <p className="px-4 py-6 text-sm text-muted-foreground">{copy.find.empty}</p> : null}
-          <ul className="max-h-[380px] overflow-auto">
-            {people.map((person) => {
-              const sent = requested.includes(person.id);
-              return (
-                <li key={person.id} className="flex items-start justify-between gap-3 border-b border-border px-4 py-3 last:border-b-0">
-                  <div>
-                    <p className="text-sm font-medium">
-                      {person.firstName} {person.lastInitial}. · {person.role}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {caregiverArea(person, locale)} · {person.miles} {t.units.mi}
-                    </p>
-                    <p className="text-xs text-muted-foreground">{caregiverWindow(person, locale)}</p>
-                  </div>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant={sent ? "outline" : "default"}
-                    onClick={() => setRequested((current) => (current.includes(person.id) ? current : [...current, person.id]))}
-                  >
-                    {sent ? copy.find.requested : copy.find.request}
-                  </Button>
-                </li>
-              );
-            })}
           </ul>
         </section>
       </div>

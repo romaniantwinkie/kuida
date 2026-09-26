@@ -20,7 +20,7 @@ export default function SearchPage() {
   const results = useMemo(() => {
     if (!queried) return [];
     return MOCK_CAREGIVERS.filter((c) =>
-      language === "Any" ? true : c.languages.includes(language),
+      language === "Any" ? true : c.languages.some((item) => item === language),
     ).slice(0, PLANS.search.resultCap);
   }, [queried, language]);
 
