@@ -7,9 +7,9 @@ import { useI18n } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { suggestAddresses, type GeocodeSuggestion } from "@/lib/demo-geocoder";
+import { fill } from "@/lib/i18n";
 import {
   caregiverArea,
-  caregiverWindow,
   MOCK_CAREGIVERS,
   type DayKey,
   type MockCaregiver,
@@ -32,6 +32,11 @@ function emptySchedule(): Record<DayKey, DayState> {
     sat: { on: false, start: "09:00", end: "15:00" },
     sun: { on: false, start: "09:00", end: "15:00" },
   };
+}
+
+function compactHour(value: string) {
+  const [hour, minute] = value.split(":");
+  return minute === "00" ? String(Number(hour)) : `${Number(hour)}:${minute}`;
 }
 
 function covers(person: MockCaregiver, day: DayKey, start: string, end: string) {
@@ -107,6 +112,20 @@ export function FindScreen() {
     if (language === "English") return copy.languageEnglish;
     if (language === "Spanish") return copy.languageSpanish;
     return copy.languageCreole;
+  }
+
+  function yearsLabel(years: number) {
+    return fill(copy.years, { n: years });
+  }
+
+  function rateLabel(person: MockCaregiver) {
+    return fill(copy.rateRange, { min: person.rateMin, max: person.rateMax });
+  }
+
+  function genderLabel(person: MockCaregiver) {
+    if (person.gender === "female") return copy.female;
+    if (person.gender === "male") return copy.male;
+    return null;
   }
 
   function clearFilters() {
@@ -331,10 +350,12 @@ export function FindScreen() {
                         <span className="block text-sm font-medium">
                           {person.firstName} {person.lastInitial}. · {person.role}
                         </span>
-                        <span className="block text-xs text-muted-foreground">
-                          {caregiverArea(person, locale)} · {person.miles} {t.units.mi}
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {caregiverArea(person, locale)} · {person.miles} {t.units.mi} · {person.languages.map(languageName).join(", ")}
                         </span>
-                        <span className="block text-xs text-muted-foreground">{person.languages.map(languageName).join(", ")}</span>
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {yearsLabel(person.years)} · {person.certifications.join(", ")} · {rateLabel(person)}
+                        </span>
                       </span>
                     </button>
                     <Button
@@ -358,21 +379,28 @@ export function FindScreen() {
         title={profile ? `${profile.firstName} ${profile.lastInitial}.` : copy.title}
         closeLabel={copy.close}
         onClose={() => setProfile(null)}
+        className="max-h-[min(40rem,calc(100svh-2rem))] max-w-lg overflow-y-auto"
       >
         {profile ? (
-          <div className="mt-4 grid gap-3">
+          <div className="mt-3 grid gap-3">
             <div className="flex items-center gap-3">
               <CaregiverAvatar person={profile} size="lg" />
               <div>
                 <p className="text-sm font-medium">
                   {profile.firstName} {profile.lastInitial}. · {profile.role}
+                  {genderLabel(profile) ? ` · ${genderLabel(profile)}` : ""}
                 </p>
                 <p className="text-xs text-muted-foreground">
-                  {caregiverArea(profile, locale)} · {profile.miles} {t.units.mi}
+                  {caregiverArea(profile, locale)} · {profile.miles} {t.units.mi} · {yearsLabel(profile.years)} · {rateLabel(profile)}
                 </p>
               </div>
             </div>
-            <dl className="grid gap-2 text-sm">
+            <p className="text-sm leading-5">{locale === "es" ? profile.bioEs : profile.bio}</p>
+            <dl className="grid grid-cols-2 gap-x-3 gap-y-2 text-sm">
+              <div>
+                <dt className="text-xs text-muted-foreground">{copy.certifications}</dt>
+                <dd>{profile.certifications.join(", ")}</dd>
+              </div>
               <div>
                 <dt className="text-xs text-muted-foreground">{copy.languages}</dt>
                 <dd>{profile.languages.map(languageName).join(", ")}</dd>
@@ -381,11 +409,29 @@ export function FindScreen() {
                 <dt className="text-xs text-muted-foreground">{copy.drives}</dt>
                 <dd>{profile.drives ? copy.yes : copy.no}</dd>
               </div>
-              <div>
-                <dt className="text-xs text-muted-foreground">{copy.availability}</dt>
-                <dd>{caregiverWindow(profile, locale)}</dd>
-              </div>
+              {genderLabel(profile) ? (
+                <div>
+                  <dt className="text-xs text-muted-foreground">{copy.gender}</dt>
+                  <dd>{genderLabel(profile)}</dd>
+                </div>
+              ) : null}
             </dl>
+            <div>
+              <p className="text-xs text-muted-foreground">{copy.availability}</p>
+              <div className="mt-1 grid grid-cols-7 gap-1 text-center">
+                {copy.days.map((day) => {
+                  const slot = profile.availability[day.key];
+                  return (
+                    <div key={day.key}>
+                      <div className="text-[10px] text-muted-foreground">{day.label}</div>
+                      <div className="mt-0.5 rounded bg-[#eef0f3] px-0.5 py-1 text-[10px] leading-tight">
+                        {slot ? `${compactHour(slot.start)}–${compactHour(slot.end)}` : "—"}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
             <Button
               type="button"
               onClick={() => setRequested((current) => (current.includes(profile.id) ? current : [...current, profile.id]))}

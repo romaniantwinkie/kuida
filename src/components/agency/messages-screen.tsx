@@ -7,6 +7,7 @@ import { openThread, sendMessage, useMessageStore } from "@/components/agency/me
 import { useI18n } from "@/components/language-provider";
 import { Button } from "@/components/ui/button";
 import type { DemoMessage } from "@/lib/demo-messages";
+import { fill } from "@/lib/i18n";
 import { caregiverArea, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
 import { cn } from "@/lib/utils";
 
@@ -122,7 +123,10 @@ export function MessagesScreen() {
               <p className="truncate text-sm font-medium">
                 {person.firstName} {person.lastInitial}. · {person.role}
               </p>
-              <p className="truncate text-xs text-muted-foreground">{caregiverArea(person, locale)}</p>
+              <p className="truncate text-xs text-muted-foreground">
+                {caregiverArea(person, locale)} · {fill(t.shell.find.years, { n: person.years })} · {person.certifications.join(", ")} ·{" "}
+                {fill(t.shell.find.rateRange, { min: person.rateMin, max: person.rateMax })}
+              </p>
             </div>
           </header>
           <div className="min-h-0 flex-1 space-y-2 overflow-auto px-3 py-3" role="log" aria-label={copy.title}>

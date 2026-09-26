@@ -301,6 +301,15 @@ export type Messages = {
       clear: string;
       close: string;
       availability: string;
+      experience: string;
+      years: string;
+      certifications: string;
+      gender: string;
+      female: string;
+      male: string;
+      rate: string;
+      rateRange: string;
+      about: string;
     };
     requests: {
       title: string;
@@ -828,13 +837,13 @@ export const messages: Record<Locale, Messages> = {
       },
       find: {
         title: "Find caregivers",
-        body: "Demo pins around Miami. Not a live search.",
+        body: "Demo pins. Not a live search.",
         list: "Nearby",
         empty: "No one matches these filters.",
         request: "Request",
         requested: "Requested",
         address: "Address",
-        addressPlaceholder: "Start typing a Miami address",
+        addressPlaceholder: "Start typing an address",
         schedule: "Schedule",
         from: "From",
         to: "To",
@@ -860,6 +869,15 @@ export const messages: Record<Locale, Messages> = {
         clear: "Clear filters",
         close: "Close",
         availability: "Availability",
+        experience: "Experience",
+        years: "{n} yrs",
+        certifications: "Certifications",
+        gender: "Gender",
+        female: "Female",
+        male: "Male",
+        rate: "Rate",
+        rateRange: "${min}–${max}/hr",
+        about: "About",
       },
       requests: {
         title: "Requests",
@@ -1397,13 +1415,13 @@ export const messages: Record<Locale, Messages> = {
       },
       find: {
         title: "Buscar cuidadores",
-        body: "Pines de demostración en Miami. No es una búsqueda en vivo.",
+        body: "Pines de demostración. No es una búsqueda en vivo.",
         list: "Cerca",
         empty: "Nadie coincide con estos filtros.",
         request: "Solicitar",
         requested: "Solicitado",
         address: "Dirección",
-        addressPlaceholder: "Empieza a escribir una dirección en Miami",
+        addressPlaceholder: "Empieza a escribir una dirección",
         schedule: "Horario",
         from: "De",
         to: "A",
@@ -1429,6 +1447,15 @@ export const messages: Record<Locale, Messages> = {
         clear: "Quitar filtros",
         close: "Cerrar",
         availability: "Disponibilidad",
+        experience: "Experiencia",
+        years: "{n} años",
+        certifications: "Certificaciones",
+        gender: "Género",
+        female: "Mujer",
+        male: "Hombre",
+        rate: "Tarifa",
+        rateRange: "${min}–${max}/h",
+        about: "Resumen",
       },
       requests: {
         title: "Solicitudes",
