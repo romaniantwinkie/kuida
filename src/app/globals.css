@@ -2,12 +2,169 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: 0.99 0 0;
+  --foreground: 0 0 0;
+  --card: 1 0 0;
+  --card-foreground: 0 0 0;
+  --popover: 0.99 0 0;
+  --popover-foreground: 0 0 0;
+  --primary: 0 0 0;
+  --primary-foreground: 1 0 0;
+  --secondary: 0.94 0 0;
+  --secondary-foreground: 0 0 0;
+  --muted: 0.97 0 0;
+  --muted-foreground: 0.44 0 0;
+  --accent: 0.94 0 0;
+  --accent-foreground: 0 0 0;
+  --destructive: 0.63 0.19 23.03;
+  --destructive-foreground: 1 0 0;
+  --border: 0.92 0 0;
+  --input: 0.94 0 0;
+  --ring: 0 0 0;
+  --radius: 0.5rem;
+  --motion-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --motion-duration-short: 180ms;
+  --motion-duration-medium: 480ms;
+  --motion-duration-long: 720ms;
+  --tracking-normal: 0em;
+  --shadow-sm: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 1px 2px -1px hsl(0 0% 0% / 0.18);
+  --shadow-md: 0px 1px 2px 0px hsl(0 0% 0% / 0.18), 0px 2px 4px -1px hsl(0 0% 0% / 0.18);
+}
+
+.dark {
+  --background: 0 0 0;
+  --foreground: 1 0 0;
+  --card: 0.14 0 0;
+  --card-foreground: 1 0 0;
+  --popover: 0.18 0 0;
+  --popover-foreground: 1 0 0;
+  --primary: 1 0 0;
+  --primary-foreground: 0 0 0;
+  --secondary: 0.25 0 0;
+  --secondary-foreground: 1 0 0;
+  --muted: 0.23 0 0;
+  --muted-foreground: 0.72 0 0;
+  --accent: 0.32 0 0;
+  --accent-foreground: 1 0 0;
+  --destructive: 0.69 0.2 23.91;
+  --destructive-foreground: 0 0 0;
+  --border: 0.26 0 0;
+  --input: 0.32 0 0;
+  --ring: 0.72 0 0;
+}
+
 body {
-  background: #f6f3ee;
-  color: #1b365d;
+  background: oklch(var(--background));
+  color: oklch(var(--foreground));
+  letter-spacing: var(--tracking-normal);
 }
 
 button,
 a {
   cursor: pointer;
+}
+
+@layer base {
+  button,
+  input,
+  select,
+  textarea {
+    border-radius: calc(var(--radius) - 2px);
+  }
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@property --tile-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes tile-border-spin {
+  to {
+    --tile-angle: 360deg;
+  }
+}
+
+/* Black segment travels the phone-tile outline. Static border stays underneath. */
+.welcome-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 1.5rem;
+  padding: 3px;
+  background: conic-gradient(
+    from var(--tile-angle),
+    transparent 0deg,
+    transparent 230deg,
+    oklch(0 0 0 / 0.28) 285deg,
+    oklch(0 0 0) 325deg,
+    transparent 360deg
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-duration-short) var(--motion-ease-out);
+}
+
+.welcome-tile:hover::after,
+.welcome-tile:focus-within::after {
+  opacity: 1;
+  animation: tile-border-spin 2.6s linear infinite;
+}
+
+.agency-map .leaflet-container {
+  height: 100%;
+  width: 100%;
+  background: oklch(0.97 0 0);
+  font-family: inherit;
+}
+
+.agency-map .leaflet-control-attribution {
+  max-width: 14rem;
+  margin: 0;
+  padding: 2px 6px;
+  font-size: 10px;
+  line-height: 1.25;
+  white-space: normal;
+  background: oklch(1 0 0 / 0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-duration-short: 1ms;
+    --motion-duration-medium: 1ms;
+    --motion-duration-long: 1ms;
+  }
+
+  .blur-fade-target {
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-tile:hover::after,
+  .welcome-tile:focus-within::after {
+    animation: none;
+    background: oklch(0 0 0);
+  }
 }

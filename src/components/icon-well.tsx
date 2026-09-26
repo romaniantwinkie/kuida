@@ -2,15 +2,15 @@ import type { LucideIcon } from "lucide-react";
 
 export function IconWell({
   icon: Icon,
-  tone = "navy",
+  tone = "primary",
 }: {
   icon: LucideIcon;
-  tone?: "navy" | "cream";
+  tone?: "primary" | "accent";
 }) {
   return (
     <span
-      className={`inline-flex size-10 shrink-0 items-center justify-center ${
-        tone === "navy" ? "bg-ink text-paper" : "bg-wash text-ink"
+      className={`inline-flex size-10 shrink-0 items-center justify-center rounded-md ${
+        tone === "primary" ? "bg-primary text-primary-foreground" : "bg-accent text-foreground"
       }`}
       aria-hidden="true"
     >
