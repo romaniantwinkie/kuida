@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState, type ReactNode } from "react";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { LangToggle } from "@/components/lang-toggle";
@@ -19,6 +19,7 @@ const fieldClass =
 
 export function AuthScreen({ role, defaultTab }: { role: Role; defaultTab: Tab }) {
   const { t } = useI18n();
+  const router = useRouter();
   const copy = t.auth;
   const [tab, setTab] = useState<Tab>(defaultTab);
   const [showLoginPw, setShowLoginPw] = useState(false);
@@ -27,6 +28,10 @@ export function AuthScreen({ role, defaultTab }: { role: Role; defaultTab: Tab }
 
   function soon(event: FormEvent) {
     event.preventDefault();
+    if (role === "agency") {
+      router.push("/agency");
+      return;
+    }
     setNote(copy.soon);
   }
 

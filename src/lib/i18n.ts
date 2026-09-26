@@ -237,6 +237,61 @@ export type Messages = {
     cprStatus: string;
   };
   units: { mi: string };
+  shell: {
+    demo: string;
+    demoNote: string;
+    search: string;
+    searchPlaceholder: string;
+    notifications: string;
+    notificationsEmpty: string;
+    agencyName: string;
+    userName: string;
+    userRole: string;
+    openMenu: string;
+    closeMenu: string;
+    collapse: string;
+    expand: string;
+    nav: {
+      dashboard: string;
+      find: string;
+      requests: string;
+      caregivers: string;
+      settings: string;
+    };
+    dashboard: {
+      title: string;
+      body: string;
+      openRequests: string;
+      nearby: string;
+      messages: string;
+      recent: string;
+      viewAll: string;
+    };
+    find: { title: string; body: string; list: string; empty: string; request: string; requested: string };
+    requests: {
+      title: string;
+      body: string;
+      case: string;
+      when: string;
+      area: string;
+      status: string;
+      open: string;
+      filled: string;
+    };
+    caregiversPage: { title: string; body: string; saved: string; contacted: string };
+    settings: {
+      title: string;
+      body: string;
+      name: string;
+      email: string;
+      phone: string;
+      area: string;
+      save: string;
+      saved: string;
+    };
+    cases: { title: string; role: string; when: string; area: string; status: "open" | "filled" }[];
+    threads: { from: string; topic: string }[];
+  };
 };
 
 export const messages: Record<Locale, Messages> = {
@@ -699,6 +754,80 @@ export const messages: Record<Locale, Messages> = {
       cprStatus: "21 days",
     },
     units: { mi: "mi" },
+    shell: {
+      demo: "Demo",
+      demoNote: "Sample office. This is not a real agency or a live account.",
+      search: "Search caregivers",
+      searchPlaceholder: "Name, area, or role",
+      notifications: "Notifications",
+      notificationsEmpty: "No new notifications.",
+      agencyName: "Lumen Home Care",
+      userName: "Alex Rivera",
+      userRole: "Office admin",
+      openMenu: "Open menu",
+      closeMenu: "Close menu",
+      collapse: "Collapse sidebar",
+      expand: "Expand sidebar",
+      nav: {
+        dashboard: "Dashboard",
+        find: "Find caregivers",
+        requests: "Requests",
+        caregivers: "Caregivers",
+        settings: "Settings",
+      },
+      dashboard: {
+        title: "Dashboard",
+        body: "A sample morning for this demo office.",
+        openRequests: "Open requests",
+        nearby: "Caregivers nearby",
+        messages: "Messages",
+        recent: "Recent requests",
+        viewAll: "View all",
+      },
+      find: {
+        title: "Find caregivers",
+        body: "Demo pins around Miami. Not a live search.",
+        list: "Nearby",
+        empty: "No one matches that search.",
+        request: "Request",
+        requested: "Requested",
+      },
+      requests: {
+        title: "Requests",
+        body: "Cases this demo office has open.",
+        case: "Case",
+        when: "When",
+        area: "Area",
+        status: "Status",
+        open: "Open",
+        filled: "Filled",
+      },
+      caregiversPage: {
+        title: "Caregivers",
+        body: "People this demo office saved or contacted.",
+        saved: "Saved",
+        contacted: "Contacted",
+      },
+      settings: {
+        title: "Settings",
+        body: "Agency profile for this demo. Saving does not store anything.",
+        name: "Agency name",
+        email: "Work email",
+        phone: "Office phone",
+        area: "Service area",
+        save: "Save",
+        saved: "Demo only. Nothing was stored.",
+      },
+      cases: [
+        { title: "Weekday mornings", role: "HHA", when: "Mon–Fri · 8:00–2:00", area: "Hialeah", status: "open" },
+        { title: "Evening shift", role: "HHA", when: "Tue · 5:00–9:00", area: "Brickell", status: "open" },
+        { title: "Saturday", role: "CNA", when: "Sat · 9:00–3:00", area: "Kendall", status: "filled" },
+      ],
+      threads: [
+        { from: "Xiomara R.", topic: "Schedule question" },
+        { from: "Ana P.", topic: "Availability" },
+      ],
+    },
   },
   es: {
     meta: { title: "KUIDAO" },
@@ -1159,6 +1288,80 @@ export const messages: Record<Locale, Messages> = {
       cprStatus: "21 días",
     },
     units: { mi: "mi" },
+    shell: {
+      demo: "Demo",
+      demoNote: "Oficina de muestra. No es una agencia real ni una cuenta activa.",
+      search: "Buscar cuidadores",
+      searchPlaceholder: "Nombre, zona o rol",
+      notifications: "Avisos",
+      notificationsEmpty: "No hay avisos nuevos.",
+      agencyName: "Lumen Home Care",
+      userName: "Alex Rivera",
+      userRole: "Administración",
+      openMenu: "Abrir menú",
+      closeMenu: "Cerrar menú",
+      collapse: "Contraer menú",
+      expand: "Expandir menú",
+      nav: {
+        dashboard: "Inicio",
+        find: "Buscar cuidadores",
+        requests: "Solicitudes",
+        caregivers: "Cuidadores",
+        settings: "Ajustes",
+      },
+      dashboard: {
+        title: "Inicio",
+        body: "Una mañana de muestra para esta oficina demo.",
+        openRequests: "Solicitudes abiertas",
+        nearby: "Cuidadores cerca",
+        messages: "Mensajes",
+        recent: "Solicitudes recientes",
+        viewAll: "Ver todas",
+      },
+      find: {
+        title: "Buscar cuidadores",
+        body: "Pines de demostración en Miami. No es una búsqueda en vivo.",
+        list: "Cerca",
+        empty: "Nadie coincide con esa búsqueda.",
+        request: "Solicitar",
+        requested: "Solicitado",
+      },
+      requests: {
+        title: "Solicitudes",
+        body: "Casos que esta oficina demo tiene abiertos.",
+        case: "Caso",
+        when: "Horario",
+        area: "Zona",
+        status: "Estado",
+        open: "Abierta",
+        filled: "Cubierta",
+      },
+      caregiversPage: {
+        title: "Cuidadores",
+        body: "Personas que esta oficina demo guardó o contactó.",
+        saved: "Guardados",
+        contacted: "Contactados",
+      },
+      settings: {
+        title: "Ajustes",
+        body: "Perfil de la agencia en esta demo. Guardar no almacena nada.",
+        name: "Nombre de la agencia",
+        email: "Correo de trabajo",
+        phone: "Teléfono",
+        area: "Zona de servicio",
+        save: "Guardar",
+        saved: "Solo demo. No se guardó nada.",
+      },
+      cases: [
+        { title: "Mañanas entre semana", role: "HHA", when: "Lun–Vie · 8:00–14:00", area: "Hialeah", status: "open" },
+        { title: "Turno de tarde", role: "HHA", when: "Mar · 17:00–21:00", area: "Brickell", status: "open" },
+        { title: "Sábado", role: "CNA", when: "Sáb · 9:00–15:00", area: "Kendall", status: "filled" },
+      ],
+      threads: [
+        { from: "Xiomara R.", topic: "Pregunta de horario" },
+        { from: "Ana P.", topic: "Disponibilidad" },
+      ],
+    },
   },
 };
 

@@ -15,7 +15,9 @@ export function audienceForPath(pathname: string): Audience {
     pathname === "/pricing" ||
     pathname.startsWith("/signup/agency") ||
     pathname === "/search" ||
-    pathname.startsWith("/search/")
+    pathname.startsWith("/search/") ||
+    pathname === "/agency" ||
+    pathname.startsWith("/agency/")
   ) {
     return "agency";
   }
