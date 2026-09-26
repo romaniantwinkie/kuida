@@ -41,6 +41,7 @@ export type Messages = {
     heroRotate: string[];
     heroBody: string;
     getStarted: string;
+    tryDemo: string;
     seeSearch: string;
     demoLabel: string;
     demoUrl: string;
@@ -382,6 +383,7 @@ export const messages: Record<Locale, Messages> = {
       heroBody:
         "Enter the address and hours, see who’s nearby, request in the app, and hire with your packet.",
       getStarted: "Get started",
+      tryDemo: "Try the demo",
       seeSearch: "See who’s nearby",
       demoLabel: "Demo",
       demoUrl: "kuidao.app/search",
@@ -960,6 +962,7 @@ export const messages: Record<Locale, Messages> = {
       heroBody:
         "Ingresa la dirección y las horas, mira quién está cerca, solicita en la app y contrata con tu paquete.",
       getStarted: "Empezar",
+      tryDemo: "Probar la demo",
       seeSearch: "Mira quién está cerca",
       demoLabel: "Demo",
       demoUrl: "kuidao.app/search",
