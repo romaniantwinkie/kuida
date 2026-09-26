@@ -127,15 +127,15 @@ export function FindScreen() {
   const languageSummary = languages.length === 0 ? copy.anyLanguage : languages.map(languageName).join(", ");
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-4">
-      <div>
-        <h1 className="text-lg font-medium tracking-tight">{copy.title}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">{copy.body}</p>
+    <div className="flex h-[calc(100svh-5.5rem)] min-h-0 flex-col gap-2 overflow-hidden md:h-[calc(100svh-6.5rem)]">
+      <div className="flex shrink-0 items-baseline justify-between gap-3">
+        <h1 className="text-base font-medium tracking-tight">{copy.title}</h1>
+        <p className="truncate text-xs text-muted-foreground">{copy.body}</p>
       </div>
-      <div className="grid gap-3 rounded-lg border border-border bg-white p-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
-        <div className="grid gap-3">
-          <div ref={suggestRef} className="relative">
-            <label htmlFor="find-address" className="text-sm font-medium">
+      <div className="shrink-0 rounded-lg border border-border bg-white p-3">
+        <div className="flex flex-wrap items-end gap-x-3 gap-y-2">
+          <div ref={suggestRef} className="relative min-w-[16rem] flex-1">
+            <label htmlFor="find-address" className="text-xs font-medium">
               {copy.address}
             </label>
             <input
@@ -146,7 +146,7 @@ export function FindScreen() {
               aria-autocomplete="list"
               value={addressQuery}
               placeholder={copy.addressPlaceholder}
-              className="mt-1 h-9 w-full rounded-md border border-input bg-white px-3 text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="mt-1 h-8 w-full rounded-md border border-input bg-white px-2 text-sm outline-none focus-visible:ring-1 focus-visible:ring-ring"
               onChange={(event) => {
                 setAddressQuery(event.target.value);
                 setAddress(null);
@@ -176,7 +176,7 @@ export function FindScreen() {
               }}
             />
             {openSuggest && suggestions.length > 0 ? (
-              <ul id={listId} role="listbox" className="absolute z-20 mt-1 max-h-56 w-full overflow-auto rounded-md border border-border bg-white py-1 shadow-sm">
+              <ul id={listId} role="listbox" className="absolute z-30 mt-1 max-h-56 w-full overflow-auto rounded-md border border-border bg-white py-1 shadow-sm">
                 {suggestions.map((place, index) => (
                   <li key={place.id} role="option" aria-selected={index === activeSuggest}>
                     <button
@@ -196,71 +196,19 @@ export function FindScreen() {
               </ul>
             ) : null}
           </div>
-          <fieldset>
-            <legend className="text-sm font-medium">{copy.schedule}</legend>
-            <div className="mt-2 grid gap-1.5">
-              {copy.days.map((day) => {
-                const state = schedule[day.key];
-                return (
-                  <div key={day.key} className="flex flex-wrap items-center gap-2">
-                    <button
-                      type="button"
-                      aria-pressed={state.on}
-                      className={cn(
-                        "h-9 w-14 rounded-md border text-sm font-medium",
-                        state.on ? "border-[#0c1e33] bg-[#0c1e33] text-white" : "border-border bg-white text-foreground",
-                      )}
-                      onClick={() => setSchedule((current) => ({ ...current, [day.key]: { ...current[day.key], on: !current[day.key].on } }))}
-                    >
-                      {day.label}
-                    </button>
-                    <label className="sr-only" htmlFor={`${day.key}-start`}>
-                      {day.label} {copy.from}
-                    </label>
-                    <input
-                      id={`${day.key}-start`}
-                      type="time"
-                      value={state.start}
-                      disabled={!state.on}
-                      className="h-9 rounded-md border border-input bg-white px-2 text-sm disabled:bg-muted disabled:text-muted-foreground"
-                      onChange={(event) =>
-                        setSchedule((current) => ({ ...current, [day.key]: { ...current[day.key], start: event.target.value } }))
-                      }
-                    />
-                    <span className="text-xs text-muted-foreground">{copy.to}</span>
-                    <label className="sr-only" htmlFor={`${day.key}-end`}>
-                      {day.label} {copy.to}
-                    </label>
-                    <input
-                      id={`${day.key}-end`}
-                      type="time"
-                      value={state.end}
-                      disabled={!state.on}
-                      className="h-9 rounded-md border border-input bg-white px-2 text-sm disabled:bg-muted disabled:text-muted-foreground"
-                      onChange={(event) =>
-                        setSchedule((current) => ({ ...current, [day.key]: { ...current[day.key], end: event.target.value } }))
-                      }
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </fieldset>
-        </div>
-        <div className="flex flex-col gap-3">
-          <div ref={langRef} className="relative">
-            <span className="text-sm font-medium">{copy.languages}</span>
+          <div ref={langRef} className="relative w-44">
+            <span className="text-xs font-medium">{copy.languages}</span>
             <button
               type="button"
               aria-expanded={langOpen}
-              className="mt-1 flex h-9 w-full items-center justify-between rounded-md border border-input bg-white px-3 text-left text-sm"
+              className="mt-1 flex h-8 w-full items-center justify-between rounded-md border border-input bg-white px-2 text-left text-sm"
               onClick={() => setLangOpen((open) => !open)}
             >
               <span className="truncate">{languageSummary}</span>
               <ChevronDown className="size-4 shrink-0 text-muted-foreground" />
             </button>
             {langOpen ? (
-              <ul className="absolute z-20 mt-1 w-full rounded-md border border-border bg-white py-1 shadow-sm">
+              <ul className="absolute z-30 mt-1 w-full rounded-md border border-border bg-white py-1 shadow-sm">
                 {LANGUAGE_KEYS.map((language) => {
                   const checked = languages.includes(language);
                   return (
@@ -287,23 +235,73 @@ export function FindScreen() {
               </ul>
             ) : null}
           </div>
-          <label className="flex items-start gap-2 text-sm">
+          <label className="mb-1 flex items-center gap-2 text-xs">
             <input
               type="checkbox"
-              className="mt-0.5 size-4 accent-[#0c1e33]"
+              className="size-3.5 accent-[#0c1e33]"
               checked={hideNoDrive}
               onChange={(event) => setHideNoDrive(event.target.checked)}
             />
             {copy.hideNoDrive}
           </label>
-          <Button type="button" variant="outline" className="mt-auto" onClick={clearFilters}>
+          <Button type="button" variant="outline" size="sm" className="mb-px h-8" onClick={clearFilters}>
             {copy.clear}
           </Button>
         </div>
+        <fieldset className="m-0 mt-2 min-w-0 border-0 p-0">
+          <legend className="mb-1 block w-full text-xs font-medium">{copy.schedule}</legend>
+          <div className="grid grid-cols-1 gap-1 sm:grid-cols-2 xl:grid-cols-4">
+            {copy.days.map((day) => {
+              const state = schedule[day.key];
+              return (
+                <div key={day.key} className="flex min-w-0 items-center gap-1">
+                  <button
+                    type="button"
+                    aria-pressed={state.on}
+                    className={cn(
+                      "h-8 w-11 shrink-0 rounded-md border text-xs font-medium",
+                      state.on ? "border-[#0c1e33] bg-[#0c1e33] text-white" : "border-border bg-white text-foreground",
+                    )}
+                    onClick={() => setSchedule((current) => ({ ...current, [day.key]: { ...current[day.key], on: !current[day.key].on } }))}
+                  >
+                    {day.label}
+                  </button>
+                  <label className="sr-only" htmlFor={`${day.key}-start`}>
+                    {day.label} {copy.from}
+                  </label>
+                  <input
+                    id={`${day.key}-start`}
+                    type="time"
+                    value={state.start}
+                    disabled={!state.on}
+                    className="h-8 min-w-0 flex-1 rounded-md border border-input bg-white px-1 text-xs disabled:bg-muted disabled:text-muted-foreground"
+                    onChange={(event) =>
+                      setSchedule((current) => ({ ...current, [day.key]: { ...current[day.key], start: event.target.value } }))
+                    }
+                  />
+                  <span className="shrink-0 text-[11px] text-muted-foreground">{copy.to}</span>
+                  <label className="sr-only" htmlFor={`${day.key}-end`}>
+                    {day.label} {copy.to}
+                  </label>
+                  <input
+                    id={`${day.key}-end`}
+                    type="time"
+                    value={state.end}
+                    disabled={!state.on}
+                    className="h-8 min-w-0 flex-1 rounded-md border border-input bg-white px-1 text-xs disabled:bg-muted disabled:text-muted-foreground"
+                    onChange={(event) =>
+                      setSchedule((current) => ({ ...current, [day.key]: { ...current[day.key], end: event.target.value } }))
+                    }
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </fieldset>
       </div>
 
-      <div className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-start">
-        <div className="h-[560px] overflow-hidden rounded-lg border border-border bg-white">
+      <div className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="relative z-0 h-full min-h-0 isolate overflow-hidden rounded-lg border border-border bg-white">
           <AgencyMapLoader
             caregivers={people}
             selectedId={selected?.id ?? null}
@@ -315,19 +313,19 @@ export function FindScreen() {
             }}
           />
         </div>
-        <section className="flex h-[560px] flex-col overflow-hidden rounded-lg border border-border bg-white">
-          <h2 className="border-b border-border px-4 py-3 text-sm font-medium">
+        <section className="flex h-full min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-white">
+          <h2 className="border-b border-border px-3 py-2 text-sm font-medium">
             {copy.list} · {people.length}
           </h2>
-          {people.length === 0 ? <p className="px-4 py-6 text-sm text-muted-foreground">{copy.empty}</p> : null}
+          {people.length === 0 ? <p className="px-3 py-4 text-sm text-muted-foreground">{copy.empty}</p> : null}
           <ul className="min-h-0 flex-1 overflow-auto">
             {people.map((person) => {
               const sent = requested.includes(person.id);
               const active = person.id === selectedId;
               return (
                 <li key={person.id} className={cn("border-b border-border last:border-b-0", active && "bg-[#f3f6fa]")}>
-                  <div className="flex items-start gap-3 px-3 py-3">
-                    <button type="button" className="flex min-w-0 flex-1 items-start gap-3 text-left" onClick={() => openProfile(person)}>
+                  <div className="flex items-center gap-2 px-2 py-2">
+                    <button type="button" className="flex min-w-0 flex-1 items-center gap-2 text-left" onClick={() => openProfile(person)}>
                       <CaregiverAvatar person={person} />
                       <span className="min-w-0">
                         <span className="block text-sm font-medium">
