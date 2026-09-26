@@ -3,9 +3,9 @@ import { Header } from "@/components/header";
 
 export function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-cream text-ink">
+    <div className="flex min-h-screen flex-col bg-background text-foreground">
       <Header />
-      {children}
+      <div className="flex flex-1 flex-col">{children}</div>
       <Footer />
     </div>
   );

@@ -1,17 +1,18 @@
+"use client";
+
+import { useI18n } from "@/components/language-provider";
 import { Shell } from "@/components/shell";
-import { LEGAL_LINE } from "@/lib/product";
 
 export default function LegalPage() {
+  const { t } = useI18n();
+
   return (
     <Shell>
       <main className="mx-auto max-w-2xl px-5 py-14">
-        <p className="text-xs tracking-widest text-mute">LEGAL</p>
-        <h1 className="mt-3 text-3xl font-medium">How Kuida works</h1>
-        <p className="mt-4 text-sm leading-relaxed text-mute">{LEGAL_LINE}</p>
-        <p className="mt-4 text-sm leading-relaxed text-mute">
-          Full Terms, Privacy Policy, and a Business Associate Agreement will be
-          reviewed with Florida health-care counsel before paid launch.
-        </p>
+        <p className="text-xs tracking-widest text-muted-foreground">{t.legal.kicker}</p>
+        <h1 className="mt-3 text-3xl font-medium">{t.legal.title}</h1>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{t.footer.legalLine}</p>
+        <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{t.legal.later}</p>
       </main>
     </Shell>
   );
