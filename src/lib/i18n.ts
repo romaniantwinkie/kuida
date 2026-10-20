@@ -187,6 +187,10 @@ export type Messages = {
     otherAgency: string;
     working: string;
     resetSent: string;
+    passwordHint: string;
+    wrongRoleAgency: string;
+    wrongRoleCaregiver: string;
+    nameRequired: string;
   };
   caregiverHome: {
     title: string;
@@ -759,6 +763,10 @@ export const messages: Record<Locale, Messages> = {
       otherAgency: "I am an agency",
       working: "Working…",
       resetSent: "Check your email for a link to reset your password.",
+      passwordHint: "At least 6 characters.",
+      wrongRoleAgency: "This is an agency account. Opening the office…",
+      wrongRoleCaregiver: "This is a caregiver account. Opening your home…",
+      nameRequired: "Enter a name first.",
     },
     caregiverHome: {
       title: "Your shifts",
@@ -1359,6 +1367,10 @@ export const messages: Record<Locale, Messages> = {
       otherAgency: "Soy una agencia",
       working: "Trabajando…",
       resetSent: "Revisa tu correo para restablecer la contraseña.",
+      passwordHint: "Al menos 6 caracteres.",
+      wrongRoleAgency: "Esta es una cuenta de agencia. Abriendo la oficina…",
+      wrongRoleCaregiver: "Esta es una cuenta de cuidador. Abriendo tu inicio…",
+      nameRequired: "Escribe un nombre primero.",
     },
     caregiverHome: {
       title: "Tus turnos",

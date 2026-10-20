@@ -42,6 +42,11 @@ export async function middleware(request: NextRequest) {
   const role = roleFromUser(user);
   const agencyPath = pathname === "/agency" || pathname.startsWith("/agency/");
   const caregiverPath = pathname === "/caregiver" || pathname.startsWith("/caregiver/");
+  const authPath =
+    pathname === "/sign-in" ||
+    pathname.startsWith("/sign-in/") ||
+    pathname === "/signup/agency" ||
+    pathname === "/signup/caregiver";
 
   const go = (path: string, search = "") => {
     const url = request.nextUrl.clone();
@@ -49,6 +54,9 @@ export async function middleware(request: NextRequest) {
     url.search = search;
     return apply(NextResponse.redirect(url));
   };
+
+  if (authPath && role === "agency") return go("/agency");
+  if (authPath && role === "caregiver") return go("/caregiver");
 
   if (agencyPath) {
     if (request.nextUrl.searchParams.get("demo") === "1") {
