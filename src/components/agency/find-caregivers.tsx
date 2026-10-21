@@ -3,7 +3,9 @@
 import { Check, ChevronDown } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { AgencyMapLoader } from "@/components/agency-map-loader";
+import { useAgencyAccount } from "@/components/agency/agency-account";
 import { useI18n } from "@/components/language-provider";
+import { submitShiftRequest, useShiftRequests } from "@/components/shift-requests/store";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { suggestAddresses, type GeocodeSuggestion } from "@/lib/demo-geocoder";
@@ -14,6 +16,7 @@ import {
   type DayKey,
   type MockCaregiver,
 } from "@/lib/mock-caregivers";
+import { activeRequestFor, type ShiftRequestError, type ShiftWindow } from "@/lib/shift-requests";
 import { cn } from "@/lib/utils";
 
 const DAY_KEYS: DayKey[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
@@ -21,6 +24,14 @@ const LANGUAGE_KEYS = ["English", "Spanish", "Creole"] as const;
 const MIAMI: [number, number] = [25.7617, -80.1918];
 
 type DayState = { on: boolean; start: string; end: string };
+
+function selectedWindows(schedule: Record<DayKey, DayState>): ShiftWindow[] {
+  return DAY_KEYS.filter((day) => schedule[day].on).map((day) => ({
+    day,
+    start: schedule[day].start,
+    end: schedule[day].end,
+  }));
+}
 
 function emptySchedule(): Record<DayKey, DayState> {
   return {
@@ -66,6 +77,8 @@ export function CaregiverAvatar({ person, size = "md" }: { person: MockCaregiver
 
 export function FindScreen() {
   const { t, locale } = useI18n();
+  const account = useAgencyAccount();
+  const requests = useShiftRequests();
   const copy = t.shell.find;
   const [addressQuery, setAddressQuery] = useState("");
   const [address, setAddress] = useState<GeocodeSuggestion | null>(null);
@@ -75,7 +88,7 @@ export function FindScreen() {
   const [languages, setLanguages] = useState<Array<(typeof LANGUAGE_KEYS)[number]>>([]);
   const [langOpen, setLangOpen] = useState(false);
   const [hideNoDrive, setHideNoDrive] = useState(false);
-  const [requested, setRequested] = useState<string[]>([]);
+  const [notice, setNotice] = useState<{ tone: "error" | "ok"; text: string } | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [profile, setProfile] = useState<MockCaregiver | null>(null);
   const suggestRef = useRef<HTMLDivElement>(null);
@@ -107,6 +120,37 @@ export function FindScreen() {
 
   const selected = people.find((person) => person.id === selectedId) ?? null;
   const center: [number, number] = address ? [address.lat, address.lng] : MIAMI;
+  const windows = useMemo(() => selectedWindows(schedule), [schedule]);
+
+  function requestError(error: ShiftRequestError) {
+    if (error === "need_address") return copy.needAddress;
+    if (error === "bad_window") return copy.badWindow;
+    if (error === "duplicate") return copy.duplicate;
+    return copy.needSchedule;
+  }
+
+  function requestPerson(person: MockCaregiver) {
+    const result = submitShiftRequest({
+      caregiverId: person.id,
+      caregiverName: `${person.firstName} ${person.lastInitial}.`,
+      role: person.role,
+      officeName: account.name || t.shell.agencyName,
+      addressLabel: address?.label ?? "",
+      windows,
+    });
+    if (!result.ok) {
+      setNotice({ tone: "error", text: requestError(result.error) });
+      return;
+    }
+    setNotice({ tone: "ok", text: copy.sentNote });
+  }
+
+  function requestLabel(personId: string) {
+    const active = activeRequestFor(requests, personId, windows);
+    if (active?.status === "accepted") return copy.accepted;
+    if (active) return copy.requested;
+    return copy.request;
+  }
 
   function languageName(language: (typeof LANGUAGE_KEYS)[number]) {
     if (language === "English") return copy.languageEnglish;
@@ -318,6 +362,11 @@ export function FindScreen() {
           </div>
         </fieldset>
       </div>
+      {notice && profile === null ? (
+        <p role={notice.tone === "error" ? "alert" : "status"} className="shrink-0 text-xs text-muted-foreground">
+          {notice.text}
+        </p>
+      ) : null}
 
       <div className="grid min-h-0 flex-1 gap-2 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="relative z-0 h-full min-h-0 isolate overflow-hidden rounded-lg border border-border bg-white">
@@ -339,7 +388,7 @@ export function FindScreen() {
           {people.length === 0 ? <p className="px-3 py-4 text-sm text-muted-foreground">{copy.empty}</p> : null}
           <ul className="min-h-0 flex-1 overflow-auto">
             {people.map((person) => {
-              const sent = requested.includes(person.id);
+              const sent = activeRequestFor(requests, person.id, windows) !== null;
               const active = person.id === selectedId;
               return (
                 <li key={person.id} className={cn("border-b border-border last:border-b-0", active && "bg-[#f3f6fa]")}>
@@ -362,9 +411,10 @@ export function FindScreen() {
                       type="button"
                       size="sm"
                       variant={sent ? "outline" : "default"}
-                      onClick={() => setRequested((current) => (current.includes(person.id) ? current : [...current, person.id]))}
+                      disabled={sent}
+                      onClick={() => requestPerson(person)}
                     >
-                      {sent ? copy.requested : copy.request}
+                      {requestLabel(person.id)}
                     </Button>
                   </div>
                 </li>
@@ -432,11 +482,17 @@ export function FindScreen() {
                 })}
               </div>
             </div>
+            {notice ? (
+              <p role={notice.tone === "error" ? "alert" : "status"} className="text-xs text-muted-foreground">
+                {notice.text}
+              </p>
+            ) : null}
             <Button
               type="button"
-              onClick={() => setRequested((current) => (current.includes(profile.id) ? current : [...current, profile.id]))}
+              disabled={activeRequestFor(requests, profile.id, windows) !== null}
+              onClick={() => requestPerson(profile)}
             >
-              {requested.includes(profile.id) ? copy.requested : copy.request}
+              {requestLabel(profile.id)}
             </Button>
           </div>
         ) : null}

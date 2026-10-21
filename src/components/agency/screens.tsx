@@ -4,8 +4,10 @@ import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { useAgencyAccount } from "@/components/agency/agency-account";
 import { useI18n } from "@/components/language-provider";
+import { useShiftRequests } from "@/components/shift-requests/store";
 import { Button } from "@/components/ui/button";
 import { caregiverArea, MOCK_CAREGIVERS } from "@/lib/mock-caregivers";
+import { formatShiftWhen, openRequestCount, type ShiftDay, type ShiftRequest } from "@/lib/shift-requests";
 
 export function AgencyPage({
   title,
@@ -36,10 +38,16 @@ function Stat({ label, value }: { label: string; value: number }) {
   );
 }
 
+function dayLabels(days: { key: ShiftDay; label: string }[]) {
+  return Object.fromEntries(days.map((day) => [day.key, day.label])) as Record<ShiftDay, string>;
+}
+
 export function DashboardScreen() {
   const { t } = useI18n();
   const copy = t.shell;
-  const open = copy.cases.filter((item) => item.status === "open").length;
+  const live = useShiftRequests();
+  const labels = dayLabels(copy.find.days);
+  const open = openRequestCount(live) + copy.cases.filter((item) => item.status === "open").length;
 
   return (
     <AgencyPage title={copy.dashboard.title} body={copy.dashboard.body}>
@@ -57,6 +65,19 @@ export function DashboardScreen() {
             </Link>
           </div>
           <ul>
+            {live.map((request) => (
+              <li key={request.id} className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 last:border-b-0">
+                <div>
+                  <p className="text-sm font-medium">
+                    {request.caregiverName} <span className="font-normal text-muted-foreground">· {request.role}</span>
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {request.addressLabel} · {formatShiftWhen(request.windows, labels)}
+                  </p>
+                </div>
+                <Status status={request.status} />
+              </li>
+            ))}
             {copy.cases.map((item) => (
               <li key={item.title} className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 last:border-b-0">
                 <div>
@@ -90,10 +111,18 @@ export function DashboardScreen() {
 
 export function RequestsScreen() {
   const { t } = useI18n();
+  const account = useAgencyAccount();
   const copy = t.shell;
+  const live = useShiftRequests();
+  const labels = dayLabels(copy.find.days);
 
   return (
     <AgencyPage title={copy.requests.title} body={copy.requests.body}>
+      {account.demo && live.length > 0 ? (
+        <Link href="/caregiver" className="text-sm text-foreground underline-offset-4 hover:underline">
+          {copy.requests.phone}
+        </Link>
+      ) : null}
       <div className="overflow-hidden rounded-lg border border-border bg-white">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-border text-xs text-muted-foreground">
@@ -105,6 +134,20 @@ export function RequestsScreen() {
             </tr>
           </thead>
           <tbody>
+            {live.map((request) => (
+              <tr key={request.id} className="border-b border-border last:border-b-0">
+                <td className="px-4 py-3">
+                  {request.caregiverName}
+                  <span className="text-muted-foreground"> · {request.role}</span>
+                  <span className="mt-0.5 block text-xs text-muted-foreground sm:hidden">{request.addressLabel}</span>
+                </td>
+                <td className="px-4 py-3 text-muted-foreground">{formatShiftWhen(request.windows, labels)}</td>
+                <td className="hidden px-4 py-3 text-muted-foreground sm:table-cell">{request.addressLabel}</td>
+                <td className="px-4 py-3">
+                  <Status status={request.status} />
+                </td>
+              </tr>
+            ))}
             {copy.cases.map((item) => (
               <tr key={item.title} className="border-b border-border last:border-b-0">
                 <td className="px-4 py-3">
@@ -230,9 +273,15 @@ function PersonList({
   );
 }
 
-function Status({ status }: { status: "open" | "filled" }) {
+function Status({ status }: { status: "open" | "filled" | ShiftRequest["status"] }) {
   const { t } = useI18n();
-  const label = status === "open" ? t.shell.requests.open : t.shell.requests.filled;
+  const label = {
+    open: t.shell.requests.open,
+    filled: t.shell.requests.filled,
+    pending: t.shell.requests.pending,
+    accepted: t.shell.requests.accepted,
+    declined: t.shell.requests.declined,
+  }[status];
   return (
     <span className="inline-flex rounded border border-border px-1.5 py-0.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
       {label}

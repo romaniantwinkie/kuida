@@ -197,6 +197,13 @@ export type Messages = {
     body: string;
     shiftLabel: string;
     shift: string;
+    incoming: string;
+    forWhom: string;
+    fromOffice: string;
+    accept: string;
+    decline: string;
+    accepted: string;
+    declined: string;
     signOut: string;
   };
   agencySignup: {
@@ -306,6 +313,12 @@ export type Messages = {
       empty: string;
       request: string;
       requested: string;
+      accepted: string;
+      needAddress: string;
+      needSchedule: string;
+      badWindow: string;
+      duplicate: string;
+      sentNote: string;
       address: string;
       addressPlaceholder: string;
       schedule: string;
@@ -344,6 +357,10 @@ export type Messages = {
       status: string;
       open: string;
       filled: string;
+      pending: string;
+      accepted: string;
+      declined: string;
+      phone: string;
     };
     caregiversPage: { title: string; body: string; saved: string; contacted: string };
     settings: {
@@ -770,9 +787,16 @@ export const messages: Record<Locale, Messages> = {
     },
     caregiverHome: {
       title: "Your shifts",
-      body: "A simple home for this caregiver account. No agency plans are shown here.",
+      body: "Requests from an office show up here. You can accept or decline. Agency plans are not shown.",
       shiftLabel: "Next",
       shift: "No shifts assigned yet.",
+      incoming: "New request",
+      forWhom: "For {name}",
+      fromOffice: "From {office}",
+      accept: "Accept",
+      decline: "No",
+      accepted: "You accepted",
+      declined: "You declined",
       signOut: "Sign out",
     },
     agencySignup: {
@@ -892,6 +916,12 @@ export const messages: Record<Locale, Messages> = {
         empty: "No one matches these filters.",
         request: "Request",
         requested: "Requested",
+        accepted: "Accepted",
+        needAddress: "Choose an address for this shift.",
+        needSchedule: "Choose the days and hours first.",
+        badWindow: "The end time has to be after the start.",
+        duplicate: "That request is already open.",
+        sentNote: "Request sent. They can accept it on their phone.",
         address: "Address",
         addressPlaceholder: "Start typing an address",
         schedule: "Schedule",
@@ -931,13 +961,17 @@ export const messages: Record<Locale, Messages> = {
       },
       requests: {
         title: "Requests",
-        body: "Cases this demo office has open.",
+        body: "Requests sent from Find caregivers, plus sample cases for this office.",
         case: "Case",
         when: "When",
         area: "Area",
         status: "Status",
         open: "Open",
         filled: "Filled",
+        pending: "Pending",
+        accepted: "Accepted",
+        declined: "Declined",
+        phone: "Open the caregiver phone",
       },
       caregiversPage: {
         title: "Caregivers",
@@ -1374,9 +1408,16 @@ export const messages: Record<Locale, Messages> = {
     },
     caregiverHome: {
       title: "Tus turnos",
-      body: "Un inicio sencillo para esta cuenta de cuidador. Aquí no se muestran planes de agencia.",
+      body: "Las solicitudes de una oficina aparecen aquí. Puedes aceptar o rechazar. Los planes de las agencias no se muestran.",
       shiftLabel: "Siguiente",
       shift: "Todavía no hay turnos asignados.",
+      incoming: "Nueva solicitud",
+      forWhom: "Para {name}",
+      fromOffice: "De {office}",
+      accept: "Aceptar",
+      decline: "No",
+      accepted: "Aceptaste",
+      declined: "Rechazaste",
       signOut: "Salir",
     },
     agencySignup: {
@@ -1496,6 +1537,12 @@ export const messages: Record<Locale, Messages> = {
         empty: "Nadie coincide con estos filtros.",
         request: "Solicitar",
         requested: "Solicitado",
+        accepted: "Aceptada",
+        needAddress: "Elige una dirección para este turno.",
+        needSchedule: "Elige los días y las horas primero.",
+        badWindow: "La hora de fin tiene que ser después de la de inicio.",
+        duplicate: "Esa solicitud ya está abierta.",
+        sentNote: "Solicitud enviada. Pueden aceptarla en el teléfono.",
         address: "Dirección",
         addressPlaceholder: "Empieza a escribir una dirección",
         schedule: "Horario",
@@ -1535,13 +1582,17 @@ export const messages: Record<Locale, Messages> = {
       },
       requests: {
         title: "Solicitudes",
-        body: "Casos que esta oficina demo tiene abiertos.",
+        body: "Solicitudes enviadas desde Buscar cuidadores, más los casos de muestra de esta oficina.",
         case: "Caso",
         when: "Horario",
         area: "Zona",
         status: "Estado",
         open: "Abierta",
         filled: "Cubierta",
+        pending: "Pendiente",
+        accepted: "Aceptada",
+        declined: "Rechazada",
+        phone: "Abrir el teléfono del cuidador",
       },
       caregiversPage: {
         title: "Cuidadores",
