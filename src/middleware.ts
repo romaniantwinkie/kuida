@@ -58,20 +58,22 @@ export async function middleware(request: NextRequest) {
   if (authPath && role === "agency") return go("/agency");
   if (authPath && role === "caregiver") return go("/caregiver");
 
+  const enterDemo = () => {
+    const url = request.nextUrl.clone();
+    url.searchParams.delete("demo");
+    const redirect = NextResponse.redirect(url);
+    apply(redirect);
+    redirect.cookies.set(DEMO_COOKIE, "1", {
+      path: "/",
+      sameSite: "lax",
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 30,
+    });
+    return redirect;
+  };
+
   if (agencyPath) {
-    if (request.nextUrl.searchParams.get("demo") === "1") {
-      const url = request.nextUrl.clone();
-      url.searchParams.delete("demo");
-      const redirect = NextResponse.redirect(url);
-      apply(redirect);
-      redirect.cookies.set(DEMO_COOKIE, "1", {
-        path: "/",
-        sameSite: "lax",
-        httpOnly: true,
-        maxAge: 60 * 60 * 24 * 30,
-      });
-      return redirect;
-    }
+    if (request.nextUrl.searchParams.get("demo") === "1") return enterDemo();
     if (request.cookies.get(DEMO_COOKIE)?.value === "1" || role === "agency") {
       return apply(response);
     }
@@ -82,6 +84,8 @@ export async function middleware(request: NextRequest) {
   if (caregiverPath) {
     if (role === "caregiver") return apply(response);
     if (role === "agency") return go("/agency");
+    if (request.nextUrl.searchParams.get("demo") === "1") return enterDemo();
+    if (request.cookies.get(DEMO_COOKIE)?.value === "1") return apply(response);
     return go("/sign-in", "?role=caregiver");
   }
 
