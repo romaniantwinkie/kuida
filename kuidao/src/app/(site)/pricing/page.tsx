@@ -10,7 +10,7 @@ const ROWS: Array<[string, boolean | string, boolean | string, boolean | string]
   ["Result cap per search", "15", "Unlimited", "Unlimited"],
   ["Automated outreach waves", false, true, true],
   ["Auto-backfill on decline", false, true, true],
-  ["Overtime & credential guardrails", "Flags only", true, true],
+  ["Credential guardrails", "Flags only", true, true],
   ["Coordinator copilot", false, true, true],
   ["Morning brief", false, true, true],
   ["Hiring packet e-sign", false, true, true],

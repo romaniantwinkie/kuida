@@ -6,7 +6,7 @@ export type Reply = { text: string; matches?: Match[]; link?: { href: string; la
 export const SUGGESTIONS = [
   "Who can cover Sra. G. on Tuesday?",
   "Whose credentials expire this month?",
-  "Who's close to overtime?",
+  "Who's free this weekend?",
   "Give me the overnight brief",
 ];
 
@@ -30,11 +30,11 @@ export function answer(q: string): Reply {
     };
   }
 
-  if (/overtime|hours|horas|40/.test(s)) {
-    const rows = CAREGIVERS.filter((c) => c.weeklyHours >= 34).sort((a, b) => b.weeklyHours - a.weeklyHours);
+  if (/weekend|saturday|sunday|fin de semana|sábado|domingo/.test(s)) {
+    const rows = CAREGIVERS.filter((c) => c.availability.days.some((d) => d >= 5));
     return {
-      text: `${rows.length} caregivers are within 6 hours of overtime. Outreach skips anyone a shift would push past 40h unless you turn that off.`,
-      bullets: rows.map((c) => `${c.firstName} ${c.lastInitial}. — ${c.weeklyHours}h scheduled, ${40 - c.weeklyHours}h left`),
+      text: `${rows.length} caregivers list weekend availability. All are independent contractors who set their own days.`,
+      bullets: rows.map((c) => `${c.firstName} ${c.lastInitial}. — ${c.role}, ${c.area}, ${c.availability.days.filter((d) => d >= 5).map((d) => (d === 5 ? "Sat" : "Sun")).join(" & ")}`),
     };
   }
 
@@ -68,6 +68,6 @@ export function answer(q: string): Reply {
   }
 
   return {
-    text: "I can rank caregivers for a shift, flag credential and overtime risks, or summarize overnight activity. Try one of the suggestions.",
+    text: "I can rank caregivers for a shift, flag credential issues, find weekend coverage, or summarize overnight activity. Try one of the suggestions.",
   };
 }

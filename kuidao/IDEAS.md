@@ -27,7 +27,6 @@ general product knowledge and should be re-checked against their sites.
 | Explainable 0–100 match score with factor breakdown | SmartMatch, Statewise, MapleCare, ShiftMatch | `lib/match.ts`, match board rows (expand ▾) |
 | Hard-rule screening shown separately ("screened out") | SmartMatch compliance checks | Match board footer |
 | Outreach waves + auto-backfill on decline | Zingage, ShiftMatch, Statewise | `components/match-board.tsx` → Start outreach |
-| Overtime-risk flag, skip by default | Statewise "overtime risk" | Match board toggle, roster meter |
 | Live outreach timeline with sim clock | Zingage, ShiftMatch | Match board → Outreach card |
 | Bilingual SMS offer preview ("reply 1 / 2"), no app required | MapleCare, ShiftMatch | Match board, hero |
 | Coordinator copilot with reasons | ShiftMatch Coordinator AI, Zingage Casey | `/app/copilot` |

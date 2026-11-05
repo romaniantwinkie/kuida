@@ -96,7 +96,6 @@ export function scoreMatch(c: Caregiver, shift: Shift, client: Client = clientBy
     detail: `${c.reliability}% on-time, last 90 days`,
   });
 
-  if (c.weeklyHours + hours > 40) flags.unshift({ tone: "danger", label: `Overtime risk · ${c.weeklyHours + hours}h` });
 
   const score = factors.reduce((s, f) => s + f.points, 0);
   return { caregiver: c, score, miles, factors, flags, eligible: blockers.length === 0, blockers };
@@ -119,12 +118,12 @@ export function scoreTone(score: number) {
 }
 
 /**
- * Fill chance for an open shift (demo heuristic): more eligible caregivers
- * without overtime risk, and more lead time, means a higher chance.
+ * Fill chance for an open shift (demo heuristic): more eligible caregivers,
+ * stronger top matches and more lead time mean a higher chance.
  */
 export function fillChance(shift: Shift) {
   const { eligible } = rankForShift(shift);
-  const clean = eligible.filter((m) => !m.flags.some((f) => f.tone === "danger")).length;
+  const clean = eligible.filter((m) => m.score >= 70).length;
   const lead = shift.urgency === "now" ? 0.75 : shift.urgency === "today" ? 0.9 : 1;
   const pct = Math.round(Math.min(97, (25 + clean * 13 + Math.min(eligible.length, 8) * 3) * lead));
   const level = pct >= 75 ? "High" : pct >= 50 ? "Medium" : "Low";

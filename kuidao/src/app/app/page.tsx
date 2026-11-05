@@ -30,7 +30,7 @@ const ACTIVITY = [
   { who: "Kuida", text: "Filled Sr. R. Thu 10a–4p with Daniel S. (score 91)", t: "6:12a", icon: Zap },
   { who: "Kuida", text: "Caught Rosa V.'s expired CPR — removed from 2 offers", t: "5:40a", icon: ShieldAlert },
   { who: "Niurka D.", text: "Called out Tue 8a–2p (Sra. G.) — reason: sick", t: "5:31a", icon: AlertTriangle },
-  { who: "Ana M.", text: "Approved overtime for Yanelis M. (Fri)", t: "Yesterday", icon: Clock },
+  { who: "Ana M.", text: "Approved Yanelis M.'s schedule change (Fri)", t: "Yesterday", icon: Clock },
 ];
 
 function FillChance({ shift }: { shift: Parameters<typeof fillChance>[0] }) {
@@ -38,7 +38,7 @@ function FillChance({ shift }: { shift: Parameters<typeof fillChance>[0] }) {
   const tone = f.level === "High" ? "text-ok" : f.level === "Medium" ? "text-warn" : "text-danger";
   return (
     <span className="text-muted">
-      Fill chance: <b className={tone}>{f.level}</b> ({f.pct}%) · {f.clean} ready without overtime
+      Fill chance: <b className={tone}>{f.level}</b> ({f.pct}%) · {f.total} eligible, {f.clean} strong matches
     </span>
   );
 }
@@ -46,7 +46,6 @@ function FillChance({ shift }: { shift: Parameters<typeof fillChance>[0] }) {
 export default function TodayPage() {
   const open = SHIFTS.filter((s) => s.status !== "filled");
   const expiring = CAREGIVERS.flatMap((c) => c.credentials.filter((cr) => cr.expiresInDays <= 30).map((cr) => ({ c, cr })));
-  const nearOT = CAREGIVERS.filter((c) => c.weeklyHours >= 36);
 
   const kpis = [
     { label: "Fill rate · 7d", value: "97.4%", delta: "+2.1 pts", data: [91, 93, 92, 95, 94, 96, 97.4] },
@@ -104,9 +103,6 @@ export default function TodayPage() {
           <p className="text-xs font-medium text-muted">Compliance watch</p>
           <p className="mt-2 font-display text-3xl tabular-nums">{expiring.length}</p>
           <p className="mt-0.5 text-xs text-muted">credentials expired or expiring ≤30d</p>
-          <p className="mt-2 text-xs">
-            <Badge tone="danger">{nearOT.length} near overtime</Badge>
-          </p>
         </Card>
       </div>
 
@@ -217,7 +213,7 @@ export default function TodayPage() {
       </Card>
 
       <Link href="/app/copilot" className="mt-6 flex items-center gap-3 rounded-2xl border border-dashed border-line p-4 text-sm text-muted transition hover:border-brand hover:text-ink">
-        <Bot className="size-5 text-brand" /> Ask Copilot: “Who&apos;s close to overtime this week?”
+        <Bot className="size-5 text-brand" /> Ask Copilot: “Who&apos;s free this weekend?”
         <ArrowRight className="ml-auto size-4" />
       </Link>
     </>

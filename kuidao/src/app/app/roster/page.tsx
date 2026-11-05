@@ -17,7 +17,7 @@ import { cn } from "@/lib/cn";
 const FILTERS = [
   { id: "all", label: "All" },
   { id: "compliance", label: "Credential issues" },
-  { id: "overtime", label: "Near overtime" },
+  { id: "weekends", label: "Available weekends" },
   { id: "spanish", label: "Spanish" },
   { id: "invited", label: "Invited" },
 ] as const;
@@ -38,7 +38,7 @@ export default function RosterPage() {
     return CAREGIVERS.filter((c) => {
       if (q && !`${c.firstName} ${c.lastInitial} ${c.area} ${c.role}`.toLowerCase().includes(q.toLowerCase())) return false;
       if (filter === "compliance") return credIssues(c).length > 0;
-      if (filter === "overtime") return c.weeklyHours >= 36;
+      if (filter === "weekends") return c.availability.days.some((d) => d >= 5);
       if (filter === "spanish") return c.languages.includes("Spanish");
       if (filter === "invited") return false;
       return true;
@@ -170,11 +170,10 @@ export default function RosterPage() {
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
                           <div className="h-2 w-24 overflow-hidden rounded-full bg-surface-2">
-                            <div className={cn("h-full rounded-full", c.weeklyHours >= 36 ? "bg-danger" : "bg-brand")} style={{ width: `${otPct}%` }} />
+                            <div className="h-full rounded-full bg-brand" style={{ width: `${otPct}%` }} />
                           </div>
                           <span className="tabular-nums">{c.weeklyHours}h</span>
                         </div>
-                        {c.weeklyHours >= 36 && <p className="mt-1 text-xs font-medium text-danger">{40 - c.weeklyHours}h to overtime</p>}
                       </td>
                       <td className="px-4 py-3 tabular-nums">{c.reliability}%</td>
                       <td className="px-4 py-3">

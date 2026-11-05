@@ -81,7 +81,7 @@ Nothing is tied to one state or city:
 - **Hard rules** (ineligible): role below required, expired credential, required language
   missing, no availability overlap, or the caregiver who called out.
 - **Score /100**: availability 30 · distance 20 · language 15 · skills & role 15 · continuity 10 · reliability 10.
-- **Flags**: overtime risk (>40h), credential expiring ≤30d, long commute.
+- **Flags**: credential expiring ≤30d, long commute. No overtime logic: caregivers are independent contractors.
 
 All data is mock data (`src/lib/data.ts`). Accounts, SMS, and maps aren't wired yet.
 See `IDEAS.md` for the competitor review and roadmap.

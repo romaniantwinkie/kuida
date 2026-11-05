@@ -85,7 +85,7 @@ export function HeroDemo() {
               <span className="grid size-6 place-items-center rounded-full bg-accent text-accent-ink">
                 <Zap className="size-3.5" />
               </span>
-              <span>Auto-backfill on decline · overtime-risk aides skipped</span>
+              <span>Auto-backfill on decline · credentials checked first</span>
             </>
           )}
         </div>

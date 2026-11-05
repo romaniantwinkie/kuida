@@ -25,11 +25,10 @@ import { clientById, DAYS, fmtHour, type Client, type Shift } from "@/lib/data";
 import type { Match } from "@/lib/match";
 import { cn } from "@/lib/cn";
 
-type Status = "idle" | "skipped" | "sent" | "viewed" | "declined" | "noreply" | "accepted" | "withdrawn";
+type Status = "idle" | "sent" | "viewed" | "declined" | "noreply" | "accepted" | "withdrawn";
 
 const STATUS: Record<Status, { label: string; tone: Tone }> = {
   idle: { label: "Ready", tone: "muted" },
-  skipped: { label: "Skipped · overtime", tone: "muted" },
   sent: { label: "Offer sent", tone: "info" },
   viewed: { label: "Viewed", tone: "warn" },
   declined: { label: "Declined", tone: "danger" },
@@ -71,7 +70,6 @@ export function MatchBoard({
   const client = clientProp ?? clientById(shift.clientId);
   const [selected, setSelected] = useState<string | null>(eligible[0]?.caregiver.id ?? null);
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [avoidOvertime, setAvoidOvertime] = useState(true);
   const [waveSize, setWaveSize] = useState(3);
   const [statuses, setStatuses] = useState<Record<string, Status>>({});
   const [events, setEvents] = useState<Event[]>([]);
@@ -82,10 +80,7 @@ export function MatchBoard({
 
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
-  const queue = useMemo(
-    () => eligible.filter((m) => !(avoidOvertime && m.flags.some((f) => f.tone === "danger"))),
-    [eligible, avoidOvertime],
-  );
+  const queue = eligible;
 
   function reset() {
     timers.current.forEach(clearTimeout);
@@ -102,12 +97,6 @@ export function MatchBoard({
     const at = (step: number, fn: () => void) => timers.current.push(setTimeout(fn, step * TICK));
     const push = (step: number, e: Omit<Event, "at">) => at(step, () => setEvents((prev) => [{ ...e, at: step }, ...prev]));
     const set = (step: number, id: string, s: Status) => at(step, () => setStatuses((prev) => ({ ...prev, [id]: s })));
-
-    if (avoidOvertime) {
-      eligible
-        .filter((m) => m.flags.some((f) => f.tone === "danger"))
-        .forEach((m) => set(0, m.caregiver.id, "skipped"));
-    }
 
     let step = 0;
     let winner: Match | null = null;
@@ -355,14 +344,10 @@ export function MatchBoard({
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <label className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl border border-line px-3">
-                    <input type="checkbox" checked={avoidOvertime} onChange={(e) => setAvoidOvertime(e.target.checked)} disabled={running} className="accent-[rgb(var(--brand))]" />
-                    Avoid overtime
-                  </label>
-                  <label className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-line px-3">
-                    Wave size
-                    <select value={waveSize} onChange={(e) => setWaveSize(Number(e.target.value))} disabled={running} className="bg-transparent font-semibold outline-none">
+                <div className="text-sm">
+                  <label className="flex min-h-11 items-center justify-between gap-2 rounded-xl border border-line px-4">
+                    Caregivers per wave
+                    <select value={waveSize} onChange={(e) => setWaveSize(Number(e.target.value))} disabled={running} className="min-h-11 bg-transparent font-semibold">
                       <option value={1}>1</option>
                       <option value={3}>3</option>
                       <option value={5}>5</option>

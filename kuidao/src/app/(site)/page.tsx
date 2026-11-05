@@ -39,8 +39,8 @@ const FEATURES = [
   },
   {
     icon: BellRing,
-    title: "Overtime guardrails",
-    body: "Aides who'd go past 40 hours are flagged and skipped by default. You decide when to override.",
+    title: "Continuity first",
+    body: "Caregivers who already know the client rank higher, so families see familiar faces.",
   },
   {
     icon: FileSignature,
@@ -215,7 +215,7 @@ export default function Home() {
               credentials, and always shows the reasons behind its pick. English or Spanish.
             </p>
             <ul className="mt-6 space-y-2 text-sm">
-              {["Ranked answers with the why", "Overnight brief every morning", "Overtime and compliance flags before you commit"].map((t) => (
+              {["Ranked answers with the why", "Overnight brief every morning", "Credential flags before you commit"].map((t) => (
                 <li key={t} className="flex items-center gap-2">
                   <Sparkles className="size-4 text-brand" /> {t}
                 </li>
