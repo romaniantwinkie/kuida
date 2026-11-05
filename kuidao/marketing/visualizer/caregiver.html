@@ -1,0 +1,122 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="common.css" />
+<script src="avatars.js"></script>
+<script src="timing.js"></script>
+<script src="common.js"></script>
+</head>
+<body>
+
+<!-- 1 logo -->
+<div class="scene center" id="s1">
+  <div class="word" id="c1w">cercana<span class="dot">.</span></div>
+  <p class="lead" id="c1t" style="margin-top:32px;font-size:40px">Free for caregivers, always.</p>
+</div>
+
+<!-- 2 the paperwork problem -->
+<div class="scene" id="s2">
+  <div id="c2t" style="position:absolute;left:140px;top:340px;width:760px">
+    <p class="eyebrow">Sound familiar?</p>
+    <h2 style="margin-top:24px">The same papers, to every agency.</h2>
+  </div>
+  <div id="c2s" style="position:absolute;right:160px;top:220px;width:760px"></div>
+</div>
+
+<!-- 3 vault upload -->
+<div class="scene" id="s3">
+  <div id="c3t" style="position:absolute;left:140px;top:320px;width:660px">
+    <p class="eyebrow">Your document vault</p>
+    <h2 style="margin-top:24px">Upload once.</h2>
+    <p class="lead" style="margin-top:24px">We check them and remind you 30 days before anything expires.</p>
+  </div>
+  <div class="card" id="c3c" style="position:absolute;right:140px;top:200px;width:820px;overflow:hidden"></div>
+</div>
+
+<!-- 4 share per agency, phone private -->
+<div class="scene" id="s4">
+  <div id="c4t" style="position:absolute;left:140px;top:320px;width:660px">
+    <p class="eyebrow">You decide</p>
+    <h2 style="margin-top:24px">Share only with the agencies you choose.</h2>
+    <p class="lead" style="margin-top:24px">For as long as you allow. Your phone number stays private.</p>
+  </div>
+  <div class="card" id="c4c" style="position:absolute;right:140px;top:240px;width:820px;overflow:hidden"></div>
+</div>
+
+<!-- 5 offer by text -->
+<div class="scene" id="s5">
+  <div id="c5t" style="position:absolute;left:140px;top:320px;width:640px">
+    <p class="eyebrow">Shifts near you</p>
+    <h2 style="margin-top:24px">Offers by text. Pay and distance up front.</h2>
+    <p class="lead" style="margin-top:24px">In English or Spanish. Reply 1 to accept.</p>
+  </div>
+  <div class="phone" id="phone" style="left:1000px;top:110px;width:520px">
+    <p style="text-align:center;font-size:22px;color:var(--muted);font-weight:500">Cercana · text message</p>
+    <div id="sms1" class="bubble" style="margin-top:40px;background:#EEF1F5;border-bottom-left-radius:8px;max-width:440px">New shift near you: HHA · Northside · Tue 8a–2p · <b>$18–20/h</b> · <b>1.5 mi</b>. Reply <b>1</b> to accept or <b>2</b> to pass.</div>
+    <div id="sms2" class="bubble" style="margin:24px 0 0 auto;width:fit-content;background:var(--blue);color:#fff;font-weight:600;border-bottom-right-radius:8px">1</div>
+    <div id="sms3" class="bubble" style="margin-top:24px;background:#EEF1F5;border-bottom-left-radius:8px;max-width:440px">Confirmed! Sunrise Home Health ✓ licensed agency. We texted you the address.</div>
+  </div>
+</div>
+
+<!-- 6 free -->
+<div class="scene center" id="s6">
+  <p id="c6p" style="font-size:260px;font-weight:600;letter-spacing:-0.05em;line-height:1">$0</p>
+  <h2 id="c6h" style="margin-top:24px">No fees. No cut of your pay. Ever.</h2>
+</div>
+
+<!-- 7 end -->
+<div class="scene center" id="s7">
+  <div class="word" style="font-size:180px">cercana<span class="dot">.</span></div>
+  <p class="lead" style="margin-top:28px;font-size:42px">Free for caregivers, always.</p>
+  <p style="margin-top:56px;font-size:40px;font-weight:600;color:var(--blue)">Join free at cercana.ai</p>
+</div>
+
+<script>
+const S = TIMING.caregiver.scenes;
+
+// 2: repeated sends to three agencies
+const AG = ["Agency A", "Agency B", "Agency C"];
+$("c2s").innerHTML = AG.map((a, i) => `<div class="card" id="pp${i}" style="margin-top:${i ? 24 : 0}px;padding:24px 32px;display:flex;align-items:center;gap:20px">
+  <span style="width:56px;height:56px;border-radius:16px;background:#FDE8E8;display:grid;place-items:center"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D22C2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg></span>
+  <div style="flex:1"><p class="name">Email ID, certificate, TB, CPR…</p><p class="meta">to ${a} · again</p></div>
+  <span class="chip" style="background:#FDE8E8;color:var(--danger)">Resent ${i + 2}×</span></div>`).join("");
+
+// 3: vault
+const DOCS = ["Photo ID", "HHA / CNA certificate", "Background check", "TB test", "CPR / First aid"];
+$("c3c").innerHTML = `<div style="padding:28px 32px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px"><img src="${AV["Maria L"]}" style="width:64px;height:64px;border-radius:50%"/><div><p class="name">María L. · my vault</p><p class="meta">Private until you share</p></div></div>` +
+  DOCS.map((d, i) => `<div class="row" id="d${i}" style="padding:22px 32px"><span class="okicon">${CHECK}</span><p class="name" style="flex:1;font-size:28px">${d}</p><span class="chip" id="dc${i}"></span></div>`).join("");
+
+// 4: share toggles
+const SH = [["Sunrise Home Health", true, "5 documents · 30 days"], ["Bayside Care Partners", true, "3 documents · 30 days"], ["Golden Years Home Care", false, "Not shared"]];
+$("c4c").innerHTML = SH.map((s, i) => `<div class="row" style="padding:28px 32px"><div style="flex:1"><p class="name" style="font-size:28px">${s[0]}</p><p class="meta" id="sm${i}">${s[2]}</p></div>
+  <span id="tg${i}" style="position:relative;width:84px;height:48px;border-radius:99px;background:#DFE3E8;flex:none"><i id="kn${i}" style="position:absolute;top:6px;left:6px;width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgb(0 0 0 / .2)"></i></span></div>`).join("") +
+  `<div style="padding:22px 32px;border-top:1px solid var(--line);background:#F6F7F9;display:flex;align-items:center;gap:14px;font-size:24px;color:var(--muted)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5D6774" stroke-width="2" stroke-linecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Agencies view, never download. Your number stays private.</div>`;
+
+window.__DURATION = 30;
+window.__render = function (t) {
+  let [l, L] = scene(0, t, S); show($("c1w"), l, 0.05, L - 0.45, 40, 0.7); show($("c1t"), l, 0.5, L - 0.45, 24, 0.6);
+
+  [l, L] = scene(1, t, S); show($("c2t"), l, 0.1, L - 0.45);
+  AG.forEach((a, i) => show($("pp" + i), l, 0.4 + i * 0.35, L - 0.45, 30, 0.5));
+
+  [l, L] = scene(2, t, S); show($("c3t"), l, 0.1, L - 0.45); show($("c3c"), l, 0.3, L - 0.45, 40, 0.7);
+  DOCS.forEach((d, i) => { const k = prog(l, 0.8 + i * 0.4, 0.4); $("d" + i).style.opacity = 0.3 + 0.7 * k; chipStyle($("dc" + i), k < 0.5 ? "Checking…" : "Verified", k < 0.5 ? "#EEF0F3" : "var(--okbg)", k < 0.5 ? "#5D6774" : "#16964A"); });
+
+  [l, L] = scene(3, t, S); show($("c4t"), l, 0.1, L - 0.45); show($("c4c"), l, 0.3, L - 0.45, 40, 0.7);
+  SH.forEach((s, i) => { const k = s[1] ? prog(l, 1.0 + i * 0.5, 0.35) : 0; $("tg" + i).style.background = k > 0.5 ? "#1D4ED8" : "#DFE3E8"; $("kn" + i).style.left = (6 + 36 * k) + "px"; });
+
+  [l, L] = scene(4, t, S); show($("c5t"), l, 0.1, L - 0.45); show($("phone"), l, 0.3, L - 0.45, 40, 0.7);
+  show($("sms1"), l, 0.8, null, 16, 0.5); show($("sms2"), l, 3.0, null, 16, 0.4); show($("sms3"), l, 3.7, null, 16, 0.5);
+
+  [l, L] = scene(5, t, S); const k6 = prog(l, 0.05, 0.6); $("c6p").style.opacity = k6 * (1 - clamp((l - (L - 0.45)) / 0.4)); $("c6p").style.transform = `scale(${0.85 + 0.15 * k6})`;
+  show($("c6h"), l, 0.5, L - 0.45);
+
+  [l, L] = scene(6, t, S);
+  [...$("s7").children].forEach((el, i) => show(el, l, 0.1 + i * 0.3, null, 24, 0.7));
+};
+window.__render(0);
+</script>
+</body>
+</html>

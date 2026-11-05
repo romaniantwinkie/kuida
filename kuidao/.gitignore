@@ -3,3 +3,5 @@ node_modules
 .DS_Store
 *.tsbuildinfo
 marketing/visualizer/frames/
+marketing/visualizer/frames-*/
+marketing/visualizer/*-mix.wav
