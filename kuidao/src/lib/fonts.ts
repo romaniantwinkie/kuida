@@ -50,7 +50,7 @@ export const FONTS = [
   },
 ] as const;
 export type FontId = (typeof FONTS)[number]["id"];
-export const DEFAULT_FONT: FontId = "editorial";
+export const DEFAULT_FONT: FontId = "modern";
 
 export const fontHref = (id: string) => {
   const f = FONTS.find((x) => x.id === id) ?? FONTS[0];

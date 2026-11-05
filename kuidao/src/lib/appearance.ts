@@ -54,8 +54,8 @@ function makeStore<T extends string>(key: string, fallback: T, valid: readonly s
   };
 }
 
-const paletteStore = makeStore<PaletteId>(KEYS.palette, "teal", PALETTES.map((p) => p.id));
-const mapStore = makeStore<MapStyleId>(KEYS.map, "streets", MAP_STYLES.map((m) => m.id));
+const paletteStore = makeStore<PaletteId>(KEYS.palette, "slate", PALETTES.map((p) => p.id));
+const mapStore = makeStore<MapStyleId>(KEYS.map, "aerial", MAP_STYLES.map((m) => m.id));
 
 const regionStore = makeStore<RegionId>(KEYS.region, "atl", REGIONS.map((r) => r.id));
 

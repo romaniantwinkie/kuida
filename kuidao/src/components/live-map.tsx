@@ -74,7 +74,10 @@ export function LiveMap({
     if (!Lf || !map.current || !layer.current || !el.current) return;
     const { client, pins, selectedId, toLatLng } = props.current;
     layer.current.clearLayers();
-    const surface = token("surface", el.current);
+    const aerial = basemap === "aerial";
+    // On photo imagery, pins need a bright, heavier ring to read.
+    const surface = aerial ? "#ffffff" : token("surface", el.current);
+    const ring = aerial ? 3 : 2;
     if (client) {
       const c = toLatLng(client);
       Lf.circle(c, { radius: 2400, color: token("accent", el.current), weight: 1, dashArray: "4 4", fillOpacity: 0.08 }).addTo(layer.current);
@@ -85,9 +88,9 @@ export function LiveMap({
     for (const p of pins) {
       const sel = p.id === selectedId;
       const m = Lf.circleMarker(toLatLng(p), {
-        radius: sel ? 8 : 6,
+        radius: (sel ? 8 : 6) + (aerial ? 1 : 0),
         color: surface,
-        weight: 2,
+        weight: ring,
         fillColor: token(TONE_TOKEN[p.tone ?? "brand"], el.current),
         fillOpacity: 1,
       }).addTo(layer.current);

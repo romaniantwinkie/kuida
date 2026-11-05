@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/cn";
 
 type Mode = "system" | "light" | "dark";
-const order: Mode[] = ["system", "light", "dark"];
+const order: Mode[] = ["light", "dark", "system"];
 const icons = { system: Monitor, light: Sun, dark: Moon };
 
 function apply(mode: Mode) {
@@ -15,7 +15,7 @@ function apply(mode: Mode) {
 }
 
 export function ThemeToggle({ className }: { className?: string }) {
-  const [mode, setMode] = useState<Mode>("system");
+  const [mode, setMode] = useState<Mode>("light");
 
   useEffect(() => {
     try {
