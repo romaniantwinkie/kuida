@@ -1,12 +1,9 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import palettesJson from "./palettes.json";
 import { DEFAULT_FONT, ensureFontLoaded, FONTS, type FontId } from "./fonts";
 import { REGIONS, type RegionId } from "./regions";
 
-export type PaletteId = (typeof palettesJson.palettes)[number]["id"];
-export const PALETTES = palettesJson.palettes;
 
 export const MAP_STYLES = [
   { id: "streets", name: "Streets", blurb: "Neighborhood map with highways and labels." },
@@ -20,7 +17,7 @@ export const MAP_STYLES = [
 ] as const;
 export type MapStyleId = (typeof MAP_STYLES)[number]["id"];
 
-const KEYS = { palette: "kuida-palette", map: "kuida-map", region: "kuida-region", font: "kuida-font" } as const;
+const KEYS = { map: "kuida-map", region: "kuida-region", font: "kuida-font" } as const;
 
 function makeStore<T extends string>(key: string, fallback: T, valid: readonly string[]) {
   const listeners = new Set<() => void>();
@@ -54,24 +51,15 @@ function makeStore<T extends string>(key: string, fallback: T, valid: readonly s
   };
 }
 
-const paletteStore = makeStore<PaletteId>(KEYS.palette, "slate", PALETTES.map((p) => p.id));
 const mapStore = makeStore<MapStyleId>(KEYS.map, "aerial", MAP_STYLES.map((m) => m.id));
 
-const regionStore = makeStore<RegionId>(KEYS.region, "atl", REGIONS.map((r) => r.id));
+const regionStore = makeStore<RegionId>(KEYS.region, "mia", REGIONS.map((r) => r.id));
 
 export function useRegion() {
   const v = useSyncExternalStore(regionStore.subscribe, regionStore.get, () => regionStore.fallback);
   return [v, regionStore.set] as const;
 }
 
-export function usePalette() {
-  const v = useSyncExternalStore(paletteStore.subscribe, paletteStore.get, () => paletteStore.fallback);
-  const set = (id: PaletteId) => {
-    document.documentElement.setAttribute("data-palette", id);
-    paletteStore.set(id);
-  };
-  return [v, set] as const;
-}
 
 export function useMapStyle() {
   const v = useSyncExternalStore(mapStore.subscribe, mapStore.get, () => mapStore.fallback);

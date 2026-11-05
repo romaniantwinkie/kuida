@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Download, UserPlus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import { PageHead } from "@/components/page-head";
-import { Avatar } from "@/components/ui/avatar";
+import { CaregiverLink } from "@/components/caregiver-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -43,14 +43,9 @@ export default function RosterPage() {
         title="Roster"
         sub={`${CAREGIVERS.length} caregivers · contact details are relayed, never shown`}
         action={
-          <div className="flex gap-2">
-            <Button variant="secondary">
-              <Download className="size-4" /> Export
-            </Button>
-            <Button>
-              <UserPlus className="size-4" /> Invite by text
-            </Button>
-          </div>
+          <Button>
+            <UserPlus className="size-4" /> Invite by text
+          </Button>
         }
       />
       <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -85,17 +80,16 @@ export default function RosterPage() {
                 return (
                   <tr key={c.id} className="hover:bg-surface-2/50">
                     <td className="px-5 py-3">
-                      <div className="flex items-center gap-3">
-                        <Avatar name={`${c.firstName} ${c.lastInitial}`} />
-                        <div>
-                          <p className="font-semibold">
+                      <CaregiverLink caregiver={c} withAvatar avatarClassName="size-10" className="group">
+                        <span>
+                          <span className="block font-semibold group-hover:text-brand">
                             {c.firstName} {c.lastInitial}.
-                          </p>
-                          <p className="text-xs text-muted">
+                          </span>
+                          <span className="block text-xs text-muted">
                             {c.role} · {c.area} · {c.languages.join("/")}
-                          </p>
-                        </div>
-                      </div>
+                          </span>
+                        </span>
+                      </CaregiverLink>
                     </td>
                     <td className="px-3 py-3">
                       <div className="flex gap-0.5" title={`${c.availability.days.map((d) => DAYS[d]).join(", ")} · ${fmtHour(c.availability.start)}–${fmtHour(c.availability.end)}`}>

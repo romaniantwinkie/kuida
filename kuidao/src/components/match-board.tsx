@@ -16,7 +16,7 @@ import {
   X,
 } from "lucide-react";
 import { MapView } from "@/components/map-view";
-import { Avatar } from "@/components/ui/avatar";
+import { CaregiverLink } from "@/components/caregiver-card";
 import { Badge, type Tone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader } from "@/components/ui/card";
@@ -202,11 +202,12 @@ export function MatchBoard({
                 <div className="flex items-center gap-3 px-4 py-3 sm:px-5">
                   <span className="hidden w-4 text-xs font-semibold tabular-nums text-muted sm:block">{idx + 1}</span>
                   <ScoreRing score={m.score} />
+                  <CaregiverLink caregiver={m.caregiver} withAvatar avatarClassName="size-10" className="hidden sm:inline-flex">
+                    <></>
+                  </CaregiverLink>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <p className="font-semibold">
-                        {m.caregiver.firstName} {m.caregiver.lastInitial}.
-                      </p>
+                      <CaregiverLink caregiver={m.caregiver} />
                       <span className="text-xs text-muted">
                         {m.caregiver.role} · {m.miles} mi · {m.caregiver.languages.join("/")}
                       </span>
@@ -340,7 +341,9 @@ export function MatchBoard({
           <div className="space-y-4 p-5">
             {winner ? (
               <div className="flex animate-fade-up items-center gap-3 rounded-xl bg-ok/10 p-3">
-                <Avatar name={`${winner.caregiver.firstName} ${winner.caregiver.lastInitial}`} className="bg-ok text-bg" />
+                <CaregiverLink caregiver={winner.caregiver} withAvatar avatarClassName="size-10 ring-2 ring-ok">
+                  <></>
+                </CaregiverLink>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold">
                     Filled by {winner.caregiver.firstName} {winner.caregiver.lastInitial}. in {simClock(lastStep)}

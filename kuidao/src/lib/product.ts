@@ -51,10 +51,13 @@ export const PLANS: Plan[] = [
     features: [
       "Everything in Pro",
       "Shared bench across locations",
-      "EVV / EMR export (HHAeXchange, CSV)",
+      "Dedicated onboarding for every branch",
       "Fill-rate analytics by branch",
     ],
   },
 ];
 
 export const RESULT_CAP = 15;
+
+/** Launch offer for agencies. */
+export const FOUNDING_OFFER = { agencies: 50, freeMonths: 6 } as const;

@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
-import { PLANS } from "@/lib/product";
+import { FOUNDING_OFFER, PLANS } from "@/lib/product";
 import { cn } from "@/lib/cn";
 
 export function PricingCards() {
@@ -22,14 +22,11 @@ export function PricingCards() {
           <h3 className="font-display text-2xl">{p.name}</h3>
           <p className={cn("mt-2 text-sm", p.highlight ? "text-bg/70" : "text-muted")}>{p.blurb}</p>
           <p className="mt-6 flex items-baseline gap-1">
-            {p.monthly ? (
-              <>
-                <span className="font-display text-5xl">${p.monthly}</span>
-                <span className={cn("text-sm", p.highlight ? "text-bg/60" : "text-muted")}>/location/mo</span>
-              </>
-            ) : (
-              <span className="font-display text-4xl">Let’s talk</span>
-            )}
+            <span className="font-display text-5xl">$0</span>
+            <span className={cn("text-sm", p.highlight ? "text-bg/60" : "text-muted")}>for {FOUNDING_OFFER.freeMonths} months</span>
+          </p>
+          <p className={cn("mt-1 text-sm", p.highlight ? "text-bg/80" : "text-ink")}>
+            then {p.monthly ? <b>${p.monthly}/location/mo</b> : <b>custom pricing</b>}
           </p>
           <p className={cn("mt-1 text-xs", p.highlight ? "text-bg/60" : "text-muted")}>{p.seats} · unlimited fills</p>
           <ul className="mt-6 flex-1 space-y-2.5 text-sm">
@@ -45,7 +42,7 @@ export function PricingCards() {
             variant={p.highlight ? "accent" : "secondary"}
             className="mt-8"
           >
-            {p.monthly ? `Start ${p.name}` : "Contact sales"}
+            {p.monthly ? `Start ${p.name} free` : "Talk to us"}
           </ButtonLink>
         </article>
       ))}

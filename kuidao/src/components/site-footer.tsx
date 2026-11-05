@@ -1,23 +1,40 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Logo } from "@/components/logo";
+import { audienceFromPath } from "@/lib/audience";
 import { LEGAL_LINE } from "@/lib/product";
 
-const COLS = [
-  { title: "Product", links: [["Agency console", "/app"], ["Match & outreach", "/app/shifts/s-1042"], ["Copilot", "/app/copilot"], ["Pricing", "/pricing"]] },
-  { title: "Caregivers", links: [["Crear perfil", "/signup/caregiver"], ["App preview", "/c"]] },
-  { title: "Company", links: [["Legal", "/legal"], ["Log in", "/sign-in"], ["Agency signup", "/signup/agency"]] },
-];
+const COLS = {
+  agency: [
+    { title: "Product", links: [["Live demo", "/app"], ["Match & outreach", "/app/shifts/s-1042"], ["Copilot", "/app/copilot"], ["Pricing", "/pricing"]] },
+    { title: "Get started", links: [["Create your office", "/signup/agency"], ["Log in", "/sign-in"]] },
+    { title: "Company", links: [["Legal", "/legal"]] },
+  ],
+  caregiver: [
+    { title: "Get started", links: [["Create free profile", "/caregivers/signup"], ["Log in", "/caregivers/sign-in"]] },
+    { title: "Learn", links: [["How it works", "/caregivers#how"], ["App preview", "/c"], ["FAQ", "/caregivers#faq"]] },
+    { title: "Company", links: [["Legal", "/caregivers/legal"]] },
+  ],
+} as const;
+
+const TAGLINE = {
+  agency: "Built for licensed home care agencies in all 50 states.",
+  caregiver: "Free for caregivers, always. In English and Spanish.",
+};
 
 export function SiteFooter() {
+  const audience = audienceFromPath(usePathname());
   return (
     <footer className="border-t border-line bg-surface">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-5">
         <div className="md:col-span-2">
-          <Logo />
+          <Logo href={audience === "caregiver" ? "/caregivers" : "/"} />
           <p className="mt-4 max-w-sm text-xs leading-relaxed text-muted">{LEGAL_LINE}</p>
-          <p className="mt-3 text-xs text-muted">Built for home care in all 50 states · En inglés y español</p>
+          <p className="mt-3 text-xs text-muted">{TAGLINE[audience]}</p>
         </div>
-        {COLS.map((c) => (
+        {COLS[audience].map((c) => (
           <div key={c.title}>
             <p className="eyebrow">{c.title}</p>
             <ul className="mt-3 space-y-1 text-sm">

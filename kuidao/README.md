@@ -14,7 +14,8 @@ npm run dev        # http://localhost:3001 (the original app keeps :3000)
 
 | Route | What it is |
 |---|---|
-| `/` | New marketing site: live outreach hero, product grid, how-it-works, Spanish caregiver section, pricing, FAQ |
+| `/` | **Agency site**: live outreach hero, product grid, Find caregivers map, Copilot demo, pricing with the founding offer, FAQ |
+| `/caregivers` | **Caregiver site**: credential vault (main feature), how it works, "Free, always" pricing, FAQ. Own nav, login (`/caregivers/sign-in`) and signup (`/caregivers/signup`) |
 | `/pricing` | 3 plans + comparison table |
 | `/app` | **Agency console**, "Today": overnight brief, KPIs, needs-attention queue, activity, week coverage |
 | `/app/shifts` · `/app/shifts/[id]` | Shift list → **match board**: explainable scores, hard-rule screening, map, automated outreach waves with auto-backfill |
@@ -22,7 +23,7 @@ npm run dev        # http://localhost:3001 (the original app keeps :3000)
 | `/app/roster` | Bench with availability, overtime meter, credential status, filters |
 | `/app/copilot` | Coordinator copilot (deterministic demo engine built on the same scoring) |
 | `/c` | Caregiver app (Spanish-first): offers, availability, documents, pay log |
-| `/signup/agency`, `/signup/caregiver`, `/sign-in`, `/legal` | Multi-step onboarding, rebuilt forms |
+| `/signup/agency`, `/sign-in`, `/legal` | Agency onboarding and login. `/signup/caregiver` redirects to `/caregivers/signup` |
 
 ## Design system
 
@@ -40,13 +41,8 @@ npm run dev        # http://localhost:3001 (the original app keeps :3000)
 Open **`/app/appearance`**, or use the palette button next to the theme toggle on any page.
 The choice is saved per browser and applied before first paint.
 
-- **7 healthcare color schemes**: Slate (default, light mode), Care Teal, Clinical Blue, Sage, Lavender, Navy and Aqua.
-  Each one is tonal: its main and secondary colors are shades of one hue. Each has a hand-tuned light and dark mode.
-  Only the tokens change; layout and components stay the same.
-  - Source of truth: `src/lib/palettes.json`.
-  - After editing, run `node scripts/build-palettes.mjs`. It regenerates `src/app/palettes.css` and fails
-    if any pair misses WCAG AA: brand/accent buttons, brand text, muted text, ink.
-  - A scheme can be scoped to any element with `data-palette="…"` (and `data-theme`); the previews use this.
+- **Color scheme: Slate only**, in light (default) and dark mode. Tokens live in `src/lib/palettes.json`.
+  `node scripts/build-palettes.mjs` regenerates `src/app/palettes.css` and checks WCAG AA contrast.
 - **6 typefaces** (`src/lib/fonts.ts`): Modern (Outfit + Inter, default), Editorial (Fraunces + Plus Jakarta Sans), Hyperlegible
   (Atkinson Hyperlegible, built for low vision), Friendly (Nunito), Clinical (IBM Plex Sans),
   and Classic (Lora + Source Sans 3).
@@ -59,13 +55,33 @@ The choice is saved per browser and applied before first paint.
     Pins use the active palette. The demo bench is placed around the selected demo office.
     Esri's public tiles are fine for demos. For production, use an ArcGIS or MapTiler key.
 
+## Agencies vs caregivers
+
+The two audiences never see each other's marketing. The header has a "For agencies | For caregivers" switch, and
+nav, CTAs, login and footer follow the side you're on (`src/lib/audience.ts`).
+- **Agencies**: flat per-location plans. **Founding offer: first 50 agencies get 6 months free** (`FOUNDING_OFFER` in `src/lib/product.ts`).
+- **Caregivers**: free, always, with no fees and no cut of pay.
+- No data export: there is no export option on either side.
+
+## Caregiver profiles & credential vault
+
+- Every caregiver has a profile picture: illustrated DiceBear "Notionists" avatars (CC0), generated locally, as a demo stand-in for uploaded photos.
+  Caregivers add a real photo in signup step 1.
+- Clicking a caregiver anywhere in the console (roster, match board, copilot) opens a **contact card**: photo, role,
+  experience, area, languages, availability, vault credentials and skills. It has **no phone number or email**;
+  contact goes through Kuida messages and offers.
+- **Credential vault** (`src/components/credential-vault.tsx`): caregivers upload ID, certificate, background check, TB and CPR once,
+  then share per agency with a switch. Agencies can view but not download, every view is logged, and sharing can be revoked.
+  The demo keeps uploads in the browser. A real build needs encrypted storage, signed short-lived URLs, an audit log,
+  and primary-source license checks where states offer them.
+
 ## Nationwide
 
 Nothing is tied to one state or city:
 - License, background check and legal copy is generic, and agency signup asks for state + city.
 - Drawn maps use placeholder neighborhoods (Northside, Downtown, Westfield…).
 - The office switcher in the console sidebar moves the demo office between 9 metros
-  (Atlanta, Chicago, Dallas, Denver, Houston, Los Angeles, Miami, Philadelphia, Phoenix).
+  (Miami is the default; also Atlanta, Chicago, Dallas, Denver, Houston, Los Angeles, Philadelphia, Phoenix).
   Real-tile maps re-center there. See `src/lib/regions.ts`.
 
 ## Matching engine

@@ -2,11 +2,9 @@ import Link from "next/link";
 import {
   ArrowRight,
   BellRing,
-  Bot,
   CalendarClock,
   FileSignature,
   Gauge,
-  Languages,
   MapPinned,
   PhoneOff,
   ShieldCheck,
@@ -15,6 +13,8 @@ import {
   Waves,
 } from "lucide-react";
 import { HeroDemo } from "@/components/hero-demo";
+import { CopilotDemo, FindCaregiversDemo } from "@/components/home-demos";
+import { FoundingOfferBanner } from "@/components/founding-offer";
 import { PricingCards } from "@/components/pricing-cards";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
@@ -44,11 +44,11 @@ const FEATURES = [
     body: "Aides who'd go past 40 hours are flagged and skipped by default. You decide when to override.",
   },
   {
-    icon: Bot,
-    title: "Coordinator copilot",
-    body: "Ask “who can cover Sra. G. tomorrow?” and get a ranked answer with the reasons behind it.",
+    icon: FileSignature,
+    title: "Pre-credentialed caregivers",
+    body: "Caregivers keep verified documents in their Kuida vault and share them with you in one tap. Hire without chasing paperwork; get alerts 30 days before anything expires.",
     className: "md:col-span-2",
-    demo: "copilot",
+    demo: "vault",
   },
   {
     icon: Sunrise,
@@ -56,14 +56,10 @@ const FEATURES = [
     body: "Overnight call-outs, what got filled, what still needs a human — waiting when you log in.",
   },
   {
-    icon: FileSignature,
-    title: "Packet & credential vault",
-    body: "Your contract and their documents, e-signed on their phone, with 30-day expiry alerts.",
-  },
-  {
     icon: PhoneOff,
     title: "Private by design",
     body: "Agencies never see a caregiver's phone; caregivers never see a client's address until assigned.",
+    className: "md:col-span-4",
   },
 ];
 
@@ -78,7 +74,7 @@ const FAQ = [
   ["Is Kuida a nurse registry or staffing agency?", "No. Kuida is software. Caregivers contract with your licensed agency, never with us, and we don't set pay or employ anyone."],
   ["Do caregivers need to download an app?", "No. Offers arrive by SMS (reply 1 or 2) and the app is optional — it's where they manage hours, documents and history."],
   ["How is the match score calculated?", "Six weighted factors totaling 100. Any coordinator can open a score and see the points behind each factor. Hard rules (role, expired credentials, required language, availability) are applied first."],
-  ["Will it work with HHAeXchange or my EMR?", "Network plans export assignments as EVV-ready CSV today; direct write-back is on the roadmap."],
+  ["What is the founding offer?", "The first 50 agencies to sign up get 6 months free on any plan, with every feature. No card is needed to start, and you can cancel any time."],
 ];
 
 export default function Home() {
@@ -102,14 +98,14 @@ export default function Home() {
               <ButtonLink href="/app" size="lg">
                 Try the agency console <ArrowRight className="size-4" />
               </ButtonLink>
-              <ButtonLink href="/signup/caregiver" size="lg" variant="secondary">
-                Soy cuidador/a
+              <ButtonLink href="/pricing" size="lg" variant="secondary">
+                See pricing
               </ButtonLink>
             </div>
             <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-line pt-6">
               {[
                 ["< 90s", "to a ranked bench"],
-                ["$0", "for caregivers"],
+                ["6 mo free", "first 50 agencies"],
                 ["50 states", "license-aware onboarding"],
               ].map(([k, v]) => (
                 <div key={v}>
@@ -158,11 +154,18 @@ export default function Home() {
                     ))}
                   </div>
                 )}
-                {f.demo === "copilot" && (
-                  <div className="mt-5 space-y-2 rounded-xl border border-line bg-surface p-4 text-sm">
-                    <p className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-br-sm bg-ink px-3 py-2 text-bg">Who can cover Sra. G. tomorrow 8–2?</p>
-                    <p className="w-fit max-w-[90%] rounded-2xl rounded-bl-sm bg-brand-soft px-3 py-2">
-                      <b>Xiomara R. (96)</b> — 6 prior visits, 0.5 mi, Spanish. Lázaro is closer to overtime, so I&apos;d hold him as backup.
+                {f.demo === "vault" && (
+                  <div className="mt-5 grid gap-2 rounded-xl border border-line bg-surface p-4 text-sm sm:grid-cols-2">
+                    <p className="text-xs text-muted sm:col-span-2">
+                      <b className="text-ink">Xiomara R.</b> shared 5 verified documents with you · view-only · logged
+                    </p>
+                    {["Photo ID", "HHA certificate", "Background check", "TB test"].map((d) => (
+                      <p key={d} className="flex items-center gap-2 rounded-lg bg-ok/10 px-3 py-1.5 text-xs font-medium text-ok">
+                        <ShieldCheck className="size-3.5" /> {d}
+                      </p>
+                    ))}
+                    <p className="flex items-center gap-2 rounded-lg bg-warn/10 px-3 py-1.5 text-xs font-medium text-warn sm:col-span-2">
+                      <BellRing className="size-3.5" /> CPR expires in 21 days. Caregiver reminded.
                     </p>
                   </div>
                 )}
@@ -183,6 +186,45 @@ export default function Home() {
               </article>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Find caregivers map */}
+      <section id="map">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <div className="max-w-2xl">
+            <p className="eyebrow">Find caregivers</p>
+            <h2 className="mt-3 font-display text-4xl tracking-tight">See who&apos;s free near the case, on a real map.</h2>
+            <p className="mt-3 text-muted">
+              Enter the visit and Kuida plots every eligible caregiver around the client, ranked and explained. Switch to aerial, streets or drive-time
+              rings, and expand to full screen.
+            </p>
+          </div>
+          <div className="mt-10">
+            <FindCaregiversDemo />
+          </div>
+        </div>
+      </section>
+
+      {/* Copilot */}
+      <section id="copilot" className="border-y border-line bg-surface">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_1.2fr]">
+          <div>
+            <p className="eyebrow">Coordinator copilot</p>
+            <h2 className="mt-3 font-display text-4xl tracking-tight">Ask it like you&apos;d ask your best coordinator.</h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              &ldquo;Who can cover Sra. G. tomorrow?&rdquo; &ldquo;Whose CPR expires this month?&rdquo; Copilot answers from your live schedule, roster and
+              credentials, and always shows the reasons behind its pick. English or Spanish.
+            </p>
+            <ul className="mt-6 space-y-2 text-sm">
+              {["Ranked answers with the why", "Overnight brief every morning", "Overtime and compliance flags before you commit"].map((t) => (
+                <li key={t} className="flex items-center gap-2">
+                  <Sparkles className="size-4 text-brand" /> {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <CopilotDemo />
         </div>
       </section>
 
@@ -217,66 +259,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Caregivers */}
-      <section id="caregivers" className="bg-ink text-bg">
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 py-20 sm:px-6 md:grid-cols-2">
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-bg/60">Para cuidadores · gratis</p>
-            <h2 className="mt-3 font-display text-4xl tracking-tight">Turnos cerca de ti. Sin llamadas a medianoche.</h2>
-            <p className="mt-4 max-w-md leading-relaxed text-bg/70">
-              Pon tu zona, horas e idiomas una vez. Te llegan ofertas por texto con el pago y la hora. Respondes 1 o 2. Tu teléfono nunca se comparte.
-            </p>
-            <ul className="mt-6 space-y-2 text-sm text-bg/80">
-              {["Siempre gratis para ti", "Tus documentos en un solo lugar, con recordatorios", "Español primero · English · Kreyòl"].map((t) => (
-                <li key={t} className="flex items-center gap-2">
-                  <Languages className="size-4 text-accent" /> {t}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ButtonLink href="/signup/caregiver" variant="accent" size="lg">
-                Crear mi perfil
-              </ButtonLink>
-              <ButtonLink href="/c" size="lg" className="bg-bg/10 text-bg hover:bg-bg/20">
-                Ver la app
-              </ButtonLink>
-            </div>
-          </div>
-          <div className="mx-auto w-full max-w-[300px] rounded-[40px] border-[10px] border-bg/10 bg-bg p-4 text-ink shadow-lift">
-            <p className="text-xs text-muted">Martes</p>
-            <p className="font-display text-2xl">Hola, María</p>
-            <div className="mt-4 rounded-2xl bg-brand p-4 text-brand-ink">
-              <p className="text-[11px] font-semibold uppercase tracking-wider opacity-80">Nueva oferta · 96% match</p>
-              <p className="mt-1 text-lg font-semibold">HHA · Northside</p>
-              <p className="text-sm opacity-90">Mar 8:00a–2:00p · $18–20/h · 1.5 mi</p>
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <span className="grid min-h-10 place-items-center rounded-full bg-brand-ink text-sm font-semibold text-brand">Aceptar</span>
-                <span className="grid min-h-10 place-items-center rounded-full border border-brand-ink/30 text-sm">Pasar</span>
-              </div>
-            </div>
-            <div className="mt-3 grid grid-cols-2 gap-2 text-sm">
-              <div className="rounded-2xl bg-surface-2 p-3">
-                <p className="text-xs text-muted">Esta semana</p>
-                <p className="font-semibold">28 h · $532</p>
-              </div>
-              <div className="rounded-2xl bg-warn/10 p-3">
-                <p className="text-xs text-muted">CPR vence</p>
-                <p className="font-semibold text-warn">en 21 días</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Pricing */}
       <section id="pricing">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="text-center">
             <p className="eyebrow">Pricing</p>
             <h2 className="mt-3 font-display text-4xl tracking-tight">Flat per location. Unlimited fills.</h2>
-            <p className="mt-3 text-muted">No per-shift fees, no placement fees. Caregivers are always free.</p>
+            <p className="mt-3 text-muted">No per-shift fees, no placement fees, no charge per caregiver on your roster.</p>
           </div>
-          <div className="mt-12">
+          <FoundingOfferBanner className="mt-10" />
+          <div className="mt-10">
             <PricingCards />
           </div>
         </div>

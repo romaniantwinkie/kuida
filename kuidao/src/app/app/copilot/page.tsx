@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowUp, Bot } from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
+import { CaregiverLink } from "@/components/caregiver-card";
 import { Badge } from "@/components/ui/badge";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { answer, SUGGESTIONS, type Reply } from "@/lib/copilot";
@@ -80,7 +80,7 @@ export default function CopilotPage() {
                     <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
                       {m.reply.matches.map((x) => (
                         <li key={x.caregiver.id} className="flex items-center gap-3 p-3">
-                          <Avatar name={`${x.caregiver.firstName} ${x.caregiver.lastInitial}`} />
+                          <CaregiverLink caregiver={x.caregiver} withAvatar avatarClassName="size-10"><></></CaregiverLink>
                           <div className="min-w-0 flex-1">
                             <p className="text-sm font-semibold">
                               {x.caregiver.firstName} {x.caregiver.lastInitial}. <span className="font-normal text-muted">· {x.caregiver.role} · {x.miles} mi</span>

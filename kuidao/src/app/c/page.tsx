@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Bell, CalendarDays, Check, ChevronRight, Clock, FileText, Home, MapPin, ShieldCheck, Upload, Wallet, X } from "lucide-react";
+import { Bell, CalendarDays, Check, Clock, FileText, Home, MapPin, Wallet, X } from "lucide-react";
 import { LogoMark } from "@/components/logo";
-import { PalettePicker } from "@/components/palette-picker";
+import { CaregiverAvatar } from "@/components/caregiver-avatar";
+import { CredentialVault } from "@/components/credential-vault";
+import { FontPicker } from "@/components/font-picker";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { DAYS_ES } from "@/lib/data";
@@ -35,11 +37,11 @@ export default function CaregiverApp() {
     <div className="min-h-screen bg-surface-2/60" lang="es">
       <div className="mx-auto flex min-h-screen max-w-md flex-col bg-bg sm:border-x sm:border-line">
         <header className="flex items-center justify-between px-5 pb-2 pt-5">
-          <Link href="/" aria-label="Kuida inicio">
+          <Link href="/caregivers" aria-label="Kuida inicio">
             <LogoMark className="size-9" />
           </Link>
           <div className="flex items-center gap-1">
-            <PalettePicker />
+            <FontPicker showLink={false} />
             <ThemeToggle />
             <button type="button" className="relative grid size-10 place-items-center rounded-full hover:bg-surface-2" aria-label="Notificaciones">
               <Bell className="size-5" />
@@ -51,8 +53,13 @@ export default function CaregiverApp() {
         <main className="flex-1 px-5 pb-28">
           {tab === "home" && (
             <>
-              <p className="text-sm text-muted">Lunes, 4 de nov</p>
-              <h1 className="font-display text-3xl tracking-tight">Hola, María</h1>
+              <div className="flex items-center gap-3">
+                <CaregiverAvatar caregiver={{ firstName: "María", lastInitial: "L" }} className="size-12" />
+                <div>
+                  <p className="text-sm text-muted">Lunes, 4 de nov</p>
+                  <h1 className="font-display text-3xl tracking-tight">Hola, María</h1>
+                </div>
+              </div>
 
               <button
                 type="button"
@@ -174,27 +181,8 @@ export default function CaregiverApp() {
           {tab === "docs" && (
             <>
               <h1 className="font-display text-3xl tracking-tight">Documentos</h1>
-              <p className="mt-1 text-sm text-muted">Te avisamos 30 días antes de que algo venza.</p>
-              <ul className="mt-6 space-y-2">
-                {[
-                  ["ID / Licencia", "Listo", "ok"],
-                  ["Certificado HHA", "Listo", "ok"],
-                  ["Background check", "Listo", "ok"],
-                  ["CPR", "Vence en 21 días", "warn"],
-                  ["Contrato · Sunrise", "Firmar", "accent"],
-                ].map(([n, s, t]) => (
-                  <li key={n}>
-                    <button type="button" className="flex min-h-14 w-full items-center gap-3 rounded-2xl border border-line bg-surface px-4 text-left">
-                      <span className={cn("grid size-9 place-items-center rounded-xl", t === "ok" ? "bg-ok/10 text-ok" : t === "warn" ? "bg-warn/10 text-warn" : "bg-accent-soft text-accent")}>
-                        {t === "ok" ? <ShieldCheck className="size-4" /> : t === "warn" ? <Upload className="size-4" /> : <FileText className="size-4" />}
-                      </span>
-                      <span className="flex-1 text-sm font-semibold">{n}</span>
-                      <span className={cn("text-xs font-semibold", t === "ok" ? "text-muted" : t === "warn" ? "text-warn" : "text-accent")}>{s}</span>
-                      <ChevronRight className="size-4 text-muted" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+              <p className="mt-1 text-sm text-muted">Súbelos una vez. Tú decides qué agencias los ven. · Upload once, share with the agencies you choose.</p>
+              <CredentialVault className="mt-6" />
             </>
           )}
 

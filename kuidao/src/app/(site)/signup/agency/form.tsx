@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { FormEvent, useState } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2, FileSpreadsheet, Upload } from "lucide-react";
 import { Stepper } from "@/components/stepper";
 import { Button, ButtonLink } from "@/components/ui/button";
-import { PLANS } from "@/lib/product";
+import { FOUNDING_OFFER, PLANS } from "@/lib/product";
 import { US_STATES } from "@/lib/regions";
 import { cn } from "@/lib/cn";
 
@@ -100,13 +99,20 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
                       <span className="flex-1">
                         <span className="flex items-baseline justify-between gap-2">
                           <span className="font-semibold">{p.name}</span>
-                          <span className="text-sm font-semibold">{p.monthly ? `$${p.monthly}/mo` : "Custom"}</span>
+                          <span className="text-right text-sm font-semibold">
+                            $0{" "}
+                            <span className="text-xs font-normal text-muted">
+                              for {FOUNDING_OFFER.freeMonths} mo, then {p.monthly ? `$${p.monthly}/mo` : "custom"}
+                            </span>
+                          </span>
                         </span>
                         <span className="mt-0.5 block text-xs text-muted">{p.blurb}</span>
                       </span>
                     </label>
                   ))}
-                  <p className="text-xs text-muted">14-day trial. You won&apos;t be charged until you fill your first shift.</p>
+                  <p className="rounded-xl bg-brand-soft px-3 py-2 text-xs font-medium text-brand">
+                    Founding offer: the first {FOUNDING_OFFER.agencies} agencies get {FOUNDING_OFFER.freeMonths} months free on any plan. No card needed to start.
+                  </p>
                 </fieldset>
               )}
               {step === 2 && (
@@ -136,12 +142,6 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
           </form>
         )}
       </div>
-      <p className="mt-6 text-center text-sm text-muted">
-        Caregiver?{" "}
-        <Link href="/signup/caregiver" className="font-semibold text-brand hover:underline">
-          Registro gratis
-        </Link>
-      </p>
     </main>
   );
 }

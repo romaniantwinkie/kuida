@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Bot, CalendarRange, Home, Paintbrush, Search, Users } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { OfficeSwitcher } from "@/components/office-switcher";
-import { PalettePicker } from "@/components/palette-picker";
+import { FontPicker } from "@/components/font-picker";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/cn";
 import { SHIFTS } from "@/lib/data";
@@ -65,7 +65,7 @@ export function AppSidebar() {
           Ana M.
         </span>
         <span className="flex items-center">
-          <PalettePicker side="top" />
+          <FontPicker side="top" />
           <ThemeToggle />
         </span>
       </div>
@@ -80,7 +80,7 @@ export function AppTopbar() {
       <div className="flex h-14 items-center justify-between px-4">
         <Logo href="/app" />
         <span className="flex items-center">
-          <PalettePicker />
+          <FontPicker />
           <ThemeToggle />
         </span>
       </div>

@@ -32,7 +32,7 @@ general product knowledge and should be re-checked against their sites.
 | Bilingual SMS offer preview ("reply 1 / 2"), no app required | MapleCare, ShiftMatch | Match board, hero |
 | Coordinator copilot with reasons | ShiftMatch Coordinator AI, Zingage Casey | `/app/copilot` |
 | Overnight brief | ShiftMatch overnight log | `/app` top banner, copilot |
-| Credential vault + expiry alerts | AxisCare, AlayaCare, SmartMatch | `/app/roster`, `/c` Documentos |
+| Caregiver-owned credential vault, shared per agency | AxisCare, AlayaCare, SmartMatch (agency-side versions) | `/caregivers`, `/c` Documentos, contact cards |
 | Caregiver self-serve app (accept, availability, docs, pay) | ShiftMatch Caregiver Choice, AxisCare | `/c` |
 | Outcome KPIs (fill rate, time-to-fill, calls saved) | Zingage, ShiftMatch | `/app` KPI tiles |
 | Roster import + text invites during onboarding | AlayaCare / WellSky onboarding | `/signup/agency` step 3 |
@@ -45,7 +45,7 @@ client's address until they're assigned); bilingual (English/Spanish) for caregi
 ## Roadmap (not built)
 
 1. **Real outreach**: Twilio SMS/voice, reply parsing (1/2/"sí"), per-caregiver quiet hours.
-2. **EVV/EMR export → write-back**: HHAeXchange first (Network plan).
+2. **EVV/EMR write-back** (no user-facing export): HHAeXchange first.
 3. **Fill-probability prediction** per open referral (ShiftMatch predictive analytics).
 4. **Requirement groups**: reusable bundles of client needs/preferences (SmartMatch).
 5. **Inbound call-out capture** by text or voice → auto-opens the shift.

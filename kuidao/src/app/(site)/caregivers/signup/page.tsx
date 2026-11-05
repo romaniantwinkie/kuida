@@ -1,13 +1,14 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { ArrowLeft, ArrowRight, CheckCircle2, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Camera, CheckCircle2, Lock } from "lucide-react";
+import { CredentialVault } from "@/components/credential-vault";
 import { Stepper } from "@/components/stepper";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { DAYS_ES } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
-const STEPS = ["Tú", "Trabajo", "Horario"];
+const STEPS = ["Tú", "Trabajo", "Horario", "Documentos"];
 const ROLES = ["HHA", "CNA", "Companion", "LPN"];
 const LANGS = ["Español", "English", "Kreyòl"];
 
@@ -18,6 +19,14 @@ export default function CaregiverSignup() {
   const [langs, setLangs] = useState<string[]>(["Español"]);
   const [days, setDays] = useState<number[]>([0, 1, 2, 3, 4]);
   const [slot, setSlot] = useState("Mañana");
+  const [photo, setPhoto] = useState<string | null>(null);
+
+  function onPhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const f = e.target.files?.[0];
+    if (!f) return;
+    // Demo: preview only. The photo stays on this device.
+    setPhoto(URL.createObjectURL(f));
+  }
 
   const toggle = <T,>(arr: T[], v: T) => (arr.includes(v) ? arr.filter((x) => x !== v) : [...arr, v]);
 
@@ -54,6 +63,21 @@ export default function CaregiverSignup() {
             <div className="mt-8 space-y-5">
               {step === 0 && (
                 <>
+                  <label className="flex cursor-pointer items-center gap-4 rounded-2xl border border-dashed border-line p-4 hover:bg-surface-2">
+                    {photo ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={photo} alt="Tu foto" className="size-16 rounded-full object-cover ring-2 ring-brand" />
+                    ) : (
+                      <span className="grid size-16 place-items-center rounded-full bg-surface-2 text-muted">
+                        <Camera className="size-6" />
+                      </span>
+                    )}
+                    <span>
+                      <span className="block text-sm font-semibold">{photo ? "Cambiar foto" : "Agrega tu foto"} · Profile photo</span>
+                      <span className="block text-xs text-muted">Una foto clara de tu cara. Las agencias la ven en tu tarjeta de contacto.</span>
+                    </span>
+                    <input type="file" accept="image/*" className="sr-only" onChange={onPhoto} />
+                  </label>
                   <div className="grid grid-cols-2 gap-3">
                     <label className="block text-sm font-medium">
                       Nombre
@@ -97,6 +121,14 @@ export default function CaregiverSignup() {
                     <input required placeholder="Código postal o ciudad…" className="field" />
                   </label>
                 </>
+              )}
+              {step === 3 && (
+                <div>
+                  <p className="text-sm text-muted">
+                    Opcional: sube tus documentos ahora y compártelos con cualquier agencia con un toque. · Optional: upload now, share later.
+                  </p>
+                  <CredentialVault compact className="mt-4 shadow-none" />
+                </div>
               )}
               {step === 2 && (
                 <>
