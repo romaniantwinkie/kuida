@@ -14,7 +14,7 @@ export function PageHead({
       <div className="min-w-0">
         {eyebrow && <p className="eyebrow">{eyebrow}</p>}
         <h1 className="mt-1 font-display text-3xl tracking-tight sm:text-[34px]">{title}</h1>
-        {sub && <p className="mt-1.5 text-sm text-muted">{sub}</p>}
+        {sub && <p className="mt-2 text-sm text-muted">{sub}</p>}
       </div>
       {action}
     </div>

@@ -9,7 +9,7 @@ import { Card, CardHeader } from "@/components/ui/card";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { CAREGIVERS, clientById, DAYS, SHIFTS, shiftLabel } from "@/lib/data";
 
-import { rankForShift } from "@/lib/match";
+import { fillChance, rankForShift } from "@/lib/match";
 
 export const metadata = { title: "Today" };
 
@@ -32,6 +32,16 @@ const ACTIVITY = [
   { who: "Niurka D.", text: "Called out Tue 8a–2p (Sra. G.) — reason: sick", t: "5:31a", icon: AlertTriangle },
   { who: "Ana M.", text: "Approved overtime for Yanelis M. (Fri)", t: "Yesterday", icon: Clock },
 ];
+
+function FillChance({ shift }: { shift: Parameters<typeof fillChance>[0] }) {
+  const f = fillChance(shift);
+  const tone = f.level === "High" ? "text-ok" : f.level === "Medium" ? "text-warn" : "text-danger";
+  return (
+    <span className="text-muted">
+      Fill chance: <b className={tone}>{f.level}</b> ({f.pct}%) · {f.clean} ready without overtime
+    </span>
+  );
+}
 
 export default function TodayPage() {
   const open = SHIFTS.filter((s) => s.status !== "filled");
@@ -58,16 +68,16 @@ export default function TodayPage() {
       />
 
       {/* Morning brief */}
-      <div className="mb-6 overflow-hidden rounded-2xl border border-line bg-gradient-to-br from-brand-soft via-surface to-accent-soft/60 p-5 sm:p-6">
+      <div className="mb-6 overflow-hidden rounded-2xl border border-line bg-surface p-6 shadow-card">
         <div className="flex flex-wrap items-start gap-4">
-          <span className="grid size-10 place-items-center rounded-xl bg-ink text-bg">
+          <span className="grid size-10 place-items-center rounded-xl bg-brand-soft text-brand">
             <Moon className="size-5" />
           </span>
           <div className="min-w-0 flex-1">
             <p className="eyebrow">Overnight brief · 9p–7a</p>
-            <p className="mt-1.5 max-w-3xl leading-relaxed">
+            <p className="mt-2 max-w-3xl leading-relaxed">
               <b>3 call-outs came in.</b> Kuida filled 2 automatically (avg 3m 40s). <b>Sra. G. Tue 8a–2p is still open</b> — Niurka called out sick and the
-              Spanish-required rule narrows the bench to 6. Rosa V.&apos;s CPR expired, so she was held back from 2 offers.
+              Spanish-required rule narrows the roster to 6. Rosa V.&apos;s CPR expired, so she was held back from 2 offers.
             </p>
           </div>
           <ButtonLink href="/app/shifts/s-1042" variant="inverse" size="sm">
@@ -103,7 +113,7 @@ export default function TodayPage() {
       <div className="mt-6 grid gap-6 xl:grid-cols-3">
         {/* Needs attention */}
         <Card className="xl:col-span-2">
-          <CardHeader title="Needs attention" subtitle="Open and in-outreach shifts, most urgent first" action={<Link href="/app/shifts" className="text-xs font-semibold text-brand hover:underline">All shifts</Link>} />
+          <CardHeader title="Needs attention" subtitle="Open and in-outreach shifts, most urgent first" action={<Link href="/app/shifts" className="inline-flex min-h-11 items-center text-sm font-medium text-brand hover:underline">All shifts</Link>} />
           <ul className="divide-y divide-line">
             {open.map((s) => {
               const c = clientById(s.clientId);
@@ -124,6 +134,9 @@ export default function TodayPage() {
                       </div>
                       <p className="mt-0.5 text-sm text-muted">
                         {shiftLabel(s)} · {c.area} · {s.reason}
+                      </p>
+                      <p className="mt-1 text-sm">
+                        <FillChance shift={s} />
                       </p>
                     </div>
                     {top && (
@@ -177,10 +190,10 @@ export default function TodayPage() {
           subtitle="Visits per day · filled vs still open"
           action={
             <div className="flex items-center gap-3 text-xs text-muted">
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-2">
                 <span className="size-2.5 rounded-sm bg-brand" /> Filled
               </span>
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-2">
                 <span className="size-2.5 rounded-sm bg-accent" /> Open
               </span>
             </div>
@@ -196,7 +209,7 @@ export default function TodayPage() {
                   <div className={`bg-brand ${o > 0 ? "rounded-b" : "rounded"}`} style={{ height: `${(f / max) * 100}%` }} />
                 </div>
                 <p className="text-xs font-semibold">{DAYS[i]}</p>
-                <p className={`text-[11px] tabular-nums ${o ? "font-semibold text-accent" : "text-muted"}`}>{o ? `${o} open` : "✓"}</p>
+                <p className={`text-xs tabular-nums ${o ? "font-semibold text-accent" : "text-muted"}`}>{o ? `${o} open` : "✓"}</p>
               </div>
             );
           })}

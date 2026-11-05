@@ -61,7 +61,7 @@ export function answer(q: string): Reply {
     return {
       text: lead
         ? `For ${c.alias} (${shiftLabel(shift)}), I'd offer ${lead.caregiver.firstName} ${lead.caregiver.lastInitial}. first — score ${lead.score}, ${lead.miles} mi away, ${continuity?.detail.replace(/^New/, "new")} — ${blocked.length} others were screened out by hard rules.`
-        : `No one on the bench is eligible for ${c.alias} right now. I'd widen the radius or relax the language requirement.`,
+        : `No one on your roster is eligible for ${c.alias} right now. I'd widen the radius or relax the language requirement.`,
       matches: top,
       link: { href: `/app/shifts/${shift.id}`, label: "Start outreach" },
     };

@@ -12,14 +12,14 @@ const variants: Record<Variant, string> = {
   inverse: "bg-ink text-bg hover:bg-ink/90",
 };
 const sizes: Record<Size, string> = {
-  sm: "min-h-9 px-3 text-xs",
+  sm: "min-h-11 px-4 text-sm",
   md: "min-h-11 px-4 text-sm",
-  lg: "min-h-12 px-6 text-[15px]",
+  lg: "min-h-12 px-6 text-base",
 };
 
 export function buttonClass(variant: Variant = "primary", size: Size = "md", extra?: string) {
   return cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/25 disabled:opacity-50",
+    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors disabled:opacity-50",
     variants[variant],
     sizes[size],
     extra,

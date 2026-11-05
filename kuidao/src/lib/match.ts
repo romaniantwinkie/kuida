@@ -12,8 +12,8 @@ export type Match = {
   blockers: string[];
 };
 
-/** Demo map: 100 units ≈ 14 miles. */
-const MILES_PER_UNIT = 0.14;
+/** Demo grid unit = 0.31 km (same projection as the live map). */
+const MILES_PER_UNIT = 0.31 / 1.609;
 
 export function milesBetween(a: { x: number; y: number }, b: { x: number; y: number }) {
   return Math.round(Math.hypot(a.x - b.x, a.y - b.y) * MILES_PER_UNIT * 10) / 10;
@@ -47,7 +47,7 @@ export function scoreMatch(c: Caregiver, shift: Shift, client: Client = clientBy
   // Distance (20)
   const distPts = Math.round(Math.max(0, 20 - Math.max(0, miles - 1.5) * 2.5));
   factors.push({ key: "distance", label: "Distance", points: distPts, max: 20, detail: `${miles} mi from client` });
-  if (miles > 6) flags.push({ tone: "info", label: "Long commute" });
+  if (miles > 8) flags.push({ tone: "info", label: "Long commute" });
 
   // Language (15)
   let langPts = 10;
@@ -116,4 +116,17 @@ export function scoreTone(score: number) {
   if (score >= 70) return "ok" as const;
   if (score >= 55) return "warn" as const;
   return "muted" as const;
+}
+
+/**
+ * Fill chance for an open shift (demo heuristic): more eligible caregivers
+ * without overtime risk, and more lead time, means a higher chance.
+ */
+export function fillChance(shift: Shift) {
+  const { eligible } = rankForShift(shift);
+  const clean = eligible.filter((m) => !m.flags.some((f) => f.tone === "danger")).length;
+  const lead = shift.urgency === "now" ? 0.75 : shift.urgency === "today" ? 0.9 : 1;
+  const pct = Math.round(Math.min(97, (25 + clean * 13 + Math.min(eligible.length, 8) * 3) * lead));
+  const level = pct >= 75 ? "High" : pct >= 50 ? "Medium" : "Low";
+  return { pct, level, clean, total: eligible.length } as const;
 }

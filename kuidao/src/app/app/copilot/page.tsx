@@ -14,6 +14,7 @@ export default function CopilotPage() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
+  const [hint, setHint] = useState<string | null>(null);
   const end = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,7 +22,11 @@ export default function CopilotPage() {
   }, [msgs, thinking]);
 
   function ask(q: string) {
-    if (!q.trim() || thinking) return;
+    if (thinking) return;
+    if (!q.trim()) {
+      setHint("Type a question first, or pick one of the suggestions.");
+      return;
+    }
     setMsgs((m) => [...m, { role: "user", text: q }]);
     setInput("");
     setThinking(true);
@@ -58,7 +63,7 @@ export default function CopilotPage() {
           {msgs.map((m, i) =>
             m.role === "user" ? (
               <div key={i} className="flex justify-end">
-                <p className="max-w-[85%] rounded-2xl rounded-br-md bg-ink px-4 py-2.5 text-sm text-bg">{m.text}</p>
+                <p className="max-w-[85%] rounded-2xl rounded-br-md bg-ink px-4 py-3 text-sm text-bg">{m.text}</p>
               </div>
             ) : (
               <div key={i} className="flex animate-fade-up gap-3">
@@ -68,7 +73,7 @@ export default function CopilotPage() {
                 <div className="min-w-0 flex-1 space-y-3">
                   <p className="text-[15px] leading-relaxed">{m.reply.text}</p>
                   {m.reply.bullets && (
-                    <ul className="space-y-1.5 rounded-2xl border border-line bg-surface p-4 text-sm">
+                    <ul className="space-y-2 rounded-2xl border border-line bg-surface p-4 text-sm">
                       {m.reply.bullets.map((b) => (
                         <li key={b} className="flex gap-2">
                           <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand" /> {b}
@@ -90,9 +95,9 @@ export default function CopilotPage() {
                                 .filter((f) => f.points === f.max)
                                 .slice(0, 3)
                                 .map((f) => (
-                                  <Badge key={f.key} tone="brand">
-                                    {f.detail}
-                                  </Badge>
+                                  <span key={f.key} className="text-xs text-muted">
+                                    {f.detail} ·
+                                  </span>
                                 ))}
                               {x.flags.map((f) => (
                                 <Badge key={f.label} tone={f.tone}>
@@ -107,7 +112,7 @@ export default function CopilotPage() {
                     </ul>
                   )}
                   {m.reply.link && (
-                    <Link href={m.reply.link.href} className="inline-flex min-h-9 items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
+                    <Link href={m.reply.link.href} className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand hover:underline">
                       {m.reply.link.label} <ArrowRight className="size-4" />
                     </Link>
                   )}
@@ -130,11 +135,21 @@ export default function CopilotPage() {
           <div ref={end} />
         </div>
       )}
-      <form onSubmit={onSubmit} className="sticky bottom-4 mt-4 flex items-center gap-2 rounded-full border border-line bg-surface p-1.5 pl-5 shadow-lift">
-        <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about shifts, caregivers, compliance…" className="min-h-10 flex-1 bg-transparent text-sm outline-none placeholder:text-muted" aria-label="Ask copilot" />
-        <button type="submit" disabled={!input.trim() || thinking} className="grid size-10 place-items-center rounded-full bg-brand text-brand-ink transition disabled:opacity-40" aria-label="Send">
+      <form onSubmit={onSubmit} className="sticky bottom-4 mt-4 rounded-3xl border border-line bg-surface px-4 pb-2 pt-3 shadow-lift">
+        <label htmlFor="copilot-input" className="block px-1 text-xs font-medium text-muted">
+          Ask Copilot
+        </label>
+        {hint && (
+          <p role="status" className="px-1 pt-1 text-xs text-danger">
+            {hint}
+          </p>
+        )}
+        <div className="flex items-center gap-2">
+        <input value={input} onChange={(e) => { setInput(e.target.value); setHint(null); }} placeholder="e.g. Who can cover Sra. G. on Tuesday?" className="min-h-11 flex-1 bg-transparent px-1 text-base outline-none placeholder:text-muted" id="copilot-input" />
+        <button type="submit" className="grid size-11 place-items-center rounded-full bg-brand text-brand-ink transition-colors hover:bg-brand/90" aria-label="Send question">
           <ArrowUp className="size-4" />
         </button>
+        </div>
       </form>
     </div>
   );

@@ -269,8 +269,6 @@ export function AreaMap({
       {client && (
         <g>
           <circle cx={client.x} cy={client.y} r="2.4" className="fill-accent/30">
-            <animate attributeName="r" values="2.4;5;2.4" dur="2.4s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.6;0;0.6" dur="2.4s" repeatCount="indefinite" />
           </circle>
           <path d={`M${client.x} ${client.y + 0.2} l-2 -3.2 a2.4 2.4 0 1 1 4 0 Z`} className="fill-accent stroke-surface" strokeWidth="0.4" />
           <circle cx={client.x} cy={client.y - 4.3} r="0.8" className="fill-surface" />

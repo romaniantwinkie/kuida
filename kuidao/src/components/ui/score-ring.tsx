@@ -15,14 +15,14 @@ export function ScoreRing({ score, size = 44 }: { score: number; size?: number }
           cx="22"
           cy="22"
           r={r}
-          className={cn("fill-none transition-all duration-700", stroke[tone])}
+          className={cn("fill-none transition-[stroke-dashoffset] duration-300 ease-out", stroke[tone])}
           strokeWidth="4"
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={c * (1 - score / 100)}
         />
       </svg>
-      <span className="absolute inset-0 grid place-items-center text-[13px] font-bold tabular-nums">{score}</span>
+      <span className="absolute inset-0 grid place-items-center text-[13px] font-semibold tabular-nums">{score}</span>
     </div>
   );
 }

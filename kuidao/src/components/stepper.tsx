@@ -8,7 +8,7 @@ export function Stepper({ steps, current }: { steps: string[]; current: number }
         <li key={s} className="flex flex-1 items-center gap-2">
           <span
             className={cn(
-              "grid size-7 shrink-0 place-items-center rounded-full text-xs font-bold transition",
+              "grid size-7 shrink-0 place-items-center rounded-full text-xs font-semibold transition",
               i < current && "bg-brand text-brand-ink",
               i === current && "bg-ink text-bg",
               i > current && "bg-surface-2 text-muted",

@@ -4,20 +4,20 @@
       "ok": "#16964A",
       "warn": "#B86A06",
       "danger": "#D22C2C",
-      "info": "#2563EB"
+      "info": "#0E7490"
     },
     "dark": {
       "ok": "#4ADE80",
       "warn": "#FBBF24",
       "danger": "#F87171",
-      "info": "#60A5FA"
+      "info": "#5CC8E4"
     }
   },
   "palettes": [
     {
       "id": "slate",
       "name": "Slate",
-      "blurb": "Cool grays with a blue-gray lead.",
+      "blurb": "Slate neutrals with one clinical blue for actions.",
       "light": {
         "bg": "#F6F7F9",
         "surface": "#FFFFFF",
@@ -25,12 +25,12 @@
         "line": "#DFE3E8",
         "ink": "#0F141B",
         "muted": "#5D6774",
-        "brand": "#334155",
+        "brand": "#1D4ED8",
         "brand-ink": "#FFFFFF",
-        "brand-soft": "#E6EAF0",
-        "accent": "#4B5D78",
+        "brand-soft": "#E7EEFD",
+        "accent": "#2563EB",
         "accent-ink": "#FFFFFF",
-        "accent-soft": "#E5EAF2"
+        "accent-soft": "#E8EFFE"
       },
       "dark": {
         "bg": "#0B0D11",
@@ -39,12 +39,12 @@
         "line": "#2A313C",
         "ink": "#ECEFF3",
         "muted": "#9AA3AF",
-        "brand": "#B6C2D3",
-        "brand-ink": "#141B26",
-        "brand-soft": "#232A35",
-        "accent": "#93A3BA",
-        "accent-ink": "#0F1520",
-        "accent-soft": "#232C3A"
+        "brand": "#8AB4FF",
+        "brand-ink": "#0B1A3A",
+        "brand-soft": "#17264A",
+        "accent": "#6EA0FF",
+        "accent-ink": "#071833",
+        "accent-soft": "#182A50"
       }
     }
   ]

@@ -20,7 +20,7 @@ export function LogoMark({ className }: { className?: string }) {
 
 export function Logo({ href = "/", className }: { href?: string; className?: string }) {
   return (
-    <Link href={href} aria-label="Kuida home" className={cn("inline-flex items-center gap-2.5", className)}>
+    <Link href={href} aria-label="Kuida home" className={cn("inline-flex min-h-11 items-center gap-2", className)}>
       <LogoMark />
       <span className="font-display text-[22px] font-semibold tracking-tight">kuida</span>
     </Link>

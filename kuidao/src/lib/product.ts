@@ -18,7 +18,7 @@ export const PLANS: Plan[] = [
     id: "search",
     name: "Search",
     monthly: 149,
-    blurb: "For a single office that needs a bench when the roster runs dry.",
+    blurb: "For a single office that needs backup when the schedule has gaps.",
     seats: "2 coordinator seats",
     features: [
       "Ranked matches with score breakdown",
@@ -46,11 +46,11 @@ export const PLANS: Plan[] = [
     id: "network",
     name: "Network",
     monthly: null,
-    blurb: "Multi-location groups that share a bench across offices.",
+    blurb: "Multi-location groups that share one roster across offices.",
     seats: "Unlimited seats",
     features: [
       "Everything in Pro",
-      "Shared bench across locations",
+      "Shared roster across locations",
       "Dedicated onboarding for every branch",
       "Fill-rate analytics by branch",
     ],

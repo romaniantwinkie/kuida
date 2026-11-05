@@ -9,16 +9,16 @@
   --line: 223 227 232;
   --ink: 15 20 27;
   --muted: 93 103 116;
-  --brand: 51 65 85;
+  --brand: 29 78 216;
   --brand-ink: 255 255 255;
-  --brand-soft: 230 234 240;
-  --accent: 75 93 120;
+  --brand-soft: 231 238 253;
+  --accent: 37 99 235;
   --accent-ink: 255 255 255;
-  --accent-soft: 229 234 242;
+  --accent-soft: 232 239 254;
   --ok: 22 150 74;
   --warn: 184 106 6;
   --danger: 210 44 44;
-  --info: 37 99 235;
+  --info: 14 116 144;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -29,16 +29,16 @@
     --line: 42 49 60;
     --ink: 236 239 243;
     --muted: 154 163 175;
-    --brand: 182 194 211;
-    --brand-ink: 20 27 38;
-    --brand-soft: 35 42 53;
-    --accent: 147 163 186;
-    --accent-ink: 15 21 32;
-    --accent-soft: 35 44 58;
+    --brand: 138 180 255;
+    --brand-ink: 11 26 58;
+    --brand-soft: 23 38 74;
+    --accent: 110 160 255;
+    --accent-ink: 7 24 51;
+    --accent-soft: 24 42 80;
     --ok: 74 222 128;
     --warn: 251 191 36;
     --danger: 248 113 113;
-    --info: 96 165 250;
+    --info: 92 200 228;
     color-scheme: dark;
   }
 }
@@ -49,16 +49,16 @@
   --line: 42 49 60;
   --ink: 236 239 243;
   --muted: 154 163 175;
-  --brand: 182 194 211;
-  --brand-ink: 20 27 38;
-  --brand-soft: 35 42 53;
-  --accent: 147 163 186;
-  --accent-ink: 15 21 32;
-  --accent-soft: 35 44 58;
+  --brand: 138 180 255;
+  --brand-ink: 11 26 58;
+  --brand-soft: 23 38 74;
+  --accent: 110 160 255;
+  --accent-ink: 7 24 51;
+  --accent-soft: 24 42 80;
   --ok: 74 222 128;
   --warn: 251 191 36;
   --danger: 248 113 113;
-  --info: 96 165 250;
+  --info: 92 200 228;
   color-scheme: dark;
 }
 :where([data-theme="light"][data-palette="slate"]) {
@@ -68,15 +68,15 @@
   --line: 223 227 232;
   --ink: 15 20 27;
   --muted: 93 103 116;
-  --brand: 51 65 85;
+  --brand: 29 78 216;
   --brand-ink: 255 255 255;
-  --brand-soft: 230 234 240;
-  --accent: 75 93 120;
+  --brand-soft: 231 238 253;
+  --accent: 37 99 235;
   --accent-ink: 255 255 255;
-  --accent-soft: 229 234 242;
+  --accent-soft: 232 239 254;
   --ok: 22 150 74;
   --warn: 184 106 6;
   --danger: 210 44 44;
-  --info: 37 99 235;
+  --info: 14 116 144;
   color-scheme: light;
 }

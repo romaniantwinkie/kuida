@@ -198,6 +198,7 @@ export function MatchBoard({
                 key={m.caregiver.id}
                 className={cn("transition-colors", selected === m.caregiver.id && "bg-brand-soft/40", st === "accepted" && "bg-ok/10")}
                 onMouseEnter={() => setSelected(m.caregiver.id)}
+                onFocusCapture={() => setSelected(m.caregiver.id)}
               >
                 <div className="flex items-center gap-3 px-4 py-3 sm:px-5">
                   <span className="hidden w-4 text-xs font-semibold tabular-nums text-muted sm:block">{idx + 1}</span>
@@ -212,14 +213,14 @@ export function MatchBoard({
                         {m.caregiver.role} · {m.miles} mi · {m.caregiver.languages.join("/")}
                       </span>
                     </div>
-                    <div className="mt-1 flex flex-wrap gap-1.5">
+                    <div className="mt-1 flex flex-wrap gap-2">
                       {m.flags.map((f) => (
                         <Badge key={f.label} tone={f.tone}>
                           {f.tone !== "info" && <AlertTriangle className="size-3" />}
                           {f.label}
                         </Badge>
                       ))}
-                      {(m.caregiver.history[shift.clientId] ?? 0) > 0 && <Badge tone="brand">Knows {client.alias}</Badge>}
+                      {(m.caregiver.history[shift.clientId] ?? 0) > 0 && <span className="text-xs text-muted">Knows {client.alias}</span>}
                     </div>
                   </div>
                   <Badge tone={STATUS[st].tone} dot={st !== "idle"} className={cn(st === "idle" && "hidden sm:inline-flex")}>
@@ -228,7 +229,7 @@ export function MatchBoard({
                   <button
                     type="button"
                     onClick={() => setExpanded(open ? null : m.caregiver.id)}
-                    className="inline-grid size-9 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink"
+                    className="inline-grid size-11 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink"
                     aria-expanded={open}
                     aria-label={`Why ${m.caregiver.firstName} scored ${m.score}`}
                   >
@@ -248,7 +249,7 @@ export function MatchBoard({
                         <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-surface-2">
                           <div className="h-full rounded-full bg-brand" style={{ width: `${(f.points / f.max) * 100}%` }} />
                         </div>
-                        <p className="mt-1 text-[11px] text-muted">{f.detail}</p>
+                        <p className="mt-1 text-xs text-muted">{f.detail}</p>
                       </div>
                     ))}
                   </div>
@@ -259,13 +260,13 @@ export function MatchBoard({
         </ul>
         {blocked.length > 0 && (
           <div className="border-t border-line px-5 py-3">
-            <button type="button" onClick={() => setShowBlocked((v) => !v)} className="flex min-h-9 items-center gap-2 text-xs font-semibold text-muted hover:text-ink">
+            <button type="button" onClick={() => setShowBlocked((v) => !v)} className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted hover:text-ink">
               <CircleSlash className="size-3.5" />
               {blocked.length} screened out by hard rules
               <ChevronDown className={cn("size-3.5 transition", showBlocked && "rotate-180")} />
             </button>
             {showBlocked && (
-              <ul className="mt-2 space-y-1.5 text-xs">
+              <ul className="mt-2 space-y-2 text-xs">
                 {blocked.map((m) => (
                   <li key={m.caregiver.id} className="flex flex-wrap items-center gap-2">
                     <span className="font-medium">
@@ -289,19 +290,19 @@ export function MatchBoard({
           <Card className="overflow-hidden">
             <div className="h-56">
               <MapView
-                client={{ x: client.x, y: client.y }}
+                client={{ x: client.x, y: client.y, label: `${client.alias} · ${client.area}` }}
                 pins={pins}
                 selectedId={selected}
                 title={`${client.alias} · ${client.area} — ${eligible.length} eligible caregivers`}
                 footer={
                   <span className="flex flex-wrap gap-x-4 gap-y-1">
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-2">
                       <span className="size-2 rounded-full bg-accent" /> Client (approx.)
                     </span>
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-2">
                       <span className="size-2 rounded-full bg-brand" /> Eligible caregiver
                     </span>
-                    <span className="flex items-center gap-1.5">
+                    <span className="flex items-center gap-2">
                       <span className="size-2 rounded-full bg-ok" /> Accepted
                     </span>
                     <span>Esc to close</span>
@@ -309,8 +310,8 @@ export function MatchBoard({
                 }
               />
             </div>
-            <div className="flex items-center justify-between gap-2 border-t border-line px-4 py-2.5 text-xs text-muted">
-              <span className="flex items-center gap-1.5">
+            <div className="flex items-center justify-between gap-2 border-t border-line px-4 py-3 text-xs text-muted">
+              <span className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-accent" /> {client.alias} · {client.area}
               </span>
               <span>Exact address hidden from caregivers until assigned</span>
@@ -324,9 +325,8 @@ export function MatchBoard({
               <span className="flex items-center gap-2">
                 Outreach
                 {running && (
-                  <span className="relative flex size-2">
-                    <span className="absolute inline-flex size-full animate-ping2 rounded-full bg-accent" />
-                    <span className="relative inline-flex size-2 rounded-full bg-accent" />
+                  <span className="inline-flex items-center gap-2 text-xs font-medium text-accent">
+                    <span className="size-2 rounded-full bg-accent" /> Live
                   </span>
                 )}
               </span>
@@ -334,7 +334,7 @@ export function MatchBoard({
             subtitle="Offers go out in waves; a decline automatically backfills."
             action={
               events.length > 0 && (
-                <span className="rounded-full bg-surface-2 px-2.5 py-1 font-mono text-xs tabular-nums">{simClock(lastStep)}</span>
+                <span className="rounded-full bg-surface-2 px-3 py-1 font-mono text-xs tabular-nums">{simClock(lastStep)}</span>
               )
             }
           />
@@ -370,10 +370,10 @@ export function MatchBoard({
                   </label>
                 </div>
                 <div className="rounded-xl border border-dashed border-line bg-surface-2/60 p-3">
-                  <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted">
+                  <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted">
                     <MessageSquareText className="size-3.5" /> Offer preview (ES)
                   </p>
-                  <p className="mt-1.5 text-sm leading-relaxed">
+                  <p className="mt-2 text-sm leading-relaxed">
                     Kuida: Turno {shift.role} en {client.area}, {DAYS[shift.day].toLowerCase()} {fmtHour(shift.start)}–{fmtHour(shift.end)}, ${shift.pay[0]}–{shift.pay[1]}/h. Responde <b>1</b> para aceptar o <b>2</b> para pasar.
                   </p>
                 </div>
@@ -388,7 +388,7 @@ export function MatchBoard({
               )}
               {(running || events.length > 0) && (
                 <Button variant="secondary" onClick={reset} className="flex-1">
-                  <RotateCcw className="size-4" /> {running ? "Stop" : "Replay"}
+                  <RotateCcw className="size-4" /> {running ? "Stop outreach" : "Replay outreach"}
                 </Button>
               )}
             </div>
@@ -403,7 +403,7 @@ export function MatchBoard({
                         <Icon className="size-3" />
                       </span>
                       <p className="text-sm leading-snug">{e.text}</p>
-                      <p className="font-mono text-[11px] text-muted">+{simClock(e.at)}</p>
+                      <p className="font-mono text-xs text-muted">+{simClock(e.at)}</p>
                     </li>
                   );
                 })}

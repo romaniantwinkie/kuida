@@ -35,6 +35,7 @@ export function FindCaregiversDemo() {
             <li
               key={m.caregiver.id}
               onMouseEnter={() => setSelected(m.caregiver.id)}
+              onFocusCapture={() => setSelected(m.caregiver.id)}
               className={cn("flex items-center gap-3 px-5 py-3 transition-colors", selected === m.caregiver.id && "bg-brand-soft/50")}
             >
               <CaregiverAvatar caregiver={m.caregiver} className="size-9" />
@@ -50,7 +51,7 @@ export function FindCaregiversDemo() {
             </li>
           ))}
         </ul>
-        <Link href="/app/search" className="flex min-h-12 items-center justify-center gap-1.5 border-t border-line text-sm font-semibold text-brand hover:bg-surface-2">
+        <Link href="/app/search" className="flex min-h-12 items-center justify-center gap-2 border-t border-line text-sm font-semibold text-brand hover:bg-surface-2">
           Open Find caregivers <ArrowRight className="size-4" />
         </Link>
       </div>
@@ -71,7 +72,7 @@ export function CopilotDemo() {
             type="button"
             onClick={() => setQ(s)}
             className={cn(
-              "min-h-9 rounded-full border px-3.5 text-xs font-semibold transition",
+              "min-h-11 rounded-full border px-4 text-sm font-medium transition-colors",
               q === s ? "border-ink bg-ink text-bg" : "border-line text-muted hover:text-ink",
             )}
           >
@@ -81,7 +82,7 @@ export function CopilotDemo() {
       </div>
       <div className="space-y-4 p-5">
         <div className="flex justify-end">
-          <p className="max-w-[85%] rounded-2xl rounded-br-md bg-ink px-4 py-2.5 text-sm text-bg">{q}</p>
+          <p className="max-w-[85%] rounded-2xl rounded-br-md bg-ink px-4 py-3 text-sm text-bg">{q}</p>
         </div>
         <div key={q} className="flex animate-fade-up gap-3">
           <span className="grid size-8 shrink-0 place-items-center rounded-full bg-brand text-brand-ink">
@@ -90,7 +91,7 @@ export function CopilotDemo() {
           <div className="min-w-0 flex-1 space-y-3">
             <p className="text-[15px] leading-relaxed">{r.text}</p>
             {r.bullets && (
-              <ul className="space-y-1.5 rounded-2xl border border-line bg-bg p-4 text-sm">
+              <ul className="space-y-2 rounded-2xl border border-line bg-bg p-4 text-sm">
                 {r.bullets.slice(0, 4).map((b) => (
                   <li key={b} className="flex gap-2">
                     <span className="mt-2 size-1.5 shrink-0 rounded-full bg-brand" /> {b}
@@ -123,7 +124,7 @@ export function CopilotDemo() {
           </div>
         </div>
       </div>
-      <Link href="/app/copilot" className="flex min-h-12 items-center justify-center gap-1.5 border-t border-line text-sm font-semibold text-brand hover:bg-surface-2">
+      <Link href="/app/copilot" className="flex min-h-12 items-center justify-center gap-2 border-t border-line text-sm font-semibold text-brand hover:bg-surface-2">
         Ask your own question <ArrowRight className="size-4" />
       </Link>
     </div>

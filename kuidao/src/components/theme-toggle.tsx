@@ -2,11 +2,13 @@
 
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/cn";
+import { IconButton } from "@/components/ui/icon-button";
 
 type Mode = "system" | "light" | "dark";
 const order: Mode[] = ["light", "dark", "system"];
 const icons = { system: Monitor, light: Sun, dark: Moon };
+const next = (m: Mode) => order[(order.indexOf(m) + 1) % order.length];
+const LABEL: Record<Mode, string> = { light: "Switch to dark mode", dark: "Match device theme", system: "Switch to light mode" };
 
 function apply(mode: Mode) {
   const root = document.documentElement;
@@ -14,7 +16,7 @@ function apply(mode: Mode) {
   else root.setAttribute("data-theme", mode);
 }
 
-export function ThemeToggle({ className }: { className?: string }) {
+export function ThemeToggle({ className, tooltipSide }: { className?: string; tooltipSide?: "top" | "bottom" | "left" }) {
   const [mode, setMode] = useState<Mode>("light");
 
   useEffect(() => {
@@ -25,24 +27,18 @@ export function ThemeToggle({ className }: { className?: string }) {
   }, []);
 
   function cycle() {
-    const next = order[(order.indexOf(mode) + 1) % order.length];
-    setMode(next);
-    apply(next);
+    const n = next(mode);
+    setMode(n);
+    apply(n);
     try {
-      localStorage.setItem("kuida-theme", next);
+      localStorage.setItem("kuida-theme", n);
     } catch {}
   }
 
   const Icon = icons[mode];
   return (
-    <button
-      type="button"
-      onClick={cycle}
-      className={cn("inline-grid size-10 place-items-center rounded-full text-muted transition hover:bg-surface-2 hover:text-ink", className)}
-      aria-label={`Theme: ${mode}. Switch theme`}
-      title={`Theme: ${mode}`}
-    >
+    <IconButton label={LABEL[mode]} onClick={cycle} className={className} tooltipSide={tooltipSide}>
       <Icon className="size-[18px]" strokeWidth={1.8} />
-    </button>
+    </IconButton>
   );
 }

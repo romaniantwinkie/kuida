@@ -14,7 +14,7 @@ const ROWS: Array<[string, boolean | string, boolean | string, boolean | string]
   ["Coordinator copilot", false, true, true],
   ["Morning brief", false, true, true],
   ["Hiring packet e-sign", false, true, true],
-  ["Shared bench across locations", false, false, true],
+  ["Shared roster across locations", false, false, true],
 ];
 
 function Cell({ v }: { v: boolean | string }) {

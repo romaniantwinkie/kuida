@@ -36,23 +36,22 @@ const config: Config = {
         "3xl": "28px",
       },
       boxShadow: {
-        card: "0 1px 2px rgb(16 24 22 / 0.04), 0 8px 24px -12px rgb(16 24 22 / 0.12)",
-        lift: "0 2px 4px rgb(16 24 22 / 0.06), 0 24px 48px -20px rgb(16 24 22 / 0.25)",
+        card: "var(--shadow-card)",
+        lift: "var(--shadow-lift)",
       },
       keyframes: {
-        "fade-up": {
-          from: { opacity: "0", transform: "translateY(6px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
-        ping2: {
-          "0%": { transform: "scale(1)", opacity: "0.6" },
-          "100%": { transform: "scale(2.6)", opacity: "0" },
-        },
+        "fade-in": { from: { opacity: "0" }, to: { opacity: "1" } },
+        "slide-in-right": { from: { transform: "translateX(24px)", opacity: "0" }, to: { transform: "translateX(0)", opacity: "1" } },
+        "rise-in": { from: { transform: "translateY(4px)", opacity: "0" }, to: { transform: "translateY(0)", opacity: "1" } },
       },
       animation: {
-        "fade-up": "fade-up 0.35s ease-out both",
-        ping2: "ping2 1.8s cubic-bezier(0, 0, 0.2, 1) infinite",
+        // Motion tokens: 150ms / 200ms, ease-out on enter.
+        "fade-up": "rise-in 200ms ease-out both",
+        "fade-in": "fade-in 150ms ease-out both",
+        "slide-in-right": "slide-in-right 200ms ease-out both",
       },
+      transitionDuration: { DEFAULT: "150ms" },
+      fontWeight: { bold: "600", extrabold: "600", black: "600" },
     },
   },
   plugins: [],

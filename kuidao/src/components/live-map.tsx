@@ -45,7 +45,7 @@ export function LiveMap({
   className,
   basemap = "streets",
 }: {
-  client?: { x: number; y: number };
+  client?: { x: number; y: number; label?: string };
   pins?: MapPin[];
   selectedId?: string | null;
   className?: string;
@@ -81,8 +81,8 @@ export function LiveMap({
     if (client) {
       const c = toLatLng(client);
       Lf.circle(c, { radius: 2400, color: token("accent", el.current), weight: 1, dashArray: "4 4", fillOpacity: 0.08 }).addTo(layer.current);
-      Lf.circleMarker(c, { radius: 9, color: surface, weight: 3, fillColor: token("accent", el.current), fillOpacity: 1 })
-        .bindTooltip("Client (approx.)", { direction: "top", offset: [0, -8] })
+      Lf.circleMarker(c, { radius: 10, color: token("brand", el.current), weight: 5, fillColor: "#ffffff", fillOpacity: 1 })
+        .bindTooltip(client.label ?? "Client", { direction: "top", offset: [0, -8] })
         .addTo(layer.current);
     }
     for (const p of pins) {

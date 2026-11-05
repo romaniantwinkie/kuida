@@ -27,7 +27,7 @@ export default async function ShiftPage({ params }: { params: Promise<{ id: stri
 
   return (
     <>
-      <Link href="/app/shifts" className="inline-flex min-h-9 items-center gap-1.5 text-sm text-muted hover:text-ink">
+      <Link href="/app/shifts" className="inline-flex min-h-11 items-center gap-2 text-sm text-muted hover:text-ink">
         <ArrowLeft className="size-4" /> Shifts
       </Link>
       <div className="mb-6 mt-2 flex flex-wrap items-start justify-between gap-4">
@@ -41,8 +41,8 @@ export default async function ShiftPage({ params }: { params: Promise<{ id: stri
           </div>
           <ul className="mt-3 flex flex-wrap gap-2">
             {facts.map((f) => (
-              <li key={f.label} className="flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1 text-xs">
-                <f.icon className="size-3.5 text-muted" /> {f.label}
+              <li key={f.label} className="flex items-center gap-2 text-sm">
+                <f.icon className="size-4 text-muted" /> {f.label}
               </li>
             ))}
           </ul>

@@ -11,38 +11,38 @@ export function PricingCards() {
           key={p.id}
           className={cn(
             "relative flex flex-col rounded-3xl border p-7",
-            p.highlight ? "border-transparent bg-ink text-bg shadow-lift" : "border-line bg-surface shadow-card",
+            p.highlight ? "border-brand bg-surface shadow-lift ring-1 ring-brand" : "border-line bg-surface shadow-card",
           )}
         >
           {p.highlight && (
-            <span className="absolute -top-3 left-7 rounded-full bg-accent px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-accent-ink">
-              Most offices
+            <span className="absolute -top-3 left-7 rounded-full bg-brand px-3 py-1 text-xs font-semibold text-brand-ink">
+              Most popular
             </span>
           )}
           <h3 className="font-display text-2xl">{p.name}</h3>
-          <p className={cn("mt-2 text-sm", p.highlight ? "text-bg/70" : "text-muted")}>{p.blurb}</p>
+          <p className={cn("mt-2 text-sm", "text-muted")}>{p.blurb}</p>
           <p className="mt-6 flex items-baseline gap-1">
             <span className="font-display text-5xl">$0</span>
-            <span className={cn("text-sm", p.highlight ? "text-bg/60" : "text-muted")}>for {FOUNDING_OFFER.freeMonths} months</span>
+            <span className={cn("text-sm", "text-muted")}>for {FOUNDING_OFFER.freeMonths} months</span>
           </p>
-          <p className={cn("mt-1 text-sm", p.highlight ? "text-bg/80" : "text-ink")}>
+          <p className={cn("mt-1 text-sm", "text-ink")}>
             then {p.monthly ? <b>${p.monthly}/location/mo</b> : <b>custom pricing</b>}
           </p>
-          <p className={cn("mt-1 text-xs", p.highlight ? "text-bg/60" : "text-muted")}>{p.seats} · unlimited fills</p>
-          <ul className="mt-6 flex-1 space-y-2.5 text-sm">
+          <p className={cn("mt-1 text-xs", "text-muted")}>{p.seats} · unlimited fills</p>
+          <ul className="mt-6 flex-1 space-y-3 text-sm">
             {p.features.map((f) => (
               <li key={f} className="flex gap-2.5">
-                <Check className={cn("mt-0.5 size-4 shrink-0", p.highlight ? "text-accent" : "text-brand")} />
+                <Check className={cn("mt-0.5 size-4 shrink-0", "text-brand")} />
                 <span>{f}</span>
               </li>
             ))}
           </ul>
           <ButtonLink
             href={p.monthly ? `/signup/agency?plan=${p.id}` : "/signup/agency?plan=network"}
-            variant={p.highlight ? "accent" : "secondary"}
+            variant={p.highlight ? "primary" : "secondary"}
             className="mt-8"
           >
-            {p.monthly ? `Start ${p.name} free` : "Talk to us"}
+            {p.monthly ? `Start free on ${p.name}` : "Talk to sales"}
           </ButtonLink>
         </article>
       ))}

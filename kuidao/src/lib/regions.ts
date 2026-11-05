@@ -26,6 +26,28 @@ export function gridToLatLng(p: { x: number; y: number }, regionId: string): [nu
   return [lat + dLat, lng + dLng];
 }
 
+/** Inverse of gridToLatLng: real coordinates → demo grid around a region. */
+export function latLngToGrid(lat: number, lng: number, regionId: string) {
+  const [cLat, cLng] = regionById(regionId).center;
+  const kmPerUnit = 0.31;
+  const y = 30 - (lat - cLat) / (kmPerUnit / 111);
+  const x = 50 + (lng - cLng) / (kmPerUnit / (111 * Math.cos((cLat * Math.PI) / 180)));
+  return { x, y };
+}
+
+export function kmBetween(a: readonly [number, number], b: readonly [number, number]) {
+  const R = 6371;
+  const dLat = ((b[0] - a[0]) * Math.PI) / 180;
+  const dLng = ((b[1] - a[1]) * Math.PI) / 180;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos((a[0] * Math.PI) / 180) * Math.cos((b[0] * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/** Closest demo metro to a point, with its distance in km. */
+export function nearestRegion(lat: number, lng: number) {
+  return REGIONS.map((r) => ({ region: r, km: kmBetween([lat, lng], r.center) })).sort((a, b) => a.km - b.km)[0];
+}
+
 export const US_STATES = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia",
   "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine",

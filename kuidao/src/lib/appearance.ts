@@ -6,14 +6,9 @@ import { REGIONS, type RegionId } from "./regions";
 
 
 export const MAP_STYLES = [
-  { id: "streets", name: "Streets", blurb: "Neighborhood map with highways and labels." },
-  { id: "minimal", name: "Minimal", blurb: "Just coast, two highways and pins. Least noise." },
-  { id: "drive", name: "Drive time", blurb: "10/20/30-minute rings around the client." },
-  { id: "heat", name: "Bench density", blurb: "Where your caregivers cluster." },
-  { id: "satellite", name: "Terrain", blurb: "Drawn aerial texture. No tile server needed." },
-  { id: "blueprint", name: "Blueprint", blurb: "Brand-colored grid. Great on big screens." },
-  { id: "live", name: "Live streets", blurb: "Real, zoomable street map. Light/dark canvas." },
   { id: "aerial", name: "Aerial photo", blurb: "Real satellite imagery with place labels." },
+  { id: "live", name: "Streets", blurb: "Real, zoomable street map." },
+  { id: "drive", name: "Drive time", blurb: "10/20/30-minute rings around the client." },
 ] as const;
 export type MapStyleId = (typeof MAP_STYLES)[number]["id"];
 

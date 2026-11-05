@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { ToastProvider } from "@/components/ui/toast";
 import { appearanceScript } from "@/lib/appearance-script";
 import { fontCss, fontHref } from "@/lib/fonts";
 import "./palettes.css";
@@ -19,16 +20,18 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-palette="slate" data-font="modern" data-theme="light" suppressHydrationWarning>
+    <html lang="en" data-palette="slate" data-font="inter" data-theme="light" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: appearanceScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link id="font-modern" href={fontHref("modern")} rel="stylesheet" />
+        <link id="font-inter" href={fontHref("inter")} rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
         <style dangerouslySetInnerHTML={{ __html: fontCss }} />
       </head>
-      <body className="min-h-screen bg-bg font-sans text-ink antialiased">{children}</body>
+      <body className="min-h-screen bg-bg font-sans text-ink antialiased">
+        <ToastProvider>{children}</ToastProvider>
+      </body>
     </html>
   );
 }

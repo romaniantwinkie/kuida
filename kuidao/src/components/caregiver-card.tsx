@@ -1,11 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { BadgeCheck, CalendarPlus, Clock, Languages, Lock, MapPin, MessageSquare, ShieldCheck, Star } from "lucide-react";
 import { CaregiverAvatar } from "@/components/caregiver-avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button, ButtonLink } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
+import { buttonClass } from "@/components/ui/button";
+import { SlideOver } from "@/components/ui/slide-over";
 import { CLIENTS, DAYS, fmtHour, type Caregiver } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
@@ -20,54 +21,52 @@ function credTone(days: number) {
  * phone number or email: contact always goes through Kuida.
  */
 export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
-  const [sent, setSent] = useState(false);
   const known = Object.entries(c.history)
     .filter(([, n]) => n > 0)
-    .map(([id, n]) => `${CLIENTS.find((x) => x.id === id)?.alias ?? "Client"} (${n})`);
+    .map(([id, n]) => `${CLIENTS.find((x) => x.id === id)?.alias ?? "Client"} (${n} visits)`);
 
   return (
     <div>
-      {/* Header: business-card style */}
-      <div className="rounded-t-3xl bg-gradient-to-br from-brand-soft via-surface to-surface px-6 pb-5 pt-7">
+      <div className="border-b border-line bg-surface-2 px-6 pb-6 pt-6">
         <div className="flex items-center gap-4">
           <CaregiverAvatar caregiver={c} className="size-20 ring-4 ring-surface" />
           <div className="min-w-0">
-            <p className="font-display text-2xl leading-tight">
+            <p className="text-2xl font-semibold leading-tight tracking-tight">
               {c.firstName} {c.lastInitial}.
             </p>
-            <p className="mt-0.5 text-sm text-muted">
+            <p className="mt-1 text-sm text-muted">
               {c.role} · {c.years} yrs experience
             </p>
-            <div className="mt-2 flex flex-wrap gap-1.5">
-              <Badge tone="brand">
-                <BadgeCheck className="size-3" /> ID verified
-              </Badge>
-              <Badge tone="muted">
-                <Star className="size-3" /> {c.reliability}% on time
-              </Badge>
-            </div>
+            <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+              <span className="inline-flex items-center gap-1 text-ok">
+                <BadgeCheck className="size-4" /> ID verified
+              </span>
+              <span className="inline-flex items-center gap-1 text-muted">
+                <Star className="size-4" /> {c.reliability}% on time
+              </span>
+            </p>
           </div>
         </div>
-        <p className="mt-4 text-sm leading-relaxed">{c.bio}</p>
+        <p className="mt-4 max-w-prose text-sm leading-relaxed">{c.bio}</p>
       </div>
 
-      <dl className="grid grid-cols-2 gap-px border-y border-line bg-line text-sm">
+      <dl className="grid grid-cols-2 gap-px border-b border-line bg-line text-sm">
         {[
           { icon: MapPin, k: "Area", v: c.area },
           { icon: Languages, k: "Languages", v: c.languages.join(", ") },
           { icon: Clock, k: "Hours", v: `${fmtHour(c.availability.start)}–${fmtHour(c.availability.end)}` },
           { icon: CalendarPlus, k: "This week", v: `${c.weeklyHours}h scheduled` },
         ].map((r) => (
-          <div key={r.k} className="bg-surface px-5 py-3">
-            <dt className="flex items-center gap-1.5 text-xs text-muted">
-              <r.icon className="size-3.5" /> {r.k}
+          <div key={r.k} className="bg-surface px-6 py-3">
+            <dt className="flex items-center gap-2 text-xs text-muted">
+              <r.icon className="size-4" /> {r.k}
             </dt>
-            <dd className="mt-0.5 font-medium">{r.v}</dd>
+            <dd className="mt-1 font-medium">{r.v}</dd>
           </div>
         ))}
       </dl>
 
-      <div className="space-y-5 px-6 py-5">
+      <div className="space-y-6 px-6 py-6">
         <div>
           <p className="eyebrow">Availability</p>
           <div className="mt-2 flex gap-1">
@@ -75,8 +74,8 @@ export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
               <span
                 key={d}
                 className={cn(
-                  "grid h-8 flex-1 place-items-center rounded-lg text-[11px] font-bold",
-                  c.availability.days.includes(i) ? "bg-brand-soft text-brand" : "bg-surface-2 text-muted/60",
+                  "grid h-8 flex-1 place-items-center rounded-lg text-xs font-semibold",
+                  c.availability.days.includes(i) ? "bg-brand-soft text-brand" : "bg-surface-2 text-muted",
                 )}
               >
                 {d}
@@ -91,7 +90,7 @@ export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
             {c.credentials.map((cr) => {
               const t = credTone(cr.expiresInDays);
               return (
-                <li key={cr.name} className="flex items-center justify-between gap-3 px-4 py-2.5 text-sm">
+                <li key={cr.name} className="flex items-center justify-between gap-3 px-4 py-3 text-sm">
                   <span className="flex items-center gap-2">
                     <ShieldCheck className="size-4 text-muted" /> {cr.name}
                   </span>
@@ -102,46 +101,42 @@ export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
               );
             })}
           </ul>
-          <p className="mt-2 text-xs text-muted">Shared with your agency by the caregiver. Access is logged and they can revoke it.</p>
+          <p className="mt-2 text-xs text-muted">Shared with your agency by the caregiver. View-only; every view is logged and they can revoke access.</p>
         </div>
 
         {(c.skills.length > 0 || known.length > 0) && (
-          <div className="flex flex-wrap gap-1.5">
-            {c.skills.map((s) => (
-              <Badge key={s} tone="muted">
-                {s}
-              </Badge>
-            ))}
-            {known.map((k) => (
-              <Badge key={k} tone="brand">
-                Knows {k}
-              </Badge>
-            ))}
+          <div className="text-sm">
+            <p className="eyebrow">Skills & history</p>
+            <p className="mt-2">{c.skills.join(" · ")}</p>
+            {known.length > 0 && <p className="mt-1 text-muted">Knows {known.join(", ")}</p>}
           </div>
         )}
 
-        <div className="flex items-start gap-2.5 rounded-2xl bg-surface-2 px-4 py-3 text-xs text-muted">
+        <p className="flex items-start gap-2 rounded-2xl bg-surface-2 px-4 py-3 text-sm text-muted">
           <Lock className="mt-0.5 size-4 shrink-0" />
           <span>
-            <b className="text-ink">Phone number private.</b> Messages and shift offers go through Kuida, which relays them by text in the caregiver&apos;s
-            language.
+            <b className="text-ink">Phone number private.</b> Messages and shift offers go through Kuida, by text, in the caregiver&apos;s language.
           </span>
-        </div>
-
-        <div className="grid grid-cols-2 gap-2">
-          <Button variant={sent ? "secondary" : "primary"} onClick={() => setSent(true)} disabled={sent}>
-            <MessageSquare className="size-4" /> {sent ? "Message sent" : "Message"}
-          </Button>
-          <ButtonLink href="/app/search" variant="secondary">
-            <CalendarPlus className="size-4" /> Offer a shift
-          </ButtonLink>
-        </div>
+        </p>
       </div>
     </div>
   );
 }
 
-/** Name (and optional photo) that opens the caregiver's contact card. */
+export function CardActions({ caregiver: c }: { caregiver: Caregiver }) {
+  return (
+    <div className="grid grid-cols-2 gap-2">
+      <Link href={`/app/messages?with=${c.id}`} className={buttonClass("primary")}>
+        <MessageSquare className="size-4" /> Send message
+      </Link>
+      <Link href="/app/search" className={buttonClass("secondary")}>
+        <CalendarPlus className="size-4" /> Offer a shift
+      </Link>
+    </div>
+  );
+}
+
+/** Name (and optional photo) that opens the caregiver's contact card in a slide-over. */
 export function CaregiverLink({
   caregiver,
   withAvatar = false,
@@ -156,6 +151,7 @@ export function CaregiverLink({
   children?: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const name = `${caregiver.firstName} ${caregiver.lastInitial}.`;
   return (
     <>
       <button
@@ -164,20 +160,15 @@ export function CaregiverLink({
           e.stopPropagation();
           setOpen(true);
         }}
-        className={cn("inline-flex items-center gap-3 rounded-lg text-left hover:text-brand focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand/25", className)}
-        aria-label={`Open ${caregiver.firstName} ${caregiver.lastInitial}.'s profile`}
+        className={cn("inline-flex min-h-11 min-w-11 items-center gap-3 rounded-lg text-left hover:text-brand", className)}
+        aria-label={`Open ${name} profile`}
       >
         {withAvatar && <CaregiverAvatar caregiver={caregiver} className={avatarClassName} />}
-        {children ?? (
-          <span className="font-semibold">
-            {caregiver.firstName} {caregiver.lastInitial}.
-          </span>
-        )}
+        {children ?? <span className="font-semibold">{name}</span>}
       </button>
-      <Dialog open={open} onClose={() => setOpen(false)} label={`${caregiver.firstName} ${caregiver.lastInitial}. profile`}>
+      <SlideOver open={open} onClose={() => setOpen(false)} title={`${name} · profile`} footer={<CardActions caregiver={caregiver} />}>
         <CaregiverCard caregiver={caregiver} />
-      </Dialog>
+      </SlideOver>
     </>
   );
 }
-

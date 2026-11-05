@@ -16,7 +16,6 @@ import { HeroDemo } from "@/components/hero-demo";
 import { CopilotDemo, FindCaregiversDemo } from "@/components/home-demos";
 import { FoundingOfferBanner } from "@/components/founding-offer";
 import { PricingCards } from "@/components/pricing-cards";
-import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/ui/button";
 
 const FEATURES = [
@@ -65,9 +64,9 @@ const FEATURES = [
 
 const STEPS = [
   { icon: CalendarClock, t: "0:00", title: "Call-out logged", body: "Text, call or one tap in the console. Kuida reads the client's needs and the visit window." },
-  { icon: Sparkles, t: "0:05", title: "Bench ranked", body: "Hard rules screen out the ineligible. Everyone else is scored and sorted — with the why." },
+  { icon: Sparkles, t: "0:05", title: "Roster ranked", body: "Hard rules screen out anyone ineligible. Everyone else is scored and sorted, with the reasons." },
   { icon: Waves, t: "0:10", title: "Offers go out", body: "Bilingual SMS + app push to the top wave. Declines and silences roll to the next wave." },
-  { icon: ShieldCheck, t: "~4:00", title: "Confirmed", body: "First yes wins. Credentials re-checked, family notified, EVV visit created." },
+  { icon: ShieldCheck, t: "0:04+", title: "Confirmed", body: "First yes wins. Credentials re-checked, family notified, EVV visit created." },
 ];
 
 const FAQ = [
@@ -82,17 +81,16 @@ export default function Home() {
     <main>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="dot-grid absolute inset-0 -z-10 opacity-60 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]" />
-        <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-14 sm:px-6 md:pt-20 lg:grid-cols-[1.1fr_1fr]">
+        <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-14 sm:px-6 md:pt-20 lg:grid-cols-[1.1fr_1fr] [&>*]:min-w-0">
           <div className="animate-fade-up">
-            <Badge tone="brand" className="py-1">
-              <MapPinned className="size-3.5" /> For licensed home care agencies · nationwide
-            </Badge>
-            <h1 className="mt-6 font-display text-[44px] leading-[1.02] tracking-tight sm:text-6xl">
-              The call-out is covered <em className="text-brand">before</em> the family calls.
+            <p className="inline-flex items-center gap-2 text-sm font-medium text-brand">
+              <MapPinned className="size-4" /> For licensed home care agencies, nationwide
+            </p>
+            <h1 className="mt-6 font-display text-[40px] leading-[1.1] sm:text-6xl">
+              The call-out is covered <span className="text-brand">before</span> the family calls.
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-              Kuida ranks your caregiver bench for every open shift, then sends bilingual offers in waves until someone says yes. You approve. It does the phoning.
+              Kuida ranks your caregivers for every open shift and texts offers in English or Spanish until someone accepts. You stay in control.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <ButtonLink href="/app" size="lg">
@@ -104,7 +102,7 @@ export default function Home() {
             </div>
             <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-line pt-6">
               {[
-                ["< 90s", "to a ranked bench"],
+                ["EN · ES", "offers by text"],
                 ["6 mo free", "first 50 agencies"],
                 ["50 states", "license-aware onboarding"],
               ].map(([k, v]) => (
@@ -143,11 +141,11 @@ export default function Home() {
                       ["Reliab.", 8, 10],
                     ].map(([l, p, m]) => (
                       <div key={l as string}>
-                        <p className="text-[11px] text-muted">{l}</p>
+                        <p className="text-xs text-muted">{l}</p>
                         <div className="mt-1 h-1.5 rounded-full bg-surface-2">
                           <div className="h-full rounded-full bg-brand" style={{ width: `${((p as number) / (m as number)) * 100}%` }} />
                         </div>
-                        <p className="mt-1 text-[11px] font-semibold tabular-nums">
+                        <p className="mt-1 text-xs font-semibold tabular-nums">
                           {p}/{m}
                         </p>
                       </div>
@@ -160,17 +158,17 @@ export default function Home() {
                       <b className="text-ink">Xiomara R.</b> shared 5 verified documents with you · view-only · logged
                     </p>
                     {["Photo ID", "HHA certificate", "Background check", "TB test"].map((d) => (
-                      <p key={d} className="flex items-center gap-2 rounded-lg bg-ok/10 px-3 py-1.5 text-xs font-medium text-ok">
+                      <p key={d} className="flex items-center gap-2 rounded-lg bg-ok/10 px-3 py-2 text-xs font-medium text-ok">
                         <ShieldCheck className="size-3.5" /> {d}
                       </p>
                     ))}
-                    <p className="flex items-center gap-2 rounded-lg bg-warn/10 px-3 py-1.5 text-xs font-medium text-warn sm:col-span-2">
+                    <p className="flex items-center gap-2 rounded-lg bg-warn/10 px-3 py-2 text-xs font-medium text-warn sm:col-span-2">
                       <BellRing className="size-3.5" /> CPR expires in 21 days. Caregiver reminded.
                     </p>
                   </div>
                 )}
                 {f.demo === "waves" && (
-                  <div className="mt-5 flex items-end gap-1.5">
+                  <div className="mt-5 flex items-end gap-2">
                     {[3, 3, 3].map((n, w) => (
                       <div key={w} className="flex-1">
                         <div className="flex gap-1">
@@ -178,7 +176,7 @@ export default function Home() {
                             <span key={i} className={`h-6 flex-1 rounded-md ${w === 0 ? (i === 0 ? "bg-danger/40" : "bg-muted/30") : w === 1 && i === 1 ? "bg-ok" : w === 1 ? "bg-brand/40" : "bg-surface-2"}`} />
                           ))}
                         </div>
-                        <p className="mt-1 text-[10px] text-muted">Wave {w + 1}</p>
+                        <p className="mt-1 text-xs text-muted">Wave {w + 1}</p>
                       </div>
                     ))}
                   </div>
@@ -236,7 +234,7 @@ export default function Home() {
               <p className="eyebrow">How it works</p>
               <h2 className="mt-3 font-display text-4xl tracking-tight">From call-out to confirmed.</h2>
             </div>
-            <Link href="/app/shifts/s-1042" className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
+            <Link href="/app/shifts/s-1042" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand hover:underline">
               Watch it run on a live shift <ArrowRight className="size-4" />
             </Link>
           </div>
@@ -297,15 +295,14 @@ export default function Home() {
 
       {/* CTA */}
       <section className="px-4 py-16 sm:px-6">
-        <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-brand px-8 py-14 text-brand-ink sm:px-14">
-          <div className="absolute -right-20 -top-20 size-72 rounded-full bg-accent/30 blur-3xl" />
-          <h2 className="relative max-w-xl font-display text-4xl tracking-tight">Next call-out, let Kuida make the calls.</h2>
-          <p className="relative mt-3 max-w-lg opacity-85">Set up an office in ten minutes with your state license number. Import your roster from a spreadsheet.</p>
-          <div className="relative mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="/signup/agency" variant="inverse" size="lg">
+        <div className="mx-auto max-w-6xl rounded-3xl border border-line bg-surface px-8 py-14 shadow-card sm:px-14">
+          <h2 className="max-w-xl font-display text-4xl tracking-tight">Next call-out, let Kuida make the calls.</h2>
+          <p className="mt-3 max-w-lg text-muted">Set up an office in ten minutes with your state license number, then import your roster from a spreadsheet.</p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <ButtonLink href="/signup/agency" size="lg">
               Create your office
             </ButtonLink>
-            <ButtonLink href="/app" size="lg" className="bg-brand-ink/10 text-brand-ink hover:bg-brand-ink/20">
+            <ButtonLink href="/app" size="lg" variant="secondary">
               Explore the demo
             </ButtonLink>
           </div>

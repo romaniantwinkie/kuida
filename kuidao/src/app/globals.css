@@ -4,6 +4,23 @@
 
 /* Theme tokens (RGB channels) live in ./palettes.css, generated from lib/palettes.json. */
 
+:root {
+  /* Elevation: 1px border first, then a soft shadow (alpha < 0.08). */
+  --shadow-card: 0 1px 2px rgb(15 20 27 / 0.04), 0 4px 16px -8px rgb(15 20 27 / 0.06);
+  --shadow-lift: 0 2px 4px rgb(15 20 27 / 0.04), 0 16px 32px -16px rgb(15 20 27 / 0.07);
+}
+:root[data-theme="dark"] {
+  /* Dark mode: subtle top-edge light, no glow. */
+  --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.05);
+  --shadow-lift: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 16px 32px -16px rgb(0 0 0 / 0.5);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.05);
+    --shadow-lift: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 16px 32px -16px rgb(0 0 0 / 0.5);
+  }
+}
+
 body {
   background: rgb(var(--bg));
   color: rgb(var(--ink));
@@ -15,16 +32,41 @@ a {
   cursor: pointer;
 }
 
+/* Max weight 600 app-wide (typography rule). */
+b,
+strong,
+th {
+  font-weight: 600;
+}
+
+/* Visible focus everywhere, light and dark. */
+:focus-visible {
+  outline: 2px solid rgb(var(--accent));
+  outline-offset: 2px;
+}
+
+/* Reduced motion: no movement; instant changes. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer components {
+  .font-display {
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
   .field {
     @apply mt-1.5 min-h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-ink outline-none transition placeholder:text-muted/70 focus:border-brand focus:ring-4 focus:ring-brand/15;
   }
   .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.16em] text-muted;
-  }
-  .dot-grid {
-    background-image: radial-gradient(rgb(var(--line)) 1px, transparent 1px);
-    background-size: 18px 18px;
+    @apply text-xs font-semibold uppercase tracking-[0.12em] text-muted;
   }
 }
 
@@ -33,7 +75,14 @@ a {
   background: rgb(var(--surface-2));
   font: inherit;
 }
+.kuida-live-map .leaflet-control-attribution a {
+  font-weight: 400;
+}
 .kuida-live-map .leaflet-control-zoom a {
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  font-weight: 600;
   background: rgb(var(--surface));
   color: rgb(var(--ink));
   border-color: rgb(var(--line));
@@ -41,7 +90,7 @@ a {
 .kuida-live-map .leaflet-control-attribution {
   background: rgb(var(--surface) / 0.85);
   color: rgb(var(--muted));
-  font-size: 9px;
+  font-size: 12px;
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -55,8 +104,8 @@ a {
   color: rgb(var(--bg));
   border: 0;
   border-radius: 8px;
-  font-weight: 700;
-  font-size: 11px;
+  font-weight: 600;
+  font-size: 12px;
   box-shadow: none;
 }
 .kuida-live-map .kuida-tip::before {

@@ -25,15 +25,21 @@ const FRAMES: Array<Array<[string, Tone]>> = [
 
 export function HeroDemo() {
   const [frame, setFrame] = useState(0);
+  const [run, setRun] = useState(0);
+  // Plays once (no infinite loop). Reduced motion: jump to the result.
   useEffect(() => {
-    const t = setInterval(() => setFrame((f) => (f + 1) % FRAMES.length), 1400);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setFrame(FRAMES.length - 1);
+      return;
+    }
+    setFrame(0);
+    const t = setInterval(() => setFrame((f) => (f < FRAMES.length - 1 ? f + 1 : f)), 1400);
     return () => clearInterval(t);
-  }, []);
+  }, [run]);
   const filled = frame >= 4;
 
   return (
     <div className="relative sm:pb-20">
-      <div className="absolute -inset-6 -z-10 rounded-[36px] bg-gradient-to-br from-brand/20 via-transparent to-accent/20 blur-2xl" />
       <div className="overflow-hidden rounded-3xl border border-line bg-surface shadow-lift">
         <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4">
           <div>
@@ -61,15 +67,18 @@ export function HeroDemo() {
             );
           })}
         </ul>
-        <div className="flex items-center gap-3 border-t border-line bg-surface-2/60 px-5 py-3 text-xs">
+        <div className="flex min-h-14 items-center gap-3 border-t border-line bg-surface-2 px-5 py-2 text-sm">
           {filled ? (
             <>
               <span className="grid size-6 place-items-center rounded-full bg-ok text-bg">
                 <Check className="size-3.5" />
               </span>
-              <span>
-                <b>Covered in 1:54.</b> Family and EVV updated.
+              <span className="flex-1">
+                <b>Example: covered in under 2 minutes.</b> Family and EVV updated.
               </span>
+              <button type="button" onClick={() => setRun((r) => r + 1)} className="min-h-11 shrink-0 rounded-full px-3 text-sm font-medium text-brand hover:bg-surface-2">
+                Replay demo
+              </button>
             </>
           ) : (
             <>
@@ -81,13 +90,13 @@ export function HeroDemo() {
           )}
         </div>
       </div>
-      <div className="absolute -bottom-14 right-4 hidden w-56 rotate-[-3deg] rounded-2xl border border-line bg-surface p-3 shadow-lift sm:block">
+      <div className="absolute -bottom-14 right-4 hidden w-56 rounded-2xl border border-line bg-surface p-3 shadow-lift sm:block">
         <div className="flex items-center gap-2">
-          <Avatar name="Lazaro P" className="size-7 text-[10px]" />
+          <Avatar name="Lazaro P" className="size-7 text-xs" />
           <p className="text-xs font-semibold">SMS · Lázaro</p>
         </div>
         <p className="mt-2 rounded-xl rounded-tl-sm bg-surface-2 px-3 py-2 text-xs">Turno HHA en Northside, mar 8a–2p. Responde 1 para aceptar.</p>
-        <p className="ml-auto mt-1.5 w-fit rounded-xl rounded-tr-sm bg-brand px-3 py-1.5 text-xs font-semibold text-brand-ink">1</p>
+        <p className="ml-auto mt-2 w-fit rounded-xl rounded-tr-sm bg-brand px-3 py-2 text-xs font-semibold text-brand-ink">1</p>
       </div>
     </div>
   );

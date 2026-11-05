@@ -6,7 +6,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { clientById, SHIFTS, shiftLabel } from "@/lib/data";
-import { rankForShift } from "@/lib/match";
+import { fillChance, rankForShift } from "@/lib/match";
 
 export const metadata = { title: "Shifts" };
 
@@ -18,7 +18,7 @@ export default function ShiftsPage() {
       <PageHead
         eyebrow="Schedule"
         title="Shifts"
-        sub="Every open visit gets a ranked bench. Click one to run outreach."
+        sub="Every open visit gets a ranked list of caregivers. Open one to start outreach."
         action={
           <ButtonLink href="/app/search">
             <Sparkles className="size-4" /> New shift
@@ -26,7 +26,7 @@ export default function ShiftsPage() {
         }
       />
       <Card className="overflow-hidden">
-        <div className="overflow-x-auto">
+        <div className="relative overflow-x-auto">
           <table className="w-full min-w-[720px] text-sm">
             <thead className="border-b border-line bg-surface-2/60 text-left text-xs text-muted">
               <tr>
@@ -35,6 +35,7 @@ export default function ShiftsPage() {
                 <th className="px-3 py-3 font-semibold">Role</th>
                 <th className="px-3 py-3 font-semibold">Reason</th>
                 <th className="px-3 py-3 font-semibold">Status</th>
+                <th className="px-3 py-3 font-semibold">Fill chance</th>
                 <th className="px-3 py-3 font-semibold">Best match</th>
                 <th className="px-3 py-3" />
               </tr>
@@ -60,6 +61,21 @@ export default function ShiftsPage() {
                     </td>
                     <td className="px-3 py-3 text-muted">{s.reason}</td>
                     <td className="px-3 py-3">
+                      {s.status === "filled" ? (
+                        <span className="text-muted">Filled</span>
+                      ) : (
+                        (() => {
+                          const f = fillChance(s);
+                          return (
+                            <span>
+                              <b className={f.level === "High" ? "text-ok" : f.level === "Medium" ? "text-warn" : "text-danger"}>{f.level}</b>{" "}
+                              <span className="text-muted">{f.pct}%</span>
+                            </span>
+                          );
+                        })()
+                      )}
+                    </td>
+                    <td className="px-3 py-3">
                       <Badge tone={st.tone} dot>
                         {st.label}
                       </Badge>
@@ -78,7 +94,7 @@ export default function ShiftsPage() {
                       )}
                     </td>
                     <td className="px-3 py-3 text-right">
-                      <Link href={`/app/shifts/${s.id}`} className="inline-grid size-9 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink" aria-label={`Open ${c.alias}`}>
+                      <Link href={`/app/shifts/${s.id}`} className="inline-grid size-11 place-items-center rounded-full text-muted hover:bg-surface-2 hover:text-ink" aria-label={`Open ${c.alias}`}>
                         <ArrowRight className="size-4" />
                       </Link>
                     </td>
