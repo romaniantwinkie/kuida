@@ -1,4 +1,4 @@
-# Competitor review → ideas for Kuida
+# Competitor review → ideas for Cercana
 
 Sources: I read the product pages of ShiftCare SmartMatch, Statewise AI,
 Zingage, CareConnect ShiftMatch.AI and MapleCare (Nov 2026). Notes on
@@ -20,7 +20,7 @@ general product knowledge and should be re-checked against their sites.
    self-serve app** (ShiftMatch "Caregiver Choice", AxisCare / AlayaCare mobile).
 7. Lead marketing with **outcome metrics**: time-to-fill, coverage %, coordinator hours saved.
 
-## What Kuida 2 implements (demo)
+## What Cercana implements (demo)
 
 | Idea | Seen in | Where in `kuidao/` |
 |---|---|---|
@@ -36,7 +36,7 @@ general product knowledge and should be re-checked against their sites.
 | Outcome KPIs (fill rate, time-to-fill, calls saved) | Zingage, ShiftMatch | `/app` KPI tiles |
 | Roster import + text invites during onboarding | AlayaCare / WellSky onboarding | `/signup/agency` step 3 |
 
-**Where Kuida stays different:** a flat per-location price with caregivers always free;
+**Where Cercana stays different:** a flat per-location price with caregivers always free;
 privacy by design (agencies don't see caregiver phones, and caregivers don't see the
 client's address until they're assigned); bilingual (English/Spanish) for caregivers nationwide; and a clear
 "software, not a registry" legal posture.

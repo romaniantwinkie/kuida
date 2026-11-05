@@ -94,7 +94,7 @@ export function LiveMap({
         fillColor: token(TONE_TOKEN[p.tone ?? "brand"], el.current),
         fillOpacity: 1,
       }).addTo(layer.current);
-      if (p.label) m.bindTooltip(p.label, { direction: "right", offset: [8, 0], permanent: sel, className: "kuida-tip" });
+      if (p.label) m.bindTooltip(p.label, { direction: "right", offset: [8, 0], permanent: sel, className: "cercana-tip" });
     }
   }
 
@@ -146,5 +146,5 @@ export function LiveMap({
     draw();
   }, [region]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <div ref={el} className={cn("kuida-live-map h-full w-full", className)} role="img" aria-label="Street map of nearby caregivers" />;
+  return <div ref={el} className={cn("cercana-live-map h-full w-full", className)} role="img" aria-label="Street map of nearby caregivers" />;
 }

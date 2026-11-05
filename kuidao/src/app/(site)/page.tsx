@@ -45,7 +45,7 @@ const FEATURES = [
   {
     icon: FileSignature,
     title: "Pre-credentialed caregivers",
-    body: "Caregivers keep verified documents in their Kuida vault and share them with you in one tap. Hire without chasing paperwork; get alerts 30 days before anything expires.",
+    body: "Caregivers keep verified documents in their Cercana vault and share them with you in one tap. Hire without chasing paperwork; get alerts 30 days before anything expires.",
     className: "md:col-span-2",
     demo: "vault",
   },
@@ -63,14 +63,14 @@ const FEATURES = [
 ];
 
 const STEPS = [
-  { icon: CalendarClock, t: "0:00", title: "Call-out logged", body: "Text, call or one tap in the console. Kuida reads the client's needs and the visit window." },
+  { icon: CalendarClock, t: "0:00", title: "Call-out logged", body: "Text, call or one tap in the console. Cercana reads the client's needs and the visit window." },
   { icon: Sparkles, t: "0:05", title: "Roster ranked", body: "Hard rules screen out anyone ineligible. Everyone else is scored and sorted, with the reasons." },
   { icon: Waves, t: "0:10", title: "Offers go out", body: "Bilingual SMS + app push to the top wave. Declines and silences roll to the next wave." },
   { icon: ShieldCheck, t: "0:04+", title: "Confirmed", body: "First yes wins. Credentials re-checked, family notified, EVV visit created." },
 ];
 
 const FAQ = [
-  ["Is Kuida a nurse registry or staffing agency?", "No. Kuida is software. Caregivers contract with your licensed agency, never with us, and we don't set pay or employ anyone."],
+  ["Is Cercana a nurse registry or staffing agency?", "No. Cercana is software. Caregivers contract with your licensed agency, never with us, and we don't set pay or employ anyone."],
   ["Do caregivers need to download an app?", "No. Offers arrive by SMS (reply 1 or 2) and the app is optional — it's where they manage hours, documents and history."],
   ["How is the match score calculated?", "Six weighted factors totaling 100. Any coordinator can open a score and see the points behind each factor. Hard rules (role, expired credentials, required language, availability) are applied first."],
   ["What is the founding offer?", "The first 50 agencies to sign up get 6 months free on any plan, with every feature. No card is needed to start, and you can cancel any time."],
@@ -90,7 +90,7 @@ export default function Home() {
               The call-out is covered <span className="text-brand">before</span> the family calls.
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-              Kuida ranks your caregivers for every open shift and texts offers in English or Spanish until someone accepts. You stay in control.
+              Cercana ranks your caregivers for every open shift and texts offers in English or Spanish until someone accepts. You stay in control.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <ButtonLink href="/app" size="lg">
@@ -194,7 +194,7 @@ export default function Home() {
             <p className="eyebrow">Find caregivers</p>
             <h2 className="mt-3 font-display text-4xl tracking-tight">See who&apos;s free near the case, on a real map.</h2>
             <p className="mt-3 text-muted">
-              Enter the visit and Kuida plots every eligible caregiver around the client, ranked and explained. Switch to aerial, streets or drive-time
+              Enter the visit and Cercana plots every eligible caregiver around the client, ranked and explained. Switch to aerial, streets or drive-time
               rings, and expand to full screen.
             </p>
           </div>
@@ -296,7 +296,7 @@ export default function Home() {
       {/* CTA */}
       <section className="px-4 py-16 sm:px-6">
         <div className="mx-auto max-w-6xl rounded-3xl border border-line bg-surface px-8 py-14 shadow-card sm:px-14">
-          <h2 className="max-w-xl font-display text-4xl tracking-tight">Next call-out, let Kuida make the calls.</h2>
+          <h2 className="max-w-xl font-display text-4xl tracking-tight">Next call-out, let Cercana make the calls.</h2>
           <p className="mt-3 max-w-lg text-muted">Set up an office in ten minutes with your state license number, then import your roster from a spreadsheet.</p>
           <div className="mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/signup/agency" size="lg">

@@ -6,7 +6,7 @@ export default function LegalPage() {
   return (
     <main className="mx-auto max-w-2xl px-4 py-16 sm:px-6">
       <p className="eyebrow">Legal</p>
-      <h1 className="mt-3 font-display text-4xl">How Kuida works</h1>
+      <h1 className="mt-3 font-display text-4xl">How Cercana works</h1>
       <div className="mt-8 space-y-5 text-[15px] leading-relaxed text-muted">
         <p className="rounded-2xl border border-line bg-surface p-5 text-ink">{LEGAL_LINE}</p>
         <p>

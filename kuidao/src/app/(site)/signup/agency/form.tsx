@@ -17,7 +17,7 @@ const email: (v: string) => string | null = (v) =>
 export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
   const [step, setStep] = useState(0);
   const [done, setDone] = useState(false);
-  const draft = useDraft("kuida-draft-agency", {
+  const draft = useDraft("cercana-draft-agency", {
     name: "",
     zip: "",
     city: "",

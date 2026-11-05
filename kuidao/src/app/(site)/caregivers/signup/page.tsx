@@ -28,7 +28,7 @@ export default function CaregiverSignup() {
   const [done, setDone] = useState(false);
   const [photo, setPhoto] = useState<string | null>(null);
   const [mobile, setMobile] = useState(""); // not saved in the draft (personal data)
-  const draft = useDraft("kuida-draft-caregiver", {
+  const draft = useDraft("cercana-draft-caregiver", {
     name: "",
     zip: "",
     city: "",

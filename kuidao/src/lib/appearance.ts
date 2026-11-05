@@ -12,7 +12,7 @@ export const MAP_STYLES = [
 ] as const;
 export type MapStyleId = (typeof MAP_STYLES)[number]["id"];
 
-const KEYS = { map: "kuida-map", region: "kuida-region", font: "kuida-font" } as const;
+const KEYS = { map: "cercana-map", region: "cercana-region", font: "cercana-font" } as const;
 
 function makeStore<T extends string>(key: string, fallback: T, valid: readonly string[]) {
   const listeners = new Set<() => void>();

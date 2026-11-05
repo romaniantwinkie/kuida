@@ -359,7 +359,7 @@ export function MatchBoard({
                     <MessageSquareText className="size-3.5" /> Offer preview (ES)
                   </p>
                   <p className="mt-2 text-sm leading-relaxed">
-                    Kuida: Turno {shift.role} en {client.area}, {DAYS[shift.day].toLowerCase()} {fmtHour(shift.start)}–{fmtHour(shift.end)}, ${shift.pay[0]}–{shift.pay[1]}/h. Responde <b>1</b> para aceptar o <b>2</b> para pasar.
+                    Cercana: Turno {shift.role} en {client.area}, {DAYS[shift.day].toLowerCase()} {fmtHour(shift.start)}–{fmtHour(shift.end)}, ${shift.pay[0]}–{shift.pay[1]}/h. Responde <b>1</b> para aceptar o <b>2</b> para pasar.
                   </p>
                 </div>
               </>

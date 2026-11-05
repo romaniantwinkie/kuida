@@ -4,7 +4,7 @@ import { useSyncExternalStore } from "react";
 
 export type Lang = "en" | "es";
 
-const KEY = "kuida-lang";
+const KEY = "cercana-lang";
 const listeners = new Set<() => void>();
 let current: Lang | null = null;
 

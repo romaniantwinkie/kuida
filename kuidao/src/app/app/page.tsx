@@ -27,8 +27,8 @@ const WEEK: Array<[number, number]> = [
 ];
 
 const ACTIVITY = [
-  { who: "Kuida", text: "Filled Sr. R. Thu 10a–4p with Daniel S. (score 91)", t: "6:12a", icon: Zap },
-  { who: "Kuida", text: "Caught Rosa V.'s expired CPR — removed from 2 offers", t: "5:40a", icon: ShieldAlert },
+  { who: "Cercana", text: "Filled Sr. R. Thu 10a–4p with Daniel S. (score 91)", t: "6:12a", icon: Zap },
+  { who: "Cercana", text: "Caught Rosa V.'s expired CPR — removed from 2 offers", t: "5:40a", icon: ShieldAlert },
   { who: "Niurka D.", text: "Called out Tue 8a–2p (Sra. G.) — reason: sick", t: "5:31a", icon: AlertTriangle },
   { who: "Ana M.", text: "Approved Yanelis M.'s schedule change (Fri)", t: "Yesterday", icon: Clock },
 ];
@@ -58,7 +58,7 @@ export default function TodayPage() {
       <PageHead
         eyebrow="Tuesday · Northside office"
         title="Buenos días, Ana"
-        sub={`${open.length} shifts need attention. Kuida handled 3 call-outs overnight.`}
+        sub={`${open.length} shifts need attention. Cercana handled 3 call-outs overnight.`}
         action={
           <ButtonLink href="/app/search">
             <Sparkles className="size-4" /> New shift
@@ -75,7 +75,7 @@ export default function TodayPage() {
           <div className="min-w-0 flex-1">
             <p className="eyebrow">Overnight brief · 9p–7a</p>
             <p className="mt-2 max-w-3xl leading-relaxed">
-              <b>3 call-outs came in.</b> Kuida filled 2 automatically (avg 3m 40s). <b>Sra. G. Tue 8a–2p is still open</b> — Niurka called out sick and the
+              <b>3 call-outs came in.</b> Cercana filled 2 automatically (avg 3m 40s). <b>Sra. G. Tue 8a–2p is still open</b> — Niurka called out sick and the
               Spanish-required rule narrows the roster to 6. Rosa V.&apos;s CPR expired, so she was held back from 2 offers.
             </p>
           </div>
@@ -156,11 +156,11 @@ export default function TodayPage() {
 
         {/* Activity */}
         <Card>
-          <CardHeader title="Activity" subtitle="What Kuida and your team did" />
+          <CardHeader title="Activity" subtitle="What Cercana and your team did" />
           <ul className="space-y-4 p-5">
             {ACTIVITY.map((a, i) => (
               <li key={i} className="flex gap-3">
-                {a.who === "Kuida" ? (
+                {a.who === "Cercana" ? (
                   <span className="grid size-9 shrink-0 place-items-center rounded-full bg-brand text-brand-ink">
                     <a.icon className="size-4" />
                   </span>

@@ -1,5 +1,5 @@
 /**
- * Demo regions. Kuida is nationwide; the sample office can sit in any metro.
+ * Demo regions. Cercana is nationwide; the sample office can sit in any metro.
  * The demo grid (0–100 × 0–60) is projected around `center` for real-tile maps.
  * Centers are picked so the demo bench lands on land, not water.
  */

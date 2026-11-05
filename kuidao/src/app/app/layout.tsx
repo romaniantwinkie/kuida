@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { AppSidebar, AppTopbar } from "@/components/app-nav";
 import { CommandPalette } from "@/components/command-palette";
 
-export const metadata: Metadata = { title: { default: "Console", template: "%s · Kuida console" } };
+export const metadata: Metadata = { title: { default: "Console", template: "%s · Cercana console" } };
 
 export default function ConsoleLayout({ children }: { children: React.ReactNode }) {
   return (

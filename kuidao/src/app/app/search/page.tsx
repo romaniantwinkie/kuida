@@ -17,7 +17,7 @@ import { latLngToGrid, nearestRegion, regionById } from "@/lib/regions";
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6);
 const SKILLS = ["Dementia care", "Hoyer lift", "Diabetic care", "Wound care", "Companionship", "Meal prep"];
 const SAMPLE: Place = { address: "1600 NW 27th Ave, Miami, Florida, 33125", lat: 25.789071, lng: -80.239843 };
-const PREFS_KEY = "kuida-search-prefs";
+const PREFS_KEY = "cercana-search-prefs";
 
 type Prefs = { day: number; start: number; end: number; role: Role; language: string; required: boolean; skill: string };
 const todayIndex = () => (new Date().getDay() + 6) % 7; // Mon = 0
@@ -79,7 +79,7 @@ export default function SearchPage() {
 
   return (
     <>
-      <PageHead eyebrow="Find caregivers" title="Who's free near the client?" sub="Type the exact address. Kuida ranks every eligible caregiver around it." />
+      <PageHead eyebrow="Find caregivers" title="Who's free near the client?" sub="Type the exact address. Cercana ranks every eligible caregiver around it." />
       <Card className="mb-6 p-6">
         <form
           onSubmit={(e) => {

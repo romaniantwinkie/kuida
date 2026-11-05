@@ -21,7 +21,7 @@ export function ThemeToggle({ className, tooltipSide }: { className?: string; to
 
   useEffect(() => {
     try {
-      const saved = localStorage.getItem("kuida-theme") as Mode | null;
+      const saved = localStorage.getItem("cercana-theme") as Mode | null;
       if (saved && order.includes(saved)) setMode(saved);
     } catch {}
   }, []);
@@ -31,7 +31,7 @@ export function ThemeToggle({ className, tooltipSide }: { className?: string; to
     setMode(n);
     apply(n);
     try {
-      localStorage.setItem("kuida-theme", n);
+      localStorage.setItem("cercana-theme", n);
     } catch {}
   }
 

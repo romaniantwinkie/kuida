@@ -1,6 +1,6 @@
-# Kuida 2 (`kuidao/`)
+# Cercana (`kuidao/`)
 
-A full UI/theme redesign of Kuida, built as a **standalone copy** of the app.
+A full UI/theme redesign of Cercana, built as a **standalone copy** of the app.
 The original site at the repo root is untouched. This folder has its own
 `package.json` and can be moved into its own repository as-is.
 
@@ -59,7 +59,7 @@ nav, CTAs, login and footer follow the side you're on (`src/lib/audience.ts`).
   Caregivers add a real photo in signup step 1.
 - Clicking a caregiver anywhere in the console (roster, match board, copilot) opens a **contact card**: photo, role,
   experience, area, languages, availability, vault credentials and skills. It has **no phone number or email**;
-  contact goes through Kuida messages and offers.
+  contact goes through Cercana messages and offers.
 - **Credential vault** (`src/components/credential-vault.tsx`, English/Spanish): caregivers upload ID, certificate,
   background check, TB and CPR once, then share **per document, per agency, for 30 days** (extendable, revocable).
   Agencies can request a document and the caregiver approves or declines. Includes I-9/W-4 e-sign, expiry text

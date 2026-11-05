@@ -6,7 +6,7 @@ import "./palettes.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: { default: "Kuida — fill home-care shifts in minutes", template: "%s · Kuida" },
+  title: { default: "Cercana — fill home-care shifts in minutes", template: "%s · Cercana" },
   description:
     "Explainable caregiver matching and automated, bilingual shift outreach for licensed home care agencies and nurse registries across the US.",
 };

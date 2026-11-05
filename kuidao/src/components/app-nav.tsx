@@ -24,7 +24,7 @@ export const APP_NAV = [
   { href: "/app/compliance", label: "Compliance log", icon: FileClock },
 ];
 
-const openSearch = () => window.dispatchEvent(new Event("kuida:command"));
+const openSearch = () => window.dispatchEvent(new Event("cercana:command"));
 
 function isActive(pathname: string, href: string) {
   return href === "/app" ? pathname === "/app" : pathname.startsWith(href);

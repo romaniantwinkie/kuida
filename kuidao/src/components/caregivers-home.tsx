@@ -24,7 +24,7 @@ const STEPS = [
 ];
 
 const BENEFITS = [
-  { icon: EyeOff, title: { en: "Your number stays private", es: "Tu número es privado" }, body: { en: "Agencies message you through Kuida, never your phone.", es: "Las agencias te escriben por Kuida, nunca a tu teléfono." } },
+  { icon: EyeOff, title: { en: "Your number stays private", es: "Tu número es privado" }, body: { en: "Agencies message you through Cercana, never your phone.", es: "Las agencias te escriben por Cercana, nunca a tu teléfono." } },
   { icon: Clock, title: { en: "Only shifts that fit", es: "Solo turnos que te sirven" }, body: { en: "Offers match the days, hours and distance you set.", es: "Las ofertas respetan tus días, horas y distancia." } },
   { icon: Wallet, title: { en: "Pay shown up front", es: "El pago, desde el inicio" }, body: { en: "Every offer shows the hourly range before you say yes.", es: "Cada oferta muestra el pago por hora antes de aceptar." } },
   { icon: BellRing, title: { en: "Expiry reminders", es: "Recordatorios" }, body: { en: "We text you 30 days before a credential expires.", es: "Te avisamos 30 días antes de que un documento venza." } },
@@ -33,10 +33,10 @@ const BENEFITS = [
 ];
 
 const FAQ = [
-  { q: { en: "Is it really free?", es: "¿De verdad es gratis?" }, a: { en: "Yes. Kuida is free for caregivers, always: no sign-up fee, no monthly fee, and no cut of your pay.", es: "Sí. Kuida es gratis para cuidadores, siempre: sin cuota de registro, sin mensualidad y sin quitarte parte de tu pago." } },
-  { q: { en: "Who do I work for?", es: "¿Para quién trabajo?" }, a: { en: "The licensed agency that offers you the shift. Kuida is software that connects you; we are not your employer.", es: "Para la agencia con licencia que te ofrece el turno. Kuida es el software que los conecta; no somos tu empleador." } },
+  { q: { en: "Is it really free?", es: "¿De verdad es gratis?" }, a: { en: "Yes. Cercana is free for caregivers, always: no sign-up fee, no monthly fee, and no cut of your pay.", es: "Sí. Cercana es gratis para cuidadores, siempre: sin cuota de registro, sin mensualidad y sin quitarte parte de tu pago." } },
+  { q: { en: "Who do I work for?", es: "¿Para quién trabajo?" }, a: { en: "The licensed agency that offers you the shift. Cercana is software that connects you; we are not your employer.", es: "Para la agencia con licencia que te ofrece el turno. Cercana es el software que los conecta; no somos tu empleador." } },
   { q: { en: "Who can see my documents?", es: "¿Quién puede ver mis documentos?" }, a: { en: "Only agencies you choose, only the documents you pick, and only for the time you allow. They can view but not download, and you see every view.", es: "Solo las agencias que elijas, solo los documentos que marques y solo por el tiempo que permitas. Pueden verlos pero no descargarlos, y tú ves cada visita." } },
-  { q: { en: "Will agencies see my phone number?", es: "¿Las agencias verán mi número?" }, a: { en: "No. Agencies message you through Kuida, and offers come by text from Kuida's number.", es: "No. Las agencias te escriben por Kuida y las ofertas llegan por texto desde el número de Kuida." } },
+  { q: { en: "Will agencies see my phone number?", es: "¿Las agencias verán mi número?" }, a: { en: "No. Agencies message you through Cercana, and offers come by text from Cercana's number.", es: "No. Las agencias te escriben por Cercana y las ofertas llegan por texto desde el número de Cercana." } },
   { q: { en: "What do I need to join?", es: "¿Qué necesito para unirme?" }, a: { en: "A mobile phone and your role (HHA, CNA, LPN or companion). You can add documents now or later.", es: "Un celular y tu rol (HHA, CNA, LPN o acompañante). Puedes subir documentos ahora o después." } },
 ];
 
@@ -52,7 +52,7 @@ export function CaregiversHome() {
               <Check className="size-4" /> {t({ en: "Free for caregivers, always", es: "Gratis para cuidadores, siempre" })}
             </p>
             <h1 className="mt-6 text-[40px] font-semibold leading-[1.1] tracking-tight sm:text-6xl">
-              {t({ en: "One profile for every agency on Kuida.", es: "Un perfil para todas las agencias en Kuida." })}
+              {t({ en: "One profile for every agency on Cercana.", es: "Un perfil para todas las agencias en Cercana." })}
             </h1>
             <p className="mt-6 max-w-[60ch] text-lg leading-relaxed text-muted">
               {t({
@@ -95,8 +95,8 @@ export function CaregiversHome() {
             </h2>
             <p className="mt-4 max-w-[60ch] leading-relaxed text-muted">
               {t({
-                en: "Every new agency asks for the same papers. With Kuida you upload them once, then choose which agency sees which document, and for how long.",
-                es: "Cada agencia nueva pide los mismos papeles. Con Kuida los subes una vez y eliges qué agencia ve cada documento, y por cuánto tiempo.",
+                en: "Every new agency asks for the same papers. With Cercana you upload them once, then choose which agency sees which document, and for how long.",
+                es: "Cada agencia nueva pide los mismos papeles. Con Cercana los subes una vez y eliges qué agencia ve cada documento, y por cuánto tiempo.",
               })}
             </p>
             <ul className="mt-8 space-y-4">

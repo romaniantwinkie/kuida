@@ -1,4 +1,4 @@
-/** Demo message threads. Kuida relays these by text; no phone numbers are shown. */
+/** Demo message threads. Cercana relays these by text; no phone numbers are shown. */
 export type Msg = { from: "agency" | "caregiver"; text: string; at: string; translated?: string };
 export type Thread = { caregiverId: string; unread: number; messages: Msg[] };
 

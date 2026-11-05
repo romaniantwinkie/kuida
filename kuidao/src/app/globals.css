@@ -71,14 +71,14 @@ th {
 }
 
 /* Leaflet skin: follow the active palette. */
-.kuida-live-map.leaflet-container {
+.cercana-live-map.leaflet-container {
   background: rgb(var(--surface-2));
   font: inherit;
 }
-.kuida-live-map .leaflet-control-attribution a {
+.cercana-live-map .leaflet-control-attribution a {
   font-weight: 400;
 }
-.kuida-live-map .leaflet-control-zoom a {
+.cercana-live-map .leaflet-control-zoom a {
   width: 44px;
   height: 44px;
   line-height: 44px;
@@ -87,7 +87,7 @@ th {
   color: rgb(var(--ink));
   border-color: rgb(var(--line));
 }
-.kuida-live-map .leaflet-control-attribution {
+.cercana-live-map .leaflet-control-attribution {
   background: rgb(var(--surface) / 0.85);
   color: rgb(var(--muted));
   font-size: 12px;
@@ -96,10 +96,10 @@ th {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.kuida-live-map .leaflet-control-attribution a {
+.cercana-live-map .leaflet-control-attribution a {
   color: rgb(var(--brand));
 }
-.kuida-live-map .kuida-tip {
+.cercana-live-map .cercana-tip {
   background: rgb(var(--ink));
   color: rgb(var(--bg));
   border: 0;
@@ -108,6 +108,6 @@ th {
   font-size: 12px;
   box-shadow: none;
 }
-.kuida-live-map .kuida-tip::before {
+.cercana-live-map .cercana-tip::before {
   display: none;
 }

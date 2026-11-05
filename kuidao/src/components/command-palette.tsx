@@ -50,10 +50,10 @@ export function CommandPalette() {
     };
     const onOpen = () => setOpen(true);
     window.addEventListener("keydown", onKey);
-    window.addEventListener("kuida:command", onOpen);
+    window.addEventListener("cercana:command", onOpen);
     return () => {
       window.removeEventListener("keydown", onKey);
-      window.removeEventListener("kuida:command", onOpen);
+      window.removeEventListener("cercana:command", onOpen);
     };
   }, []);
 
@@ -69,7 +69,7 @@ export function CommandPalette() {
   }
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} label="Search Kuida">
+    <Dialog open={open} onClose={() => setOpen(false)} label="Search Cercana">
       <div className="flex items-center gap-3 border-b border-line px-4">
         <Search className="size-4 text-muted" aria-hidden="true" />
         <label htmlFor="cmdk" className="sr-only">

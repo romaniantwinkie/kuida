@@ -18,7 +18,7 @@ function credTone(days: number) {
 
 /**
  * Contact card for a caregiver, as an agency sees it. Deliberately has no
- * phone number or email: contact always goes through Kuida.
+ * phone number or email: contact always goes through Cercana.
  */
 export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
   const known = Object.entries(c.history)
@@ -85,7 +85,7 @@ export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
         </div>
 
         <div>
-          <p className="eyebrow">Credentials · from their Kuida vault</p>
+          <p className="eyebrow">Credentials · from their Cercana vault</p>
           <ul className="mt-2 divide-y divide-line rounded-2xl border border-line">
             {c.credentials.map((cr) => {
               const t = credTone(cr.expiresInDays);
@@ -115,7 +115,7 @@ export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
         <p className="flex items-start gap-2 rounded-2xl bg-surface-2 px-4 py-3 text-sm text-muted">
           <Lock className="mt-0.5 size-4 shrink-0" />
           <span>
-            <b className="text-ink">Phone number private.</b> Messages and shift offers go through Kuida, by text, in the caregiver&apos;s language.
+            <b className="text-ink">Phone number private.</b> Messages and shift offers go through Cercana, by text, in the caregiver&apos;s language.
           </span>
         </p>
       </div>

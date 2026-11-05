@@ -6,7 +6,7 @@ import { Bell, CalendarDays, Check, Clock, FileText, Home, MapPin, MessageSquare
 import { CaregiverAvatar } from "@/components/caregiver-avatar";
 import { CredentialVault } from "@/components/credential-vault";
 import { LangToggle } from "@/components/lang-toggle";
-import { LogoMark } from "@/components/logo";
+import { Wordmark } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -94,8 +94,8 @@ export default function CaregiverApp() {
     <div className="min-h-screen bg-surface-2">
       <div className="mx-auto flex min-h-screen max-w-md flex-col bg-bg sm:border-x sm:border-line">
         <header className="flex items-center justify-between px-4 pb-2 pt-4">
-          <Link href="/caregivers" aria-label={t({ en: "Kuida home", es: "Inicio de Kuida" })} className="inline-flex min-h-11 min-w-11 items-center justify-center">
-            <LogoMark className="size-9" />
+          <Link href="/caregivers" aria-label={t({ en: "Cercana home", es: "Inicio de Cercana" })} className="inline-flex min-h-11 min-w-11 items-center">
+            <Wordmark className="text-[22px]" />
           </Link>
           <div className="flex items-center gap-1">
             <LangToggle />
