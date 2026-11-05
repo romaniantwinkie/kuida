@@ -114,7 +114,7 @@ const DOCS = ["Photo ID", "HHA certificate", "Background check", "TB test", "CPR
 $("a6c").innerHTML = `<div style="padding:28px 32px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px"><img src="${AV["Xiomara R"]}" style="width:64px;height:64px;border-radius:50%"/><div><p class="name">Xiomara R. shared 5 documents</p><p class="meta">With your agency · view-only · every view logged</p></div></div>` +
   DOCS.map((d, i) => `<div class="row" id="d${i}" style="padding:22px 32px"><span class="okicon">${CHECK}</span><p class="name" style="flex:1;font-size:28px">${d}</p><span class="chip" style="background:var(--okbg);color:var(--ok)">Verified</span></div>`).join("");
 
-window.__DURATION = 30;
+window.__DURATION = TIMING.agency.total;
 window.__render = function (t) {
   let [l, L] = scene(0, t, S); show($("a1w"), l, 0.05, L - 0.45, 40, 0.7); show($("a1t"), l, 0.45, L - 0.45, 24, 0.6);
 

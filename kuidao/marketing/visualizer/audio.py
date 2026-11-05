@@ -22,7 +22,7 @@ def env(n, a, r, sustain=1.0):
     if ri: e[-ri:] = np.linspace(sustain, 0, ri)
     return e
 
-def music(seed_shift=0):
+def music(DUR):
     n = int(DUR * SR)
     L = np.zeros(n); R = np.zeros(n)
     bpm = 88; beat = 60 / bpm; bar = 4 * beat
@@ -105,12 +105,15 @@ def write_wav(path, L, R):
 
 S = sys.argv[1]
 timing = json.load(open(f"{S}/video/timing.json"))
-mL, mR = music()
+VO = sys.argv[2] if len(sys.argv) > 2 else "vo"
 for vid in ("agency", "caregiver"):
+    DUR = timing[vid]["total"]
+    mL, mR = music(DUR)
     n = int(DUR * SR)
     voice = np.zeros(n)
     for i, at in enumerate(timing[vid]["vo"]):
-        x = read_wav(f"{S}/vo/{vid}-{i}.wav")
+        if at is None: continue
+        x = read_wav(f"{S}/{VO}/{vid}-{i}.wav")
         s = int(at * SR); e = min(n, s + len(x)); voice[s:e] += x[: e - s]
     voice /= np.max(np.abs(voice)) + 1e-9
     voice *= 0.8

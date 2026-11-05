@@ -15,7 +15,8 @@ const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 1920, height: 1080 } });
 await p.goto("file://" + path.join(dir, `${vid}.html`), { waitUntil: "networkidle" });
 await p.evaluate(() => document.fonts.ready);
-for (let f = 0; f < 900; f++) {
+const n = Math.round((await p.evaluate(() => window.__DURATION)) * 30);
+for (let f = 0; f < n; f++) {
   await p.evaluate((t) => window.__render(t), f / 30);
   await p.screenshot({ path: path.join(frames, String(f).padStart(4, "0") + ".jpg"), type: "jpeg", quality: 92 });
 }

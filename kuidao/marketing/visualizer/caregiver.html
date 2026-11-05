@@ -20,7 +20,7 @@
 <div class="scene" id="s2">
   <div id="c2t" style="position:absolute;left:140px;top:340px;width:760px">
     <p class="eyebrow">Sound familiar?</p>
-    <h2 style="margin-top:24px">The same papers, to every agency.</h2>
+    <h2 style="margin-top:24px">Care for people. Not paperwork.</h2>
   </div>
   <div id="c2s" style="position:absolute;right:160px;top:220px;width:760px"></div>
 </div>
@@ -94,7 +94,7 @@ $("c4c").innerHTML = SH.map((s, i) => `<div class="row" style="padding:28px 32px
   <span id="tg${i}" style="position:relative;width:84px;height:48px;border-radius:99px;background:#DFE3E8;flex:none"><i id="kn${i}" style="position:absolute;top:6px;left:6px;width:36px;height:36px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgb(0 0 0 / .2)"></i></span></div>`).join("") +
   `<div style="padding:22px 32px;border-top:1px solid var(--line);background:#F6F7F9;display:flex;align-items:center;gap:14px;font-size:24px;color:var(--muted)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#5D6774" stroke-width="2" stroke-linecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Agencies view, never download. Your number stays private.</div>`;
 
-window.__DURATION = 30;
+window.__DURATION = TIMING.caregiver.total;
 window.__render = function (t) {
   let [l, L] = scene(0, t, S); show($("c1w"), l, 0.05, L - 0.45, 40, 0.7); show($("c1t"), l, 0.5, L - 0.45, 24, 0.6);
 
@@ -108,7 +108,7 @@ window.__render = function (t) {
   SH.forEach((s, i) => { const k = s[1] ? prog(l, 1.0 + i * 0.5, 0.35) : 0; $("tg" + i).style.background = k > 0.5 ? "#1D4ED8" : "#DFE3E8"; $("kn" + i).style.left = (6 + 36 * k) + "px"; });
 
   [l, L] = scene(4, t, S); show($("c5t"), l, 0.1, L - 0.45); show($("phone"), l, 0.3, L - 0.45, 40, 0.7);
-  show($("sms1"), l, 0.8, null, 16, 0.5); show($("sms2"), l, 3.0, null, 16, 0.4); show($("sms3"), l, 3.7, null, 16, 0.5);
+  show($("sms1"), l, 0.8, null, 16, 0.5); show($("sms2"), l, L - 2.1, null, 16, 0.4); show($("sms3"), l, L - 1.4, null, 16, 0.5);
 
   [l, L] = scene(5, t, S); const k6 = prog(l, 0.05, 0.6); $("c6p").style.opacity = k6 * (1 - clamp((l - (L - 0.45)) / 0.4)); $("c6p").style.transform = `scale(${0.85 + 0.15 * k6})`;
   show($("c6h"), l, 0.5, L - 0.45);
