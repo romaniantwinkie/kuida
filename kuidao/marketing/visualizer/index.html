@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="avatars.js"></script>
+<style>
+  :root { --blue:#1D4ED8; --blue2:#2563EB; --soft:#E7EEFD; --ink:#0F141B; --muted:#5D6774; --line:#DFE3E8; --bg:#F6F7F9; --ok:#16964A; --okbg:#E3F4EA; --warn:#B86A06; --danger:#D22C2C; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); font-family: Inter, sans-serif; color: var(--ink); }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .word { font-size: 168px; font-weight: 600; letter-spacing: -0.045em; line-height: 1; }
+  .dot { color: var(--blue); }
+  h2 { font-size: 72px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.08; }
+  .lead { font-size: 34px; color: var(--muted); line-height: 1.4; }
+  .eyebrow { font-size: 22px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 28px; box-shadow: 0 2px 4px rgb(15 20 27 / .04), 0 24px 48px -24px rgb(15 20 27 / .08); }
+  .row { display: flex; align-items: center; gap: 24px; padding: 24px 32px; border-top: 1px solid var(--line); }
+  .row:first-child { border-top: 0; }
+  .av { width: 64px; height: 64px; border-radius: 50%; }
+  .name { font-size: 30px; font-weight: 600; }
+  .meta { font-size: 22px; color: var(--muted); margin-top: 4px; }
+  .chip { font-size: 20px; font-weight: 600; padding: 8px 18px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+  .chip::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+  .ring { position: relative; width: 76px; height: 76px; flex: none; }
+  .ring span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 24px; font-weight: 600; }
+  .bar { height: 10px; background: #EEF0F3; border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--blue); border-radius: 99px; }
+  .bubble { font-size: 30px; line-height: 1.35; padding: 22px 28px; border-radius: 28px; max-width: 520px; }
+</style>
+</head>
+<body>
+
+<!-- S1: logo -->
+<div class="scene center" id="s1">
+  <div class="word" id="s1w">cercana<span class="dot">.</span></div>
+  <p class="lead" id="s1t" style="margin-top:32px;font-size:40px">Home care shifts, covered close by.</p>
+</div>
+
+<!-- S2: call-out + map -->
+<div class="scene" id="s2">
+  <div style="position:absolute;left:140px;top:300px;width:700px">
+    <p class="eyebrow" id="s2e">6:02 AM</p>
+    <h2 id="s2h" style="margin-top:24px">An aide calls out sick.</h2>
+    <p class="lead" id="s2l" style="margin-top:24px">Sra. G. still needs care at 8:00. Who can cover?</p>
+    <div class="card" id="s2c" style="margin-top:48px;padding:28px 32px;display:flex;justify-content:space-between;align-items:center">
+      <div><p class="meta" style="margin:0;font-size:20px;letter-spacing:.12em;text-transform:uppercase;font-weight:600">Call-out · Northside</p><p class="name" style="margin-top:8px">HHA · Tue 8a–2p · Spanish</p></div>
+      <span class="chip" style="background:#FDE8E8;color:var(--danger)">Open</span>
+    </div>
+  </div>
+  <div class="card" id="s2m" style="position:absolute;right:140px;top:170px;width:860px;height:740px;overflow:hidden">
+    <svg viewBox="0 0 100 86" width="860" height="740" preserveAspectRatio="xMidYMid slice">
+      <rect width="100" height="86" fill="#EEF1F5"/>
+      <path d="M80 0 C76 14 82 26 77 38 C72 50 78 62 74 74 C72 80 74 86 74 86 L100 86 L100 0Z" fill="#DCE6F5"/>
+      <g stroke="#DDE2EA" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M0 34 L74 34"/><path d="M46 0 L46 86"/><path d="M0 58 C24 55 46 61 74 52"/><path d="M20 0 C24 30 22 58 18 86"/></g>
+      <g stroke="#E6E9EE" stroke-width=".6" fill="none"><path d="M0 16 L76 16"/><path d="M0 72 L72 72"/><path d="M32 0 L32 86"/><path d="M60 0 L62 86"/></g>
+      <circle id="ring1" cx="40" cy="40" r="18" fill="rgb(29 78 216 / .06)" stroke="rgb(29 78 216 / .35)" stroke-width=".4" stroke-dasharray="1.2 1"/>
+      <g id="pins"></g>
+      <g id="client"><circle cx="40" cy="40" r="3.6" fill="#fff" stroke="#1D4ED8" stroke-width="1.8"/></g>
+    </svg>
+  </div>
+</div>
+
+<!-- S3: ranking -->
+<div class="scene" id="s3">
+  <div style="position:absolute;left:140px;top:300px;width:620px">
+    <p class="eyebrow">Matching</p>
+    <h2 style="margin-top:24px">Your roster, ranked. With the reasons.</h2>
+    <p class="lead" style="margin-top:24px">Availability, distance, language, skills, continuity and reliability. Expired credentials never get an offer.</p>
+  </div>
+  <div class="card" id="s3c" style="position:absolute;right:140px;top:150px;width:960px;overflow:hidden">
+    <div id="rows"></div>
+    <div id="factors" style="padding:8px 32px 32px 132px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px 32px"></div>
+  </div>
+</div>
+
+<!-- S4: outreach -->
+<div class="scene" id="s4">
+  <div style="position:absolute;left:140px;top:320px;width:600px">
+    <p class="eyebrow">Outreach</p>
+    <h2 style="margin-top:24px">Offers go out by text. In English or Spanish.</h2>
+    <p class="lead" style="margin-top:24px">A decline backfills automatically. Phone numbers stay private.</p>
+  </div>
+  <div id="phone" style="position:absolute;left:790px;top:110px;width:440px;height:860px;border-radius:64px;background:#fff;border:12px solid #E3E7ED;padding:40px 28px">
+    <p style="text-align:center;font-size:22px;color:var(--muted);font-weight:500">Cercana · text message</p>
+    <div id="sms1" class="bubble" style="margin-top:40px;background:#EEF1F5;border-bottom-left-radius:8px;font-size:27px">Cercana: Turno HHA en Northside, mar 8a–2p, $18–20/h. Responde <b>1</b> para aceptar o <b>2</b> para pasar.</div>
+    <div id="typing" class="bubble" style="margin:24px 0 0 auto;width:120px;background:var(--soft);display:flex;gap:10px;justify-content:center;padding:26px"><i class="td"></i><i class="td"></i><i class="td"></i></div>
+    <div id="sms2" class="bubble" style="margin:24px 0 0 auto;width:fit-content;background:var(--blue);color:#fff;font-weight:600;border-bottom-right-radius:8px">1</div>
+    <div id="sms3" class="bubble" style="margin-top:24px;background:#EEF1F5;border-bottom-left-radius:8px;font-size:27px">¡Confirmado! Te enviamos la dirección.</div>
+  </div>
+  <div class="card" style="position:absolute;right:120px;top:300px;width:480px;overflow:hidden" id="status"></div>
+</div>
+
+<!-- S5: covered -->
+<div class="scene center" id="s5">
+  <svg id="check" width="168" height="168" viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#16964A"/><path id="tick" d="M14 24.5 21 31 34 17" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="40" stroke-dashoffset="40"/></svg>
+  <h2 id="s5h" style="margin-top:48px;font-size:88px">Covered.</h2>
+  <p class="lead" id="s5l" style="margin-top:24px">Example: filled in under 2 minutes · credentials re-checked · family notified</p>
+</div>
+
+<!-- S6: caregivers -->
+<div class="scene" id="s6">
+  <div style="position:absolute;left:140px;top:290px;width:700px">
+    <p class="eyebrow">For caregivers · free, always</p>
+    <h2 style="margin-top:24px">One profile for every agency.</h2>
+    <p class="lead" style="margin-top:24px">Upload credentials once. Share only with the agencies you choose, for as long as you allow.</p>
+  </div>
+  <div class="card" id="vault" style="position:absolute;right:140px;top:200px;width:820px;overflow:hidden"></div>
+</div>
+
+<!-- S7: end -->
+<div class="scene center" id="s7">
+  <div class="word" style="font-size:180px">cercana<span class="dot">.</span></div>
+  <p class="lead" style="margin-top:28px;font-size:42px">Home care shifts, covered close by.</p>
+  <p style="margin-top:56px;font-size:40px;font-weight:600;color:var(--blue)">cercana.ai</p>
+  <p class="lead" style="margin-top:16px;font-size:28px">Agencies: 6 months free for the first 50 · Caregivers: free, always</p>
+</div>
+
+<style>.td{display:block;width:14px;height:14px;border-radius:50%;background:#93A6C9}</style>
+<script>
+// ---------- helpers ----------
+const $ = (id) => document.getElementById(id);
+const clamp = (x) => Math.max(0, Math.min(1, x));
+const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);            // ease-out cubic
+const prog = (t, a, d) => ease((t - a) / d);                     // 0..1 from a over d seconds
+function show(el, t, inAt, outAt, dy = 24, dur = 0.6) {
+  const pin = prog(t, inAt, dur), pout = outAt == null ? 0 : clamp((t - outAt) / 0.4);
+  el.style.opacity = (pin * (1 - pout)).toFixed(3);
+  el.style.transform = `translateY(${((1 - pin) * dy - pout * 12).toFixed(1)}px)`;
+}
+function sceneVis(id, t, a, b) { const el = $(id); el.style.opacity = t >= a - 0.01 && t < b ? 1 : 0; return t - a; }
+
+// ---------- data ----------
+const PINS = [[52,30],[30,46],[46,56],[58,48],[26,26],[62,62],[34,64],[56,20]];
+$("pins").innerHTML = PINS.map((p, i) => `<g id="pin${i}"><circle cx="${p[0]}" cy="${p[1]}" r="2.6" fill="#1D4ED8" stroke="#fff" stroke-width=".9"/></g>`).join("");
+
+const RANK = [
+  { n: "Xiomara R.", av: "Xiomara R", m: "HHA · 0.6 mi · Spanish/English · knows client", s: 99 },
+  { n: "Lázaro P.", av: "Lazaro P", m: "CNA · 0.9 mi · Spanish/English", s: 90 },
+  { n: "Jennifer L.", av: "Jennifer L", m: "CNA · 1.3 mi · English/Spanish", s: 88 },
+  { n: "Gisela N.", av: "Gisela N", m: "HHA · 4.3 mi · Spanish/English", s: 78 },
+];
+const ring = (s, k) => { const c = 2 * Math.PI * 18; const col = s >= 85 ? "#1D4ED8" : "#16964A"; return `<svg viewBox="0 0 44 44" width="76" height="76" style="transform:rotate(-90deg)"><circle cx="22" cy="22" r="18" fill="none" stroke="#EEF0F3" stroke-width="4"/><circle cx="22" cy="22" r="18" fill="none" stroke="${col}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - (s * k) / 100)}"/></svg><span>${Math.round(s * k)}</span>`; };
+$("rows").innerHTML = RANK.map((r, i) => `<div class="row" id="r${i}"><div class="ring" id="rg${i}"></div><img class="av" src="${AV[r.av]}"/><div style="flex:1"><p class="name">${r.n}</p><p class="meta">${r.m}</p></div><span class="chip" style="background:#EEF0F3;color:var(--muted)">Ready</span></div>`).join("");
+const FACT = [["Availability", 30, 30], ["Distance", 19, 20], ["Language", 15, 15], ["Skills", 15, 15], ["Continuity", 10, 10], ["Reliability", 9, 10]];
+$("factors").innerHTML = FACT.map((f, i) => `<div id="f${i}"><div style="display:flex;justify-content:space-between;font-size:20px"><b style="font-weight:600">${f[0]}</b><span style="color:var(--muted)">${f[1]}/${f[2]}</span></div><div class="bar" style="margin-top:8px"><i id="fb${i}" style="width:0"></i></div></div>`).join("");
+
+const STAT = [
+  { n: "Xiomara R.", av: "Xiomara R" },
+  { n: "Lázaro P.", av: "Lazaro P" },
+  { n: "Jennifer L.", av: "Jennifer L" },
+];
+$("status").innerHTML = `<div style="padding:22px 32px;border-bottom:1px solid var(--line);font-size:22px;font-weight:600">Wave 1 · 3 offers</div>` + STAT.map((r, i) => `<div class="row"><img class="av" style="width:56px;height:56px" src="${AV[r.av]}"/><p class="name" style="flex:1;font-size:26px">${r.n}</p><span class="chip" id="st${i}"></span></div>`).join("");
+
+const DOCS = ["Photo ID", "HHA / CNA certificate", "Background check", "TB test", "CPR / First aid"];
+$("vault").innerHTML = `<div style="padding:28px 32px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px"><img src="${AV["Maria L"]}" style="width:64px;height:64px;border-radius:50%"/><div><p class="name">María L. · my vault</p><p class="meta">Shared with 2 licensed agencies · view-only</p></div></div>` +
+  DOCS.map((d, i) => `<div class="row" id="d${i}" style="padding:22px 32px"><span style="width:44px;height:44px;border-radius:14px;background:var(--okbg);display:grid;place-items:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16964A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg></span><p class="name" style="flex:1;font-size:28px">${d}</p><span class="chip" style="background:var(--okbg);color:var(--ok)">Verified</span></div>`).join("");
+
+// ---------- timeline ----------
+const T = { s1: [0, 3.4], s2: [3.4, 8.8], s3: [8.8, 14.2], s4: [14.2, 20], s5: [20, 23.4], s6: [23.4, 27.4], s7: [27.4, 30] };
+const DURATION = 30;
+
+window.__render = function (t) {
+  // S1
+  let l = sceneVis("s1", t, ...T.s1);
+  show($("s1w"), l, 0.1, 2.9, 40, 0.8); show($("s1t"), l, 0.7, 2.9, 24, 0.7);
+
+  // S2
+  l = sceneVis("s2", t, ...T.s2);
+  show($("s2e"), l, 0.1, 5.0); show($("s2h"), l, 0.3, 5.0); show($("s2l"), l, 0.6, 5.0); show($("s2c"), l, 0.9, 5.0);
+  show($("s2m"), l, 0.4, 5.0, 40, 0.8);
+  const cp = prog(l, 1.2, 0.5); $("client").setAttribute("transform", `translate(40 40) scale(${0.2 + 0.8 * cp}) translate(-40 -40)`); $("client").style.opacity = cp;
+  $("ring1").setAttribute("r", (18 * prog(l, 1.5, 1.2)).toFixed(2));
+  PINS.forEach((p, i) => { const k = prog(l, 2.0 + i * 0.18, 0.4); const g = $("pin" + i); g.style.opacity = k; g.setAttribute("transform", `translate(${p[0]} ${p[1]}) scale(${0.3 + 0.7 * k}) translate(${-p[0]} ${-p[1]})`); });
+
+  // S3
+  l = sceneVis("s3", t, ...T.s3);
+  [...$("s3").children].slice(0, 1).forEach((el) => show(el, l, 0.1, 5.0));
+  show($("s3c"), l, 0.3, 5.0, 40, 0.7);
+  RANK.forEach((r, i) => { const k = prog(l, 0.6 + i * 0.25, 0.5); const row = $("r" + i); row.style.opacity = k; row.style.transform = `translateX(${(1 - k) * 32}px)`; $("rg" + i).innerHTML = ring(r.s, prog(l, 0.8 + i * 0.25, 1.1)); });
+  FACT.forEach((f, i) => { const k = prog(l, 2.3 + i * 0.12, 0.8); $("f" + i).style.opacity = prog(l, 2.1 + i * 0.12, 0.4); $("fb" + i).style.width = (k * (f[1] / f[2]) * 100).toFixed(1) + "%"; });
+
+  // S4
+  l = sceneVis("s4", t, ...T.s4);
+  show($("s4").children[0], l, 0.1, 5.4); show($("phone"), l, 0.3, 5.4, 40, 0.7); show($("status"), l, 0.5, 5.4, 40, 0.7);
+  show($("sms1"), l, 0.9, null, 16, 0.5);
+  const typing = l > 2.0 && l < 3.0; $("typing").style.opacity = typing ? 1 : 0; $("typing").style.display = l < 3.0 ? "flex" : "none";
+  [...document.querySelectorAll(".td")].forEach((d, i) => (d.style.opacity = 0.35 + 0.65 * Math.abs(Math.sin((l * 4 + i * 0.6)))));
+  show($("sms2"), l, 3.0, null, 16, 0.4); show($("sms3"), l, 3.8, null, 16, 0.5);
+  const st = (i, label, bg, fg) => { const el = $("st" + i); el.textContent = label; el.style.background = bg; el.style.color = fg; };
+  st(0, l < 1.9 ? "Offer sent" : "Declined", l < 1.9 ? "#E1F1F5" : "#FDE8E8", l < 1.9 ? "#0E7490" : "#D22C2C");
+  st(1, l < 1.4 ? "Offer sent" : l < 3.0 ? "Viewed" : "Accepted", l < 1.4 ? "#E1F1F5" : l < 3.0 ? "#FBF0DF" : "#E3F4EA", l < 1.4 ? "#0E7490" : l < 3.0 ? "#B86A06" : "#16964A");
+  st(2, l < 3.2 ? "Offer sent" : "Offer closed", l < 3.2 ? "#E1F1F5" : "#EEF0F3", l < 3.2 ? "#0E7490" : "#5D6774");
+
+  // S5
+  l = sceneVis("s5", t, ...T.s5);
+  const ck = prog(l, 0.1, 0.5); $("check").style.transform = `scale(${0.6 + 0.4 * ck})`; $("check").style.opacity = ck * (1 - clamp((l - 3.0) / 0.4));
+  $("tick").setAttribute("stroke-dashoffset", (40 * (1 - prog(l, 0.4, 0.6))).toFixed(2));
+  show($("s5h"), l, 0.5, 3.0); show($("s5l"), l, 0.9, 3.0);
+
+  // S6
+  l = sceneVis("s6", t, ...T.s6);
+  show($("s6").children[0], l, 0.1, 3.6); show($("vault"), l, 0.3, 3.6, 40, 0.7);
+  DOCS.forEach((d, i) => { const k = prog(l, 0.8 + i * 0.3, 0.45); const el = $("d" + i); el.style.opacity = 0.25 + 0.75 * k; });
+
+  // S7
+  l = sceneVis("s7", t, ...T.s7);
+  [...$("s7").children].forEach((el, i) => show(el, l, 0.1 + i * 0.25, null, 24, 0.7));
+};
+window.__DURATION = DURATION;
+window.__render(0);
+</script>
+</body>
+</html>
