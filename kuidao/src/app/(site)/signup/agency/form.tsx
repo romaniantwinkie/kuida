@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, FileSpreadsheet, Upload } from "lu
 import { Stepper } from "@/components/stepper";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { PLANS } from "@/lib/product";
+import { US_STATES } from "@/lib/regions";
 import { cn } from "@/lib/cn";
 
 const STEPS = ["Office", "Plan", "Roster"];
@@ -25,7 +26,7 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
     <main className="mx-auto max-w-xl px-4 py-16 sm:px-6">
       <p className="eyebrow">Agency</p>
       <h1 className="mt-3 font-display text-4xl tracking-tight">Create your office</h1>
-      <p className="mt-2 text-sm text-muted">Licensed Florida nurse registry or home health agency. AHCA number required.</p>
+      <p className="mt-2 text-sm text-muted">Licensed home health agency, home care agency or nurse registry, in any state. State license number required.</p>
 
       <div className="mt-8 rounded-3xl border border-line bg-surface p-6 shadow-card sm:p-8">
         {done ? (
@@ -49,8 +50,25 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
                   </label>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <label className="block text-sm font-medium">
-                      AHCA license #
-                      <input required className="field" placeholder="HHA299991234" />
+                      State
+                      <select required className="field" defaultValue="">
+                        <option value="" disabled>
+                          Choose a state…
+                        </option>
+                        {US_STATES.map((s) => (
+                          <option key={s}>{s}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="block text-sm font-medium">
+                      City
+                      <input required className="field" placeholder="Office city" autoComplete="address-level2" />
+                    </label>
+                  </div>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <label className="block text-sm font-medium">
+                      State license #
+                      <input required className="field" placeholder="e.g. HHA-1234567" />
                     </label>
                     <label className="block text-sm font-medium">
                       Type

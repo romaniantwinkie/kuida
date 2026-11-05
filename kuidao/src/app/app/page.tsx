@@ -47,7 +47,7 @@ export default function TodayPage() {
   return (
     <>
       <PageHead
-        eyebrow="Tuesday · Hialeah office"
+        eyebrow="Tuesday · Northside office"
         title="Buenos días, Ana"
         sub={`${open.length} shifts need attention. Kuida handled 3 call-outs overnight.`}
         action={

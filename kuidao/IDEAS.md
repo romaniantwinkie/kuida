@@ -39,7 +39,7 @@ general product knowledge and should be re-checked against their sites.
 
 **Where Kuida stays different:** a flat per-location price with caregivers always free;
 privacy by design (agencies don't see caregiver phones, and caregivers don't see the
-client's address until they're assigned); Spanish-first for Miami-Dade; and a clear
+client's address until they're assigned); bilingual (English/Spanish) for caregivers nationwide; and a clear
 "software, not a registry" legal posture.
 
 ## Roadmap (not built)

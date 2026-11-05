@@ -17,7 +17,7 @@ export default function LegalPage() {
           Client addresses are used only to compute distance and are shown to a caregiver only after they are assigned. Caregiver phone
           numbers are never shown to agencies; messages are relayed.
         </p>
-        <p>Full Terms, Privacy Policy, and a Business Associate Agreement will be reviewed with Florida health-care counsel before paid launch.</p>
+        <p>Full Terms, Privacy Policy, and a Business Associate Agreement will be reviewed with health-care counsel, state by state, before paid launch.</p>
       </div>
     </main>
   );

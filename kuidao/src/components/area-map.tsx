@@ -20,17 +20,17 @@ const pinFill = {
 };
 
 const AREAS = [
-  { name: "Miami Gardens", x: 52, y: 4 },
-  { name: "Hialeah", x: 36, y: 13 },
-  { name: "Doral", x: 14, y: 27 },
-  { name: "Little Havana", x: 58, y: 34 },
-  { name: "Westchester", x: 34, y: 45 },
-  { name: "Kendall", x: 25, y: 58 },
+  { name: "Northgate", x: 52, y: 4 },
+  { name: "Northside", x: 36, y: 13 },
+  { name: "Westfield", x: 14, y: 27 },
+  { name: "Downtown", x: 58, y: 34 },
+  { name: "Southwest", x: 34, y: 45 },
+  { name: "Southpark", x: 25, y: 58 },
 ];
 
 const BAY = "M78 0 C74 10 80 18 75 26 C70 34 76 44 72 52 C70 56 72 60 72 60 L100 60 L100 0 Z";
 const COAST = "M78 0 C74 10 80 18 75 26 C70 34 76 44 72 52 C70 56 72 60 72 60";
-const KEY_BISCAYNE = "M88 34 C90 38 89 46 86 52 C85 49 86 41 88 34 Z";
+const ISLAND = "M88 34 C90 38 89 46 86 52 C85 49 86 41 88 34 Z";
 const MAJOR = ["M0 24 L70 24", "M46 0 L46 60", "M0 40 C20 38 40 42 70 36", "M20 0 C24 20 22 40 18 60", "M60 0 C62 20 64 30 68 60"];
 const MINOR = ["M0 12 L72 12", "M0 50 L70 50", "M32 0 L32 60", "M8 0 L8 60", "M0 32 L72 30", "M54 0 L54 60"];
 const PARKS = ["M2 40 C8 36 14 42 12 48 C10 54 2 54 2 48 Z", "M44 22 C48 20 52 24 50 27 C47 30 42 27 44 22 Z"];
@@ -53,7 +53,7 @@ const RINGS = [
 ];
 
 /**
- * Stylised Miami-Dade map (demo). Six drawn variants share one geometry.
+ * Stylised generic metro map (demo); neighborhoods are placeholders. Six drawn variants share one geometry.
  * Every variant except "satellite" is drawn from theme tokens, so it follows
  * the active color scheme. The real-tile option lives in live-map.tsx.
  */
@@ -65,6 +65,7 @@ export function AreaMap({
   className,
   showLabels = true,
   variant = "streets",
+  fit = "slice",
 }: {
   client?: { x: number; y: number; label?: string };
   pins?: MapPin[];
@@ -73,6 +74,8 @@ export function AreaMap({
   className?: string;
   showLabels?: boolean;
   variant?: DrawnMapVariant;
+  /** "slice" fills the box (crops); "meet" shows the whole map. */
+  fit?: "slice" | "meet";
 }) {
   const uid = useId().replace(/:/g, "");
   const sat = variant === "satellite";
@@ -85,7 +88,7 @@ export function AreaMap({
   return (
     <svg
       viewBox="0 0 100 60"
-      preserveAspectRatio="xMidYMid slice"
+      preserveAspectRatio={`xMidYMid ${fit}`}
       className={cn("block h-full w-full", className)}
       role="img"
       aria-label={`Map of nearby caregivers (${variant} style)`}
@@ -160,7 +163,7 @@ export function AreaMap({
           <path d="M36 36 C46 34 60 40 64 52 C50 56 40 50 36 36 Z" fill="#706b5c" opacity="0.7" />
           <rect width="100" height="60" filter={`url(#grain-${uid})`} />
           <path d={BAY} fill={`url(#water-${uid})`} />
-          <path d={KEY_BISCAYNE} fill="#cfc8ad" opacity="0.8" />
+          <path d={ISLAND} fill="#cfc8ad" opacity="0.8" />
           <path d={COAST} fill="none" stroke="#d9d2b8" strokeWidth="0.5" opacity="0.6" />
           <g stroke="#cfc9b6" strokeWidth="0.55" fill="none" opacity="0.75" strokeLinecap="round">
             {MAJOR.map((d) => (

@@ -66,7 +66,7 @@ export default function CaregiverSignup() {
                   </div>
                   <label className="block text-sm font-medium">
                     Celular
-                    <input required inputMode="tel" className="field" placeholder="(305) 555-0123" autoComplete="tel" />
+                    <input required inputMode="tel" className="field" placeholder="(555) 555-0123" autoComplete="tel" />
                   </label>
                 </>
               )}
@@ -94,7 +94,7 @@ export default function CaregiverSignup() {
                   </div>
                   <label className="block text-sm font-medium">
                     Zona / códigos postales
-                    <input required placeholder="33012, Hialeah…" className="field" />
+                    <input required placeholder="Código postal o ciudad…" className="field" />
                   </label>
                 </>
               )}

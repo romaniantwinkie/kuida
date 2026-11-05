@@ -1,7 +1,7 @@
 export const BRAND = "Kuida";
 
 export const LEGAL_LINE =
-  "Software for licensed Florida providers. We are not a nurse registry, home health agency, or employer. Caregivers contract with the agency, not with us.";
+  "Software for licensed home care providers in every state. We are not a nurse registry, home health agency, or employer. Caregivers contract with the agency, not with us.";
 
 export type Plan = {
   id: "search" | "pro" | "network";

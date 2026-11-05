@@ -37,7 +37,7 @@ export function HeroDemo() {
       <div className="overflow-hidden rounded-3xl border border-line bg-surface shadow-lift">
         <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-4">
           <div>
-            <p className="eyebrow">Call-out · Hialeah</p>
+            <p className="eyebrow">Call-out · Northside</p>
             <p className="mt-1 font-semibold">HHA · Tue 8a–2p · $18–20/h</p>
           </div>
           <Badge tone={filled ? "ok" : "accent"} dot>
@@ -86,7 +86,7 @@ export function HeroDemo() {
           <Avatar name="Lazaro P" className="size-7 text-[10px]" />
           <p className="text-xs font-semibold">SMS · Lázaro</p>
         </div>
-        <p className="mt-2 rounded-xl rounded-tl-sm bg-surface-2 px-3 py-2 text-xs">Turno HHA en Hialeah, mar 8a–2p. Responde 1 para aceptar.</p>
+        <p className="mt-2 rounded-xl rounded-tl-sm bg-surface-2 px-3 py-2 text-xs">Turno HHA en Northside, mar 8a–2p. Responde 1 para aceptar.</p>
         <p className="ml-auto mt-1.5 w-fit rounded-xl rounded-tr-sm bg-brand px-3 py-1.5 text-xs font-semibold text-brand-ink">1</p>
       </div>
     </div>

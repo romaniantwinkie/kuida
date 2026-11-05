@@ -13,8 +13,8 @@ import { cn } from "@/lib/cn";
 type Offer = { id: string; role: string; area: string; when: string; pay: string; miles: string; match: number; note?: string };
 
 const OFFERS: Offer[] = [
-  { id: "o1", role: "HHA", area: "Hialeah", when: "Mar · 8:00a – 2:00p", pay: "$18–20/h", miles: "1.5 mi", match: 96, note: "Ya conoces a esta clienta (6 visitas)" },
-  { id: "o2", role: "HHA", area: "Doral", when: "Mar · 5:00p – 9:00p", pay: "$19–21/h", miles: "3.9 mi", match: 74 },
+  { id: "o1", role: "HHA", area: "Northside", when: "Mar · 8:00a – 2:00p", pay: "$18–20/h", miles: "1.5 mi", match: 96, note: "Ya conoces a esta clienta (6 visitas)" },
+  { id: "o2", role: "HHA", area: "Westfield", when: "Mar · 5:00p – 9:00p", pay: "$19–21/h", miles: "3.9 mi", match: 74 },
 ];
 
 const TABS = [
@@ -179,7 +179,7 @@ export default function CaregiverApp() {
                 {[
                   ["ID / Licencia", "Listo", "ok"],
                   ["Certificado HHA", "Listo", "ok"],
-                  ["Level 2 background", "Listo", "ok"],
+                  ["Background check", "Listo", "ok"],
                   ["CPR", "Vence en 21 días", "warn"],
                   ["Contrato · Sunrise", "Firmar", "accent"],
                 ].map(([n, s, t]) => (

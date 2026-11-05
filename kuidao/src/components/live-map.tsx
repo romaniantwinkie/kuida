@@ -6,10 +6,8 @@ import type { Map as LeafletMap, LayerGroup, TileLayer } from "leaflet";
 import type { MapPin } from "@/components/area-map";
 import { cn } from "@/lib/cn";
 
-/** Demo grid (0–100 × 0–60) → approximate Miami-Dade lat/lng. */
-export function toLatLng(p: { x: number; y: number }): [number, number] {
-  return [25.961 - 0.00487 * p.y, -80.395 + 0.00284 * p.x];
-}
+import { useRegion } from "@/lib/appearance";
+import { gridToLatLng } from "@/lib/regions";
 
 const ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services";
 const BASEMAPS = {
@@ -58,13 +56,23 @@ export function LiveMap({
   const tiles = useRef<TileLayer[]>([]);
   const layer = useRef<LayerGroup | null>(null);
   const L = useRef<typeof import("leaflet") | null>(null);
-  const props = useRef({ client, pins, selectedId });
-  props.current = { client, pins, selectedId };
+  const [region] = useRegion();
+  const toLatLng = (p: { x: number; y: number }) => gridToLatLng(p, region);
+  const props = useRef({ client, pins, selectedId, toLatLng });
+  props.current = { client, pins, selectedId, toLatLng };
+
+  function fit() {
+    const Lf = L.current;
+    if (!Lf || !map.current) return;
+    const { pins, client, toLatLng } = props.current;
+    const pts = [...pins.map(toLatLng), ...(client ? [toLatLng(client)] : [])];
+    if (pts.length) map.current.fitBounds(Lf.latLngBounds(pts).pad(0.25));
+  }
 
   function draw() {
     const Lf = L.current;
     if (!Lf || !map.current || !layer.current || !el.current) return;
-    const { client, pins, selectedId } = props.current;
+    const { client, pins, selectedId, toLatLng } = props.current;
     layer.current.clearLayers();
     const surface = token("surface", el.current);
     if (client) {
@@ -94,10 +102,8 @@ export function LiveMap({
       const Lf = await import("leaflet");
       if (cancelled || !el.current) return;
       L.current = Lf;
-      const pts = [...props.current.pins.map(toLatLng), ...(props.current.client ? [toLatLng(props.current.client)] : [])];
       map.current = Lf.map(el.current, { zoomControl: true, scrollWheelZoom: false, attributionControl: true });
-      if (pts.length) map.current.fitBounds(Lf.latLngBounds(pts).pad(0.25));
-      else map.current.setView([25.8, -80.28], 11);
+      fit();
       const bm = BASEMAPS[basemap];
       tiles.current = (isDark() ? bm.dark : bm.light).map((url, i) =>
         Lf.tileLayer(url, { attribution: i === 0 ? ATTRIBUTION : undefined, maxZoom: bm.maxZoom }).addTo(map.current!),
@@ -131,6 +137,11 @@ export function LiveMap({
 
   // Redraw markers when data/selection changes.
   useEffect(draw, [client, pins, selectedId]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Re-center when the demo region changes.
+  useEffect(() => {
+    fit();
+    draw();
+  }, [region]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return <div ref={el} className={cn("kuida-live-map h-full w-full", className)} role="img" aria-label="Street map of nearby caregivers" />;
 }

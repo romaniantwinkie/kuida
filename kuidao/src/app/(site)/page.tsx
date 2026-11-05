@@ -36,7 +36,7 @@ const FEATURES = [
   {
     icon: ShieldCheck,
     title: "Compliance before contact",
-    body: "Expired CPR, wrong role or a missing Level 2 screen blocks the offer before it is sent, not after.",
+    body: "Expired CPR, wrong role or a missing background check blocks the offer before it is sent, not after.",
   },
   {
     icon: BellRing,
@@ -90,7 +90,7 @@ export default function Home() {
         <div className="mx-auto grid max-w-6xl items-center gap-14 px-4 pb-20 pt-14 sm:px-6 md:pt-20 lg:grid-cols-[1.1fr_1fr]">
           <div className="animate-fade-up">
             <Badge tone="brand" className="py-1">
-              <MapPinned className="size-3.5" /> For licensed agencies · Miami-Dade
+              <MapPinned className="size-3.5" /> For licensed home care agencies · nationwide
             </Badge>
             <h1 className="mt-6 font-display text-[44px] leading-[1.02] tracking-tight sm:text-6xl">
               The call-out is covered <em className="text-brand">before</em> the family calls.
@@ -110,7 +110,7 @@ export default function Home() {
               {[
                 ["< 90s", "to a ranked bench"],
                 ["$0", "for caregivers"],
-                ["ES · EN · HT", "offer languages"],
+                ["50 states", "license-aware onboarding"],
               ].map(([k, v]) => (
                 <div key={v}>
                   <dt className="font-display text-2xl">{k}</dt>
@@ -247,7 +247,7 @@ export default function Home() {
             <p className="font-display text-2xl">Hola, María</p>
             <div className="mt-4 rounded-2xl bg-brand p-4 text-brand-ink">
               <p className="text-[11px] font-semibold uppercase tracking-wider opacity-80">Nueva oferta · 96% match</p>
-              <p className="mt-1 text-lg font-semibold">HHA · Hialeah</p>
+              <p className="mt-1 text-lg font-semibold">HHA · Northside</p>
               <p className="text-sm opacity-90">Mar 8:00a–2:00p · $18–20/h · 1.5 mi</p>
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <span className="grid min-h-10 place-items-center rounded-full bg-brand-ink text-sm font-semibold text-brand">Aceptar</span>
@@ -308,7 +308,7 @@ export default function Home() {
         <div className="relative mx-auto max-w-6xl overflow-hidden rounded-3xl bg-brand px-8 py-14 text-brand-ink sm:px-14">
           <div className="absolute -right-20 -top-20 size-72 rounded-full bg-accent/30 blur-3xl" />
           <h2 className="relative max-w-xl font-display text-4xl tracking-tight">Next call-out, let Kuida make the calls.</h2>
-          <p className="relative mt-3 max-w-lg opacity-85">Set up an office in ten minutes with your AHCA license number. Import your roster from a spreadsheet.</p>
+          <p className="relative mt-3 max-w-lg opacity-85">Set up an office in ten minutes with your state license number. Import your roster from a spreadsheet.</p>
           <div className="relative mt-8 flex flex-wrap gap-3">
             <ButtonLink href="/signup/agency" variant="inverse" size="lg">
               Create your office

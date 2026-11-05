@@ -1,43 +1,249 @@
 {
   "shared": {
-    "light": { "ok": "#16964A", "warn": "#B86A06", "danger": "#D22C2C", "info": "#2563EB" },
-    "dark": { "ok": "#4ADE80", "warn": "#FBBF24", "danger": "#F87171", "info": "#60A5FA" }
+    "light": {
+      "ok": "#16964A",
+      "warn": "#B86A06",
+      "danger": "#D22C2C",
+      "info": "#2563EB"
+    },
+    "dark": {
+      "ok": "#4ADE80",
+      "warn": "#FBBF24",
+      "danger": "#F87171",
+      "info": "#60A5FA"
+    }
   },
   "palettes": [
     {
-      "id": "pine", "name": "Pine", "blurb": "Calm green with a coral pulse. The default.",
-      "light": { "bg": "#F7F7F4", "surface": "#FFFFFF", "surface-2": "#F0F1EC", "line": "#E2E4DD", "ink": "#101816", "muted": "#5C6863", "brand": "#0E6B58", "brand-ink": "#FFFFFF", "brand-soft": "#DEF1EA", "accent": "#C8472A", "accent-ink": "#FFFFFF", "accent-soft": "#FFE9E1" },
-      "dark": { "bg": "#0B100F", "surface": "#121917", "surface-2": "#1A2320", "line": "#28342F", "ink": "#EAF0EC", "muted": "#96A49E", "brand": "#40D6A8", "brand-ink": "#061E18", "brand-soft": "#14322A", "accent": "#FF8C6E", "accent-ink": "#2E0D04", "accent-soft": "#402018" }
+      "id": "teal",
+      "name": "Care Teal",
+      "blurb": "Deep teal with a lighter aqua. Calm, clinical, the default.",
+      "light": {
+        "bg": "#F5F8F8",
+        "surface": "#FFFFFF",
+        "surface-2": "#ECF2F2",
+        "line": "#DAE5E5",
+        "ink": "#0C1A1B",
+        "muted": "#566B6C",
+        "brand": "#0F6E6A",
+        "brand-ink": "#FFFFFF",
+        "brand-soft": "#DDF0EE",
+        "accent": "#11807A",
+        "accent-ink": "#FFFFFF",
+        "accent-soft": "#D7F1EE"
+      },
+      "dark": {
+        "bg": "#091112",
+        "surface": "#101A1B",
+        "surface-2": "#1A2526",
+        "line": "#283637",
+        "ink": "#E6F0F0",
+        "muted": "#93A8A8",
+        "brand": "#4FD1C5",
+        "brand-ink": "#042825",
+        "brand-soft": "#12302E",
+        "accent": "#2DB5AA",
+        "accent-ink": "#03201E",
+        "accent-soft": "#103734"
+      }
     },
     {
-      "id": "harbor", "name": "Harbor", "blurb": "Kuida's original navy, sharpened, with a burnt-orange signal.",
-      "light": { "bg": "#F5F6F8", "surface": "#FFFFFF", "surface-2": "#ECEFF4", "line": "#DDE2EA", "ink": "#0F1B2D", "muted": "#5A6678", "brand": "#1B365D", "brand-ink": "#FFFFFF", "brand-soft": "#E0E8F3", "accent": "#C2410C", "accent-ink": "#FFFFFF", "accent-soft": "#FDEBDD" },
-      "dark": { "bg": "#0A1018", "surface": "#111A26", "surface-2": "#182333", "line": "#26344A", "ink": "#E8EEF6", "muted": "#93A1B5", "brand": "#8DB8F2", "brand-ink": "#0A1A30", "brand-soft": "#16263D", "accent": "#FB923C", "accent-ink": "#331503", "accent-soft": "#3D2312" }
+      "id": "blue",
+      "name": "Clinical Blue",
+      "blurb": "Hospital navy to sky blue. Trustworthy and familiar.",
+      "light": {
+        "bg": "#F5F7FB",
+        "surface": "#FFFFFF",
+        "surface-2": "#ECF1F8",
+        "line": "#DBE3EF",
+        "ink": "#0C1628",
+        "muted": "#566479",
+        "brand": "#1E4E9C",
+        "brand-ink": "#FFFFFF",
+        "brand-soft": "#E2EBF8",
+        "accent": "#2F6BD0",
+        "accent-ink": "#FFFFFF",
+        "accent-soft": "#E3EDFC"
+      },
+      "dark": {
+        "bg": "#090E17",
+        "surface": "#101826",
+        "surface-2": "#182233",
+        "line": "#26344A",
+        "ink": "#E6EDF8",
+        "muted": "#93A1B6",
+        "brand": "#7DAEF5",
+        "brand-ink": "#0A1D3D",
+        "brand-soft": "#152645",
+        "accent": "#5B95EC",
+        "accent-ink": "#06172F",
+        "accent-soft": "#15284A"
+      }
     },
     {
-      "id": "clinic", "name": "Clinic", "blurb": "Crisp hospital blue and raspberry. Reads as healthcare instantly.",
-      "light": { "bg": "#F6F8FB", "surface": "#FFFFFF", "surface-2": "#EDF1F7", "line": "#DCE3EE", "ink": "#0D1726", "muted": "#576579", "brand": "#0A5FB4", "brand-ink": "#FFFFFF", "brand-soft": "#E3EEFB", "accent": "#C2255C", "accent-ink": "#FFFFFF", "accent-soft": "#FCE4EC" },
-      "dark": { "bg": "#0A0F17", "surface": "#101824", "surface-2": "#172130", "line": "#253347", "ink": "#E6EDF7", "muted": "#8E9DB3", "brand": "#6CB2FF", "brand-ink": "#04213F", "brand-soft": "#12294A", "accent": "#F06595", "accent-ink": "#2A0614", "accent-soft": "#3B1626" }
+      "id": "sage",
+      "name": "Sage",
+      "blurb": "Soft sage greens. Gentle, restorative, home-like.",
+      "light": {
+        "bg": "#F6F8F5",
+        "surface": "#FFFFFF",
+        "surface-2": "#EDF2EB",
+        "line": "#DCE5D9",
+        "ink": "#121A12",
+        "muted": "#5D6B5B",
+        "brand": "#3D6B47",
+        "brand-ink": "#FFFFFF",
+        "brand-soft": "#E3EFE3",
+        "accent": "#4C7E57",
+        "accent-ink": "#FFFFFF",
+        "accent-soft": "#E4F1E5"
+      },
+      "dark": {
+        "bg": "#0C110C",
+        "surface": "#131A13",
+        "surface-2": "#1C251C",
+        "line": "#2B372B",
+        "ink": "#E9F0E8",
+        "muted": "#9CAA9A",
+        "brand": "#9BCFA2",
+        "brand-ink": "#11281A",
+        "brand-soft": "#1B2F1E",
+        "accent": "#7DB887",
+        "accent-ink": "#0B2112",
+        "accent-soft": "#1A3320"
+      }
     },
     {
-      "id": "plum", "name": "Plum", "blurb": "Aubergine and gold. Warm, premium, boutique agency.",
-      "light": { "bg": "#F8F6F7", "surface": "#FFFFFF", "surface-2": "#F1ECEF", "line": "#E4DCE1", "ink": "#1E1420", "muted": "#6B5E6D", "brand": "#6A2C70", "brand-ink": "#FFFFFF", "brand-soft": "#F3E6F4", "accent": "#A86500", "accent-ink": "#FFFFFF", "accent-soft": "#FBF1D6" },
-      "dark": { "bg": "#110C12", "surface": "#19121B", "surface-2": "#221A25", "line": "#342838", "ink": "#F2EAF3", "muted": "#A898AB", "brand": "#D9A2E0", "brand-ink": "#2A0F2E", "brand-soft": "#33203A", "accent": "#F5C542", "accent-ink": "#2B1D00", "accent-soft": "#3A2E0E" }
+      "id": "lavender",
+      "name": "Lavender",
+      "blurb": "Muted violet tones. Comforting; suits hospice and memory care.",
+      "light": {
+        "bg": "#F7F6FB",
+        "surface": "#FFFFFF",
+        "surface-2": "#EFEDF7",
+        "line": "#E0DCEE",
+        "ink": "#16132A",
+        "muted": "#625D78",
+        "brand": "#55479A",
+        "brand-ink": "#FFFFFF",
+        "brand-soft": "#EAE7F7",
+        "accent": "#6A5BC0",
+        "accent-ink": "#FFFFFF",
+        "accent-soft": "#ECE9FA"
+      },
+      "dark": {
+        "bg": "#0E0C16",
+        "surface": "#151320",
+        "surface-2": "#1E1B2C",
+        "line": "#2E2A42",
+        "ink": "#ECE9F7",
+        "muted": "#A19CB8",
+        "brand": "#B3A8F0",
+        "brand-ink": "#1D1640",
+        "brand-soft": "#26203F",
+        "accent": "#9688E3",
+        "accent-ink": "#140E33",
+        "accent-soft": "#28214A"
+      }
     },
     {
-      "id": "terracotta", "name": "Terracotta", "blurb": "Sun-baked clay and sea teal. Human and homey.",
-      "light": { "bg": "#FAF7F2", "surface": "#FFFFFF", "surface-2": "#F2EDE5", "line": "#E6DED2", "ink": "#22180F", "muted": "#6E6255", "brand": "#A6461F", "brand-ink": "#FFFFFF", "brand-soft": "#F8E6DC", "accent": "#0F7476", "accent-ink": "#FFFFFF", "accent-soft": "#DDF1F1" },
-      "dark": { "bg": "#14100C", "surface": "#1C1712", "surface-2": "#262019", "line": "#382F25", "ink": "#F4ECE2", "muted": "#AA9D8E", "brand": "#F0A27A", "brand-ink": "#3A1606", "brand-soft": "#3A2318", "accent": "#5FD0D0", "accent-ink": "#062A2A", "accent-soft": "#123334" }
+      "id": "navy",
+      "name": "Navy",
+      "blurb": "Kuida's original navy with steel blues. Serious and steady.",
+      "light": {
+        "bg": "#F5F6F8",
+        "surface": "#FFFFFF",
+        "surface-2": "#ECEFF4",
+        "line": "#DDE2EA",
+        "ink": "#0F1B2D",
+        "muted": "#5A6678",
+        "brand": "#1B365D",
+        "brand-ink": "#FFFFFF",
+        "brand-soft": "#E0E8F3",
+        "accent": "#3D6597",
+        "accent-ink": "#FFFFFF",
+        "accent-soft": "#E3EBF5"
+      },
+      "dark": {
+        "bg": "#0A1018",
+        "surface": "#111A26",
+        "surface-2": "#182333",
+        "line": "#26344A",
+        "ink": "#E8EEF6",
+        "muted": "#93A1B5",
+        "brand": "#9CBDE6",
+        "brand-ink": "#0A1A30",
+        "brand-soft": "#16263D",
+        "accent": "#7A9FD0",
+        "accent-ink": "#081629",
+        "accent-soft": "#182A44"
+      }
     },
     {
-      "id": "flamingo", "name": "Flamingo", "blurb": "Miami pink and Biscayne teal. Loud in the right way.",
-      "light": { "bg": "#FBF7F8", "surface": "#FFFFFF", "surface-2": "#F4EDF0", "line": "#E9DFE3", "ink": "#24121A", "muted": "#725F67", "brand": "#B8215A", "brand-ink": "#FFFFFF", "brand-soft": "#FCE4EE", "accent": "#0B7A6C", "accent-ink": "#FFFFFF", "accent-soft": "#DCF3EF" },
-      "dark": { "bg": "#130B0F", "surface": "#1C1117", "surface-2": "#26181F", "line": "#3A2630", "ink": "#F7EAF0", "muted": "#B099A4", "brand": "#FF7AA8", "brand-ink": "#3D0A1E", "brand-soft": "#3B1827", "accent": "#4FD8C4", "accent-ink": "#05302A", "accent-soft": "#10342F" }
+      "id": "aqua",
+      "name": "Aqua",
+      "blurb": "Bright cyan family. Fresh and modern, still medical.",
+      "light": {
+        "bg": "#F4F9FA",
+        "surface": "#FFFFFF",
+        "surface-2": "#EAF3F5",
+        "line": "#D6E6EA",
+        "ink": "#0A191D",
+        "muted": "#526A70",
+        "brand": "#0B6A85",
+        "brand-ink": "#FFFFFF",
+        "brand-soft": "#DCEFF5",
+        "accent": "#0E7D9C",
+        "accent-ink": "#FFFFFF",
+        "accent-soft": "#D9F0F7"
+      },
+      "dark": {
+        "bg": "#081114",
+        "surface": "#0F1A1E",
+        "surface-2": "#172429",
+        "line": "#25363C",
+        "ink": "#E4F1F4",
+        "muted": "#90A9AF",
+        "brand": "#5CC8E4",
+        "brand-ink": "#032630",
+        "brand-soft": "#10303A",
+        "accent": "#38AFCF",
+        "accent-ink": "#032029",
+        "accent-soft": "#0F3540"
+      }
     },
     {
-      "id": "graphite", "name": "Graphite", "blurb": "Monochrome with an electric violet. Tool-like and precise.",
-      "light": { "bg": "#F7F7F8", "surface": "#FFFFFF", "surface-2": "#EFEFF1", "line": "#E1E1E5", "ink": "#0B0B0D", "muted": "#62626B", "brand": "#18181B", "brand-ink": "#FFFFFF", "brand-soft": "#EAEAEC", "accent": "#6345F0", "accent-ink": "#FFFFFF", "accent-soft": "#ECE7FF" },
-      "dark": { "bg": "#0A0A0B", "surface": "#131315", "surface-2": "#1B1B1E", "line": "#2A2A2F", "ink": "#F2F2F3", "muted": "#9A9AA3", "brand": "#F2F2F3", "brand-ink": "#111113", "brand-soft": "#26262B", "accent": "#9B85FF", "accent-ink": "#140A3D", "accent-soft": "#241C4A" }
+      "id": "slate",
+      "name": "Slate",
+      "blurb": "Cool grays with a blue-gray lead. Quiet and administrative.",
+      "light": {
+        "bg": "#F6F7F9",
+        "surface": "#FFFFFF",
+        "surface-2": "#EEF0F3",
+        "line": "#DFE3E8",
+        "ink": "#0F141B",
+        "muted": "#5D6774",
+        "brand": "#334155",
+        "brand-ink": "#FFFFFF",
+        "brand-soft": "#E6EAF0",
+        "accent": "#4B5D78",
+        "accent-ink": "#FFFFFF",
+        "accent-soft": "#E5EAF2"
+      },
+      "dark": {
+        "bg": "#0B0D11",
+        "surface": "#13171D",
+        "surface-2": "#1B2028",
+        "line": "#2A313C",
+        "ink": "#ECEFF3",
+        "muted": "#9AA3AF",
+        "brand": "#B6C2D3",
+        "brand-ink": "#141B26",
+        "brand-soft": "#232A35",
+        "accent": "#93A3BA",
+        "accent-ink": "#0F1520",
+        "accent-soft": "#232C3A"
+      }
     }
   ]
 }

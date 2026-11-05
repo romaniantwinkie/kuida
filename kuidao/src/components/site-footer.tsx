@@ -15,7 +15,7 @@ export function SiteFooter() {
         <div className="md:col-span-2">
           <Logo />
           <p className="mt-4 max-w-sm text-xs leading-relaxed text-muted">{LEGAL_LINE}</p>
-          <p className="mt-3 text-xs text-muted">Made in Miami · Hecho en Miami</p>
+          <p className="mt-3 text-xs text-muted">Built for home care in all 50 states · En inglés y español</p>
         </div>
         {COLS.map((c) => (
           <div key={c.title}>

@@ -10,18 +10,18 @@ import { DAYS, fmtHour, type Client, type Role, type Shift } from "@/lib/data";
 import { rankForShift } from "@/lib/match";
 
 const AREAS: Array<Pick<Client, "area" | "x" | "y">> = [
-  { area: "Hialeah", x: 35, y: 17 },
-  { area: "Doral", x: 18, y: 30 },
-  { area: "Little Havana", x: 58, y: 38 },
-  { area: "Westchester", x: 36, y: 44 },
-  { area: "Kendall", x: 30, y: 52 },
-  { area: "Miami Gardens", x: 52, y: 6 },
+  { area: "Northside", x: 35, y: 17 },
+  { area: "Westfield", x: 18, y: 30 },
+  { area: "Downtown", x: 58, y: 38 },
+  { area: "Southwest", x: 36, y: 44 },
+  { area: "Southpark", x: 30, y: 52 },
+  { area: "Northgate", x: 52, y: 6 },
 ];
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6);
 const SKILLS = ["Dementia care", "Hoyer lift", "Diabetic care", "Wound care", "Companionship", "Meal prep"];
 
 export default function SearchPage() {
-  const [area, setArea] = useState("Hialeah");
+  const [area, setArea] = useState("Northside");
   const [day, setDay] = useState(1);
   const [start, setStart] = useState(8);
   const [end, setEnd] = useState(14);

@@ -2,6 +2,8 @@
 
 import { useSyncExternalStore } from "react";
 import palettesJson from "./palettes.json";
+import { DEFAULT_FONT, ensureFontLoaded, FONTS, type FontId } from "./fonts";
+import { REGIONS, type RegionId } from "./regions";
 
 export type PaletteId = (typeof palettesJson.palettes)[number]["id"];
 export const PALETTES = palettesJson.palettes;
@@ -18,7 +20,7 @@ export const MAP_STYLES = [
 ] as const;
 export type MapStyleId = (typeof MAP_STYLES)[number]["id"];
 
-const KEYS = { palette: "kuida-palette", map: "kuida-map" } as const;
+const KEYS = { palette: "kuida-palette", map: "kuida-map", region: "kuida-region", font: "kuida-font" } as const;
 
 function makeStore<T extends string>(key: string, fallback: T, valid: readonly string[]) {
   const listeners = new Set<() => void>();
@@ -52,8 +54,15 @@ function makeStore<T extends string>(key: string, fallback: T, valid: readonly s
   };
 }
 
-const paletteStore = makeStore<PaletteId>(KEYS.palette, "pine", PALETTES.map((p) => p.id));
+const paletteStore = makeStore<PaletteId>(KEYS.palette, "teal", PALETTES.map((p) => p.id));
 const mapStore = makeStore<MapStyleId>(KEYS.map, "streets", MAP_STYLES.map((m) => m.id));
+
+const regionStore = makeStore<RegionId>(KEYS.region, "atl", REGIONS.map((r) => r.id));
+
+export function useRegion() {
+  const v = useSyncExternalStore(regionStore.subscribe, regionStore.get, () => regionStore.fallback);
+  return [v, regionStore.set] as const;
+}
 
 export function usePalette() {
   const v = useSyncExternalStore(paletteStore.subscribe, paletteStore.get, () => paletteStore.fallback);
@@ -69,5 +78,16 @@ export function useMapStyle() {
   return [v, mapStore.set] as const;
 }
 
-/** Pre-paint: apply saved palette + theme before hydration (no flash). */
-export const appearanceScript = `try{var d=document.documentElement,t=localStorage.getItem("kuida-theme"),p=localStorage.getItem("kuida-palette");if(t==="light"||t==="dark")d.setAttribute("data-theme",t);if(p&&/^[a-z]+$/.test(p))d.setAttribute("data-palette",p)}catch(e){}`;
+const fontStore = makeStore<FontId>(KEYS.font, DEFAULT_FONT, FONTS.map((f) => f.id));
+
+export function useFont() {
+  const v = useSyncExternalStore(fontStore.subscribe, fontStore.get, () => fontStore.fallback);
+  const set = (id: FontId) => {
+    ensureFontLoaded(id);
+    document.documentElement.setAttribute("data-font", id);
+    fontStore.set(id);
+  };
+  return [v, set] as const;
+}
+
+export { FONTS };

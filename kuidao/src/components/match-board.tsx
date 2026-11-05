@@ -287,7 +287,26 @@ export function MatchBoard({
         {!compact && (
           <Card className="overflow-hidden">
             <div className="h-56">
-              <MapView client={{ x: client.x, y: client.y }} pins={pins} selectedId={selected} />
+              <MapView
+                client={{ x: client.x, y: client.y }}
+                pins={pins}
+                selectedId={selected}
+                title={`${client.alias} · ${client.area} — ${eligible.length} eligible caregivers`}
+                footer={
+                  <span className="flex flex-wrap gap-x-4 gap-y-1">
+                    <span className="flex items-center gap-1.5">
+                      <span className="size-2 rounded-full bg-accent" /> Client (approx.)
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="size-2 rounded-full bg-brand" /> Eligible caregiver
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="size-2 rounded-full bg-ok" /> Accepted
+                    </span>
+                    <span>Esc to close</span>
+                  </span>
+                }
+              />
             </div>
             <div className="flex items-center justify-between gap-2 border-t border-line px-4 py-2.5 text-xs text-muted">
               <span className="flex items-center gap-1.5">
