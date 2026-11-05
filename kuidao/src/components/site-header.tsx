@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "@/components/logo";
+import { PalettePicker } from "@/components/palette-picker";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ButtonLink } from "@/components/ui/button";
 
@@ -28,6 +29,7 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="flex items-center gap-1">
+          <PalettePicker />
           <ThemeToggle />
           <Link href="/sign-in" className="hidden rounded-full px-3 py-2 text-sm font-medium text-muted hover:text-ink sm:inline-flex">
             Log in

@@ -64,7 +64,7 @@ export function HeroDemo() {
         <div className="flex items-center gap-3 border-t border-line bg-surface-2/60 px-5 py-3 text-xs">
           {filled ? (
             <>
-              <span className="grid size-6 place-items-center rounded-full bg-ok text-white">
+              <span className="grid size-6 place-items-center rounded-full bg-ok text-bg">
                 <Check className="size-3.5" />
               </span>
               <span>
@@ -73,7 +73,7 @@ export function HeroDemo() {
             </>
           ) : (
             <>
-              <span className="grid size-6 place-items-center rounded-full bg-accent text-white">
+              <span className="grid size-6 place-items-center rounded-full bg-accent text-accent-ink">
                 <Zap className="size-3.5" />
               </span>
               <span>Auto-backfill on decline · overtime-risk aides skipped</span>

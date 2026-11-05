@@ -46,6 +46,3 @@ export function ThemeToggle({ className }: { className?: string }) {
     </button>
   );
 }
-
-/** Inline, pre-paint script so the saved theme applies before hydration. */
-export const themeScript = `try{var t=localStorage.getItem("kuida-theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}`;

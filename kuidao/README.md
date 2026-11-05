@@ -36,6 +36,24 @@ npm run dev        # http://localhost:3001 (the original app keeps :3000)
 - **Shape**: 14–28px radii, pill buttons, soft elevation, and 44px minimum touch targets.
 - Primitives are in `src/components/ui/` (Button, Badge, Card, ScoreRing, Avatar).
 
+## Color schemes & map styles
+
+Open **`/app/appearance`**, or use the palette button next to the theme toggle on any page.
+The choice is saved per browser and applied before first paint.
+
+- **7 color schemes**: Pine (default), Harbor, Clinic, Plum, Terracotta, Flamingo and Graphite.
+  Each has a hand-tuned light and dark mode. Only the tokens change; layout and components stay the same.
+  - Source of truth: `src/lib/palettes.json`.
+  - After editing, run `node scripts/build-palettes.mjs`. It regenerates `src/app/palettes.css` and fails
+    if any pair misses WCAG AA: brand/accent buttons, brand text, muted text, ink.
+  - A scheme can be scoped to any element with `data-palette="…"` (and `data-theme`); the previews use this.
+- **8 map styles**, switchable from the corner of any map:
+  - **Drawn (SVG, themed, offline):** Streets, Minimal, Drive time (10/20/30-min rings),
+    Bench density (heat), Terrain, Blueprint.
+  - **Real tiles (Leaflet):** Live streets (Esri light/dark gray canvas) and Aerial photo (Esri World Imagery).
+    Pins use the active palette. Demo coordinates map onto Miami-Dade approximately.
+    Esri's public tiles are fine for demos. For production, use an ArcGIS or MapTiler key.
+
 ## Matching engine
 
 `src/lib/match.ts` is real, explainable code. The demo data is the only fake part.

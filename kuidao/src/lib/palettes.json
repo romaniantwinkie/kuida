@@ -1,0 +1,43 @@
+{
+  "shared": {
+    "light": { "ok": "#16964A", "warn": "#B86A06", "danger": "#D22C2C", "info": "#2563EB" },
+    "dark": { "ok": "#4ADE80", "warn": "#FBBF24", "danger": "#F87171", "info": "#60A5FA" }
+  },
+  "palettes": [
+    {
+      "id": "pine", "name": "Pine", "blurb": "Calm green with a coral pulse. The default.",
+      "light": { "bg": "#F7F7F4", "surface": "#FFFFFF", "surface-2": "#F0F1EC", "line": "#E2E4DD", "ink": "#101816", "muted": "#5C6863", "brand": "#0E6B58", "brand-ink": "#FFFFFF", "brand-soft": "#DEF1EA", "accent": "#C8472A", "accent-ink": "#FFFFFF", "accent-soft": "#FFE9E1" },
+      "dark": { "bg": "#0B100F", "surface": "#121917", "surface-2": "#1A2320", "line": "#28342F", "ink": "#EAF0EC", "muted": "#96A49E", "brand": "#40D6A8", "brand-ink": "#061E18", "brand-soft": "#14322A", "accent": "#FF8C6E", "accent-ink": "#2E0D04", "accent-soft": "#402018" }
+    },
+    {
+      "id": "harbor", "name": "Harbor", "blurb": "Kuida's original navy, sharpened, with a burnt-orange signal.",
+      "light": { "bg": "#F5F6F8", "surface": "#FFFFFF", "surface-2": "#ECEFF4", "line": "#DDE2EA", "ink": "#0F1B2D", "muted": "#5A6678", "brand": "#1B365D", "brand-ink": "#FFFFFF", "brand-soft": "#E0E8F3", "accent": "#C2410C", "accent-ink": "#FFFFFF", "accent-soft": "#FDEBDD" },
+      "dark": { "bg": "#0A1018", "surface": "#111A26", "surface-2": "#182333", "line": "#26344A", "ink": "#E8EEF6", "muted": "#93A1B5", "brand": "#8DB8F2", "brand-ink": "#0A1A30", "brand-soft": "#16263D", "accent": "#FB923C", "accent-ink": "#331503", "accent-soft": "#3D2312" }
+    },
+    {
+      "id": "clinic", "name": "Clinic", "blurb": "Crisp hospital blue and raspberry. Reads as healthcare instantly.",
+      "light": { "bg": "#F6F8FB", "surface": "#FFFFFF", "surface-2": "#EDF1F7", "line": "#DCE3EE", "ink": "#0D1726", "muted": "#576579", "brand": "#0A5FB4", "brand-ink": "#FFFFFF", "brand-soft": "#E3EEFB", "accent": "#C2255C", "accent-ink": "#FFFFFF", "accent-soft": "#FCE4EC" },
+      "dark": { "bg": "#0A0F17", "surface": "#101824", "surface-2": "#172130", "line": "#253347", "ink": "#E6EDF7", "muted": "#8E9DB3", "brand": "#6CB2FF", "brand-ink": "#04213F", "brand-soft": "#12294A", "accent": "#F06595", "accent-ink": "#2A0614", "accent-soft": "#3B1626" }
+    },
+    {
+      "id": "plum", "name": "Plum", "blurb": "Aubergine and gold. Warm, premium, boutique agency.",
+      "light": { "bg": "#F8F6F7", "surface": "#FFFFFF", "surface-2": "#F1ECEF", "line": "#E4DCE1", "ink": "#1E1420", "muted": "#6B5E6D", "brand": "#6A2C70", "brand-ink": "#FFFFFF", "brand-soft": "#F3E6F4", "accent": "#A86500", "accent-ink": "#FFFFFF", "accent-soft": "#FBF1D6" },
+      "dark": { "bg": "#110C12", "surface": "#19121B", "surface-2": "#221A25", "line": "#342838", "ink": "#F2EAF3", "muted": "#A898AB", "brand": "#D9A2E0", "brand-ink": "#2A0F2E", "brand-soft": "#33203A", "accent": "#F5C542", "accent-ink": "#2B1D00", "accent-soft": "#3A2E0E" }
+    },
+    {
+      "id": "terracotta", "name": "Terracotta", "blurb": "Sun-baked clay and sea teal. Human and homey.",
+      "light": { "bg": "#FAF7F2", "surface": "#FFFFFF", "surface-2": "#F2EDE5", "line": "#E6DED2", "ink": "#22180F", "muted": "#6E6255", "brand": "#A6461F", "brand-ink": "#FFFFFF", "brand-soft": "#F8E6DC", "accent": "#0F7476", "accent-ink": "#FFFFFF", "accent-soft": "#DDF1F1" },
+      "dark": { "bg": "#14100C", "surface": "#1C1712", "surface-2": "#262019", "line": "#382F25", "ink": "#F4ECE2", "muted": "#AA9D8E", "brand": "#F0A27A", "brand-ink": "#3A1606", "brand-soft": "#3A2318", "accent": "#5FD0D0", "accent-ink": "#062A2A", "accent-soft": "#123334" }
+    },
+    {
+      "id": "flamingo", "name": "Flamingo", "blurb": "Miami pink and Biscayne teal. Loud in the right way.",
+      "light": { "bg": "#FBF7F8", "surface": "#FFFFFF", "surface-2": "#F4EDF0", "line": "#E9DFE3", "ink": "#24121A", "muted": "#725F67", "brand": "#B8215A", "brand-ink": "#FFFFFF", "brand-soft": "#FCE4EE", "accent": "#0B7A6C", "accent-ink": "#FFFFFF", "accent-soft": "#DCF3EF" },
+      "dark": { "bg": "#130B0F", "surface": "#1C1117", "surface-2": "#26181F", "line": "#3A2630", "ink": "#F7EAF0", "muted": "#B099A4", "brand": "#FF7AA8", "brand-ink": "#3D0A1E", "brand-soft": "#3B1827", "accent": "#4FD8C4", "accent-ink": "#05302A", "accent-soft": "#10342F" }
+    },
+    {
+      "id": "graphite", "name": "Graphite", "blurb": "Monochrome with an electric violet. Tool-like and precise.",
+      "light": { "bg": "#F7F7F8", "surface": "#FFFFFF", "surface-2": "#EFEFF1", "line": "#E1E1E5", "ink": "#0B0B0D", "muted": "#62626B", "brand": "#18181B", "brand-ink": "#FFFFFF", "brand-soft": "#EAEAEC", "accent": "#6345F0", "accent-ink": "#FFFFFF", "accent-soft": "#ECE7FF" },
+      "dark": { "bg": "#0A0A0B", "surface": "#131315", "surface-2": "#1B1B1E", "line": "#2A2A2F", "ink": "#F2F2F3", "muted": "#9A9AA3", "brand": "#F2F2F3", "brand-ink": "#111113", "brand-soft": "#26262B", "accent": "#9B85FF", "accent-ink": "#140A3D", "accent-soft": "#241C4A" }
+    }
+  ]
+}

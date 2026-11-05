@@ -1,0 +1,73 @@
+"use client";
+
+import { useSyncExternalStore } from "react";
+import palettesJson from "./palettes.json";
+
+export type PaletteId = (typeof palettesJson.palettes)[number]["id"];
+export const PALETTES = palettesJson.palettes;
+
+export const MAP_STYLES = [
+  { id: "streets", name: "Streets", blurb: "Neighborhood map with highways and labels." },
+  { id: "minimal", name: "Minimal", blurb: "Just coast, two highways and pins. Least noise." },
+  { id: "drive", name: "Drive time", blurb: "10/20/30-minute rings around the client." },
+  { id: "heat", name: "Bench density", blurb: "Where your caregivers cluster." },
+  { id: "satellite", name: "Terrain", blurb: "Drawn aerial texture. No tile server needed." },
+  { id: "blueprint", name: "Blueprint", blurb: "Brand-colored grid. Great on big screens." },
+  { id: "live", name: "Live streets", blurb: "Real, zoomable street map. Light/dark canvas." },
+  { id: "aerial", name: "Aerial photo", blurb: "Real satellite imagery with place labels." },
+] as const;
+export type MapStyleId = (typeof MAP_STYLES)[number]["id"];
+
+const KEYS = { palette: "kuida-palette", map: "kuida-map" } as const;
+
+function makeStore<T extends string>(key: string, fallback: T, valid: readonly string[]) {
+  const listeners = new Set<() => void>();
+  let value: T = fallback;
+  let loaded = false;
+  const load = () => {
+    if (loaded || typeof window === "undefined") return;
+    loaded = true;
+    try {
+      const v = localStorage.getItem(key);
+      if (v && valid.includes(v)) value = v as T;
+    } catch {}
+  };
+  return {
+    get: () => {
+      load();
+      return value;
+    },
+    set: (v: T) => {
+      value = v;
+      try {
+        localStorage.setItem(key, v);
+      } catch {}
+      listeners.forEach((l) => l());
+    },
+    subscribe: (l: () => void) => {
+      listeners.add(l);
+      return () => listeners.delete(l);
+    },
+    fallback,
+  };
+}
+
+const paletteStore = makeStore<PaletteId>(KEYS.palette, "pine", PALETTES.map((p) => p.id));
+const mapStore = makeStore<MapStyleId>(KEYS.map, "streets", MAP_STYLES.map((m) => m.id));
+
+export function usePalette() {
+  const v = useSyncExternalStore(paletteStore.subscribe, paletteStore.get, () => paletteStore.fallback);
+  const set = (id: PaletteId) => {
+    document.documentElement.setAttribute("data-palette", id);
+    paletteStore.set(id);
+  };
+  return [v, set] as const;
+}
+
+export function useMapStyle() {
+  const v = useSyncExternalStore(mapStore.subscribe, mapStore.get, () => mapStore.fallback);
+  return [v, mapStore.set] as const;
+}
+
+/** Pre-paint: apply saved palette + theme before hydration (no flash). */
+export const appearanceScript = `try{var d=document.documentElement,t=localStorage.getItem("kuida-theme"),p=localStorage.getItem("kuida-palette");if(t==="light"||t==="dark")d.setAttribute("data-theme",t);if(p&&/^[a-z]+$/.test(p))d.setAttribute("data-palette",p)}catch(e){}`;

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Bell, CalendarDays, Check, ChevronRight, Clock, FileText, Home, MapPin, ShieldCheck, Upload, Wallet, X } from "lucide-react";
 import { LogoMark } from "@/components/logo";
+import { PalettePicker } from "@/components/palette-picker";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { DAYS_ES } from "@/lib/data";
@@ -38,6 +39,7 @@ export default function CaregiverApp() {
             <LogoMark className="size-9" />
           </Link>
           <div className="flex items-center gap-1">
+            <PalettePicker />
             <ThemeToggle />
             <button type="button" className="relative grid size-10 place-items-center rounded-full hover:bg-surface-2" aria-label="Notificaciones">
               <Bell className="size-5" />

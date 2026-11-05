@@ -15,7 +15,7 @@ import {
   ShieldCheck,
   X,
 } from "lucide-react";
-import { AreaMap } from "@/components/area-map";
+import { MapView } from "@/components/map-view";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge, type Tone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -287,7 +287,7 @@ export function MatchBoard({
         {!compact && (
           <Card className="overflow-hidden">
             <div className="h-56">
-              <AreaMap client={{ x: client.x, y: client.y }} pins={pins} selectedId={selected} />
+              <MapView client={{ x: client.x, y: client.y }} pins={pins} selectedId={selected} />
             </div>
             <div className="flex items-center justify-between gap-2 border-t border-line px-4 py-2.5 text-xs text-muted">
               <span className="flex items-center gap-1.5">
@@ -321,7 +321,7 @@ export function MatchBoard({
           <div className="space-y-4 p-5">
             {winner ? (
               <div className="flex animate-fade-up items-center gap-3 rounded-xl bg-ok/10 p-3">
-                <Avatar name={`${winner.caregiver.firstName} ${winner.caregiver.lastInitial}`} className="bg-ok text-white" />
+                <Avatar name={`${winner.caregiver.firstName} ${winner.caregiver.lastInitial}`} className="bg-ok text-bg" />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold">
                     Filled by {winner.caregiver.firstName} {winner.caregiver.lastInitial}. in {simClock(lastStep)}

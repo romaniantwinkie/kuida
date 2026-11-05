@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bot, CalendarRange, ChevronsUpDown, Home, Search, Users } from "lucide-react";
+import { Bot, CalendarRange, ChevronsUpDown, Home, Paintbrush, Search, Users } from "lucide-react";
 import { Logo } from "@/components/logo";
+import { PalettePicker } from "@/components/palette-picker";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/cn";
 import { SHIFTS } from "@/lib/data";
@@ -16,6 +17,7 @@ export const APP_NAV = [
   { href: "/app/search", label: "Find caregivers", icon: Search },
   { href: "/app/roster", label: "Roster", icon: Users },
   { href: "/app/copilot", label: "Copilot", icon: Bot },
+  { href: "/app/appearance", label: "Appearance", icon: Paintbrush },
 ];
 
 function isActive(pathname: string, href: string) {
@@ -51,7 +53,7 @@ export function AppSidebar() {
             >
               <n.icon className="size-[18px]" strokeWidth={1.9} />
               <span className="flex-1">{n.label}</span>
-              {n.count ? <span className="rounded-full bg-accent px-1.5 text-[11px] font-bold text-white">{n.count}</span> : null}
+              {n.count ? <span className="rounded-full bg-accent px-1.5 text-[11px] font-bold text-accent-ink">{n.count}</span> : null}
             </Link>
           );
         })}
@@ -68,7 +70,10 @@ export function AppSidebar() {
           <span className="grid size-8 place-items-center rounded-full bg-brand-soft text-xs font-bold text-brand">AM</span>
           Ana M.
         </span>
-        <ThemeToggle />
+        <span className="flex items-center">
+          <PalettePicker side="top" />
+          <ThemeToggle />
+        </span>
       </div>
     </aside>
   );
@@ -80,7 +85,10 @@ export function AppTopbar() {
     <div className="sticky top-0 z-30 border-b border-line bg-bg/85 backdrop-blur-xl lg:hidden">
       <div className="flex h-14 items-center justify-between px-4">
         <Logo href="/app" />
-        <ThemeToggle />
+        <span className="flex items-center">
+          <PalettePicker />
+          <ThemeToggle />
+        </span>
       </div>
       <nav className="flex gap-1 overflow-x-auto px-3 pb-2">
         {APP_NAV.map((n) => (

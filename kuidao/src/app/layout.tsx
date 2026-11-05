@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { themeScript } from "@/components/theme-toggle";
+import { appearanceScript } from "@/lib/appearance";
+import "./palettes.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,9 +18,9 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-palette="pine" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: appearanceScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link

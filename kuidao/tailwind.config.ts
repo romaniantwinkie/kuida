@@ -18,6 +18,7 @@ const config: Config = {
         "brand-ink": token("brand-ink"),
         "brand-soft": token("brand-soft"),
         accent: token("accent"),
+        "accent-ink": token("accent-ink"),
         "accent-soft": token("accent-soft"),
         ok: token("ok"),
         warn: token("warn"),
