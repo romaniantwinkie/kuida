@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Kuida 2 theme tokens — RGB channels so Tailwind opacity modifiers work. */
+:root {
+  --bg: 247 247 244;
+  --surface: 255 255 255;
+  --surface-2: 240 241 236;
+  --line: 226 228 221;
+  --ink: 16 24 22;
+  --muted: 92 104 99;
+  --brand: 14 107 88;
+  --brand-ink: 255 255 255;
+  --brand-soft: 222 241 234;
+  --accent: 240 106 74;
+  --accent-soft: 255 233 225;
+  --ok: 22 150 74;
+  --warn: 196 112 8;
+  --danger: 210 44 44;
+  --info: 37 99 235;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: 11 16 15;
+    --surface: 18 25 23;
+    --surface-2: 26 35 32;
+    --line: 40 52 48;
+    --ink: 234 240 236;
+    --muted: 150 164 158;
+    --brand: 64 214 168;
+    --brand-ink: 6 30 24;
+    --brand-soft: 20 50 42;
+    --accent: 255 140 110;
+    --accent-soft: 64 32 24;
+    --ok: 74 222 128;
+    --warn: 251 191 36;
+    --danger: 248 113 113;
+    --info: 96 165 250;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: 11 16 15;
+  --surface: 18 25 23;
+  --surface-2: 26 35 32;
+  --line: 40 52 48;
+  --ink: 234 240 236;
+  --muted: 150 164 158;
+  --brand: 64 214 168;
+  --brand-ink: 6 30 24;
+  --brand-soft: 20 50 42;
+  --accent: 255 140 110;
+  --accent-soft: 64 32 24;
+  --ok: 74 222 128;
+  --warn: 251 191 36;
+  --danger: 248 113 113;
+  --info: 96 165 250;
+  color-scheme: dark;
+}
+
+body {
+  background: rgb(var(--bg));
+  color: rgb(var(--ink));
+  font-feature-settings: "ss01", "cv11";
+}
+
+button,
+a {
+  cursor: pointer;
+}
+
+@layer components {
+  .field {
+    @apply mt-1.5 min-h-11 w-full rounded-xl border border-line bg-surface px-3.5 text-sm text-ink outline-none transition placeholder:text-muted/70 focus:border-brand focus:ring-4 focus:ring-brand/15;
+  }
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.16em] text-muted;
+  }
+  .dot-grid {
+    background-image: radial-gradient(rgb(var(--line)) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+}
