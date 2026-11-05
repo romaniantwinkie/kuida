@@ -98,7 +98,7 @@ export default function CaregiverApp() {
             <Wordmark className="text-[22px]" />
           </Link>
           <div className="flex items-center gap-1">
-            <LangToggle />
+            <LangToggle compact />
             <IconButton label={t({ en: "Notifications", es: "Notificaciones" })} tooltipSide="left">
               <Bell className="size-5" />
             </IconButton>

@@ -56,7 +56,7 @@ export function AppSidebar() {
               key={n.href}
               href={n.href}
               className={cn(
-                "flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium transition-colors",
+                "flex min-h-11 items-center gap-3 whitespace-nowrap rounded-xl px-3 text-sm font-medium transition-colors",
                 active ? "bg-brand-soft text-brand" : "text-muted hover:bg-surface-2 hover:text-ink",
               )}
             >
@@ -107,7 +107,7 @@ export function AppTopbar() {
             key={n.href}
             href={n.href}
             className={cn(
-              "flex min-h-11 shrink-0 items-center gap-2 rounded-full px-4 text-sm font-medium",
+              "flex min-h-11 shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 text-sm font-medium",
               isActive(pathname, n.href) ? "bg-brand text-brand-ink" : "bg-surface-2 text-muted",
             )}
           >

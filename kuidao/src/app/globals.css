@@ -32,6 +32,13 @@ a {
   cursor: pointer;
 }
 
+/* Pill buttons, tabs and menu links never break onto two lines. */
+a.rounded-full,
+button.rounded-full,
+[role="tab"] {
+  white-space: nowrap;
+}
+
 /* Max weight 600 app-wide (typography rule). */
 b,
 strong,
