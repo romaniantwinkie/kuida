@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-<script src="avatars2.js"></script>
 <script src="timing.js"></script>
 <style>
   :root { --blue:#1D4ED8; --sky:#8AB4FF; --soft:#E7EEFD; --ink:#0F141B; --muted:#5D6774; --line:#DFE3E8; --ok:#16964A; --okbg:#E3F4EA; --red:#D22C2C; }
@@ -131,73 +130,98 @@ function renderPeople(id, l, L, n, kinAt) {
   fx($("#" + id + "k"), l, kinAt, L - 0.5, { dy: 0, blur: 26, scale: 1.04 });
 }
 
-// ---------- videos ----------
+// ---------- map scenes (real photos on a real Miami map) ----------
+const photo = (k) => `photos/${k}.jpg`;
+function mapFrame(id, inner) {
+  return `<div class="shot" id="${id}m" style="left:150px;top:90px;width:1620px;height:900px">
+      <img src="photos/map.jpg" style="width:1920px;height:1080px;max-width:none;margin:-90px 0 0 -150px;filter:saturate(.6) brightness(1.03)"/>
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(243,246,251,.0),rgba(231,238,253,.35))"></div>
+      ${inner}</div>`;
+}
+const pin = (id, k, x, y, s, ring = "#fff") => `<div class="avc" id="${id}" style="left:${x - s / 2}px;top:${y - s / 2}px;width:${s}px;height:${s}px;box-shadow:0 18px 40px -16px rgba(15,30,80,.55),0 0 0 6px ${ring}"><img src="${photo(k)}"/></div>`;
+
 let SCENES = [];
 if (VID === "agency") {
+  // caregivers around the client (map-local coords; client at 810,450)
+  const CG = [["c1", 470, 250], ["c2", 1150, 220], ["c3", 330, 560], ["xio", 1080, 660], ["c4", 1300, 470], ["c5", 600, 740], ["c6", 1240, 760], ["c7", 560, 380], ["c8", 900, 200], ["c9", 1450, 280]];
   SCENES = [
-    { html: scenePeople("s0", [{ x: 330, y: 330, s: 380, src: AV2.client, label: "A client counting on care" }, { x: 1210, y: 330, s: 380, src: AV2.xio, label: "A caregiver close by" }], "close by"),
-      r: (l, L) => renderPeople("s0", l, L, 2, 2.6) },
-    { html: `<div class="scene" id="s1">
-        <div class="card abs" id="s1c" style="left:700px;top:400px;width:520px;padding:32px 36px;border-left:10px solid #1D4ED8">
-          <p style="font-size:34px;font-weight:600">Sra. G. · HHA</p><p class="cap" style="margin-top:10px;font-size:28px">Tue · 8:00a – 2:00p · Northside</p>
-          <span id="s1x" style="position:absolute;right:-22px;top:-22px;width:56px;height:56px;border-radius:50%;background:#D22C2C;color:#fff;font:600 34px Inter;display:grid;place-items:center;opacity:0">!</span></div>
-        ${[["Missed call", "(555) 014-2290", 260, 230, "#D22C2C"], ["No answer", "(555) 018-7731", 1240, 200, "#1E3A7B"], ["Voicemail · 0:42", "Niurka D.", 1300, 640, "#1E3A7B"], ["Text sent", "“Can anyone cover 8am?”", 220, 650, "#1E3A7B"], ["No reply", "3 caregivers", 820, 760, "#1E3A7B"]]
-          .map((c, i) => `<div class="chip abs" id="s1n${i}" style="left:${c[2]}px;top:${c[3]}px"><span style="width:44px;height:44px;border-radius:14px;background:${i === 0 ? "#FDE8E8" : "#E7EEFD"};display:grid;place-items:center;color:${c[4]};font-weight:600">${i < 2 ? "☏" : i === 2 ? "◉" : "✉"}</span><span><span style="display:block;font-size:20px;color:${c[4]};font-weight:600">${c[0]}</span><span style="font-size:24px">${c[1]}</span></span></div>`).join("")}
+    { html: sceneOrb("s0"), r: (l, L) => renderOrb("s0", l, L) },
+    { html: `<div class="scene" id="s1">${mapFrame("s1", `
+        <div id="s1ring" style="position:absolute;left:810px;top:450px;width:0;height:0;border-radius:50%;border:3px solid rgba(29,78,216,.5);background:rgba(29,78,216,.06);transform:translate(-50%,-50%)"></div>
+        ${CG.map(([k, x, y], i) => pin("s1g" + i, k, x, y, 96)).join("")}
+        ${CG.map(([k, x, y], i) => `<span id="s1v${i}" style="position:absolute;left:${x + 26}px;top:${y + 22}px;width:26px;height:26px;border-radius:50%;background:#16964A;border:4px solid #fff;opacity:0"></span>`).join("")}
+        ${pin("s1cl", "client", 810, 450, 150, "#1D4ED8")}
+        <div class="chip" id="s1cll" style="position:absolute;left:700px;top:545px;font-weight:600">Sr. G. · HHA · Tue 8a</div>`)}
+        <div class="chip abs" id="s1t1" style="left:90px;top:170px"><span style="width:14px;height:14px;border-radius:50%;background:#1D4ED8"></span>Not on your roster yet</div>
+        <div class="chip abs" id="s1t2" style="left:1480px;top:150px">${svgCheck("#16964A", 28)} Credentials verified</div>
+        <div class="chip abs" id="s1t3" style="left:1470px;top:880px"><span style="width:14px;height:14px;border-radius:50%;background:#16964A"></span>Available now · nearby</div>
       </div>`,
-      r: (l, L) => { fx($("#s1c"), l, 0.1, L - 0.5, { dy: 20 }); [0, 1, 2, 3, 4].forEach((i) => fx($("#s1n" + i), l, 0.7 + i * 0.45, L - 0.5, { dy: 30, scale: 0.9, d: 0.5 }));
-        const red = P(l, 3.2, 0.4); $("#s1c").style.borderLeftColor = red > 0.5 ? "#D22C2C" : "#1D4ED8"; $("#s1c").style.boxShadow = red > 0.5 ? "0 0 0 4px rgba(210,44,44,.25), 0 30px 60px -30px rgba(210,44,44,.4)" : ""; $("#s1x").style.opacity = red; } },
-    { html: sceneOrb("s2"), r: (l, L) => renderOrb("s2", l, L) },
-    { html: `<div class="scene" id="s3">
-        <div class="shot" id="s3a" style="left:330px;top:120px;width:1260px"><img src="shots/match.png"/></div>
-        <div class="shot" id="s3b" style="left:330px;top:120px;width:1260px;opacity:0"><img src="shots/match-why.png"/></div>
-        <div class="chip abs" id="s3c1" style="left:150px;top:700px"><b style="color:#1D4ED8;font-weight:600">Ranked</b> in seconds</div>
-        <div class="chip abs" id="s3c2" style="left:1460px;top:240px">Reasons for every score</div>
-        <div class="chip abs" id="s3c3" style="left:1440px;top:820px">Expired credentials screened out</div>
-      </div>`,
-      r: (l, L) => { const base = `perspective(2400px) rotateX(${8 - 6 * ease(l / L)}deg) rotateY(${-14 + 10 * ease(l / L)}deg)`;
-        fx($("#s3a"), l, 0.05, L - 0.5, { dy: 60, base }); const sw = P(l, 2.4, 0.6); $("#s3b").style.opacity = sw * (1 - ease((l - (L - 0.5)) / 0.5)); $("#s3b").style.transform = base;
-        fx($("#s3c1"), l, 0.8, L - 0.5); fx($("#s3c2"), l, 1.5, L - 0.5); fx($("#s3c3"), l, 3.0, L - 0.5); } },
-    { html: `<div class="scene" id="s4">
-        <div class="phone" id="s4p" style="left:300px;top:90px;width:430px;height:900px;padding:40px 28px">
+      r: (l, L) => { fx($("#s1m"), l, 0.05, L - 0.5, { dy: 40, base: "perspective(2600px) rotateX(10deg)" });
+        const rr = P(l, 0.6, 2.4); const ring = $("#s1ring"); ring.style.width = ring.style.height = 1300 * rr + "px"; ring.style.opacity = (1 - rr) * 0.9 + 0.1;
+        fx($("#s1cl"), l, 0.3, null, { dy: 0, scale: 0.6 }); fx($("#s1cll"), l, 0.6, null, { dy: 10 });
+        CG.forEach((c, i) => { fx($("#s1g" + i), l, 0.9 + i * 0.22, null, { dy: 0, scale: 0.4, d: 0.5, blur: 8 }); $("#s1v" + i).style.opacity = P(l, 1.3 + i * 0.22, 0.3); });
+        fx($("#s1t1"), l, 1.6, L - 0.5); fx($("#s1t2"), l, 2.6, L - 0.5); fx($("#s1t3"), l, 3.6, L - 0.5); } },
+    { html: `<div class="scene" id="s2">
+        <div class="phone" id="s2p" style="left:300px;top:90px;width:430px;height:900px;padding:40px 28px">
           <p class="cap" style="text-align:center">Cercana · text message</p>
-          <div id="s4m1" style="margin-top:36px;background:#EEF1F5;border-radius:28px;border-bottom-left-radius:8px;padding:22px 26px;font-size:27px;line-height:1.35">Cercana: Turno HHA en Northside, mar 8a–2p, $18–20/h. Responde <b>1</b> para aceptar.</div>
-          <div id="s4m2" style="margin:24px 0 0 auto;width:fit-content;background:#1D4ED8;color:#fff;border-radius:28px;border-bottom-right-radius:8px;padding:20px 30px;font-size:30px;font-weight:600">1</div>
-          <div id="s4m3" style="margin-top:24px;background:#EEF1F5;border-radius:28px;border-bottom-left-radius:8px;padding:22px 26px;font-size:27px;line-height:1.35">¡Confirmado! Te enviamos la dirección.</div>
+          <div id="s2m1" style="margin-top:36px;background:#EEF1F5;border-radius:28px;border-bottom-left-radius:8px;padding:22px 26px;font-size:27px;line-height:1.35">Cercana: Turno HHA en Northside, mar 8a–2p, $18–20/h. Responde <b>1</b> para aceptar.</div>
+          <div id="s2m2" style="margin:24px 0 0 auto;width:fit-content;background:#1D4ED8;color:#fff;border-radius:28px;border-bottom-right-radius:8px;padding:20px 30px;font-size:30px;font-weight:600">1</div>
+          <div id="s2m3" style="margin-top:24px;background:#EEF1F5;border-radius:28px;border-bottom-left-radius:8px;padding:22px 26px;font-size:27px;line-height:1.35">¡Confirmado! Te enviamos la dirección.</div>
         </div>
-        <div class="abs" style="left:860px;top:330px;display:flex;gap:28px" id="s4row">${["Text", "App", "English", "Español"].map((x, i) => `<span class="pill" id="s4q${i}">${x}</span>`).join("")}</div>
-        <div class="chip abs" id="s4s" style="left:860px;top:520px"><span style="width:16px;height:16px;border-radius:50%;background:#16964A"></span> Xiomara R. accepted · offers to others closed automatically</div>
+        <div class="abs" style="left:860px;top:300px;display:flex;gap:28px" id="s2row">${["Text", "App", "English", "Español"].map((x, i) => `<span class="pill" id="s2q${i}">${x}</span>`).join("")}</div>
+        <div class="chip abs" id="s2s" style="left:860px;top:500px;padding:14px 28px 14px 14px;font-size:28px"><img src="${photo("xio")}" style="width:72px;height:72px;border-radius:50%"/><span><b style="font-weight:600">Xiomara R.</b> said yes first<span class="cap" style="display:block">Offers to others closed automatically</span></span></div>
       </div>`,
-      r: (l, L) => { fx($("#s4p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(14deg)" }); fx($("#s4row"), l, 0.4, L - 0.5, { dy: 20 });
-        const hi = Math.floor(Math.max(0, l - 0.9) / 0.7); [0, 1, 2, 3].forEach((i) => $("#s4q" + i).classList.toggle("on", hi === i || (hi >= 4 && (i === 0 || i === 3))));
-        fx($("#s4m1"), l, 0.8, null, { dy: 16, blur: 0 }); fx($("#s4m2"), l, 3.3, null, { dy: 16, blur: 0 }); fx($("#s4m3"), l, 4.0, null, { dy: 16, blur: 0 }); fx($("#s4s"), l, 4.2, L - 0.5); } },
-    { html: sceneConfirmed("s5", "Shift confirmed", "Family notified · visit scheduled", "shots/match-filled.png"), r: (l, L) => renderConfirmed("s5", l, L) },
-    { html: sceneBenefits("s6", ["Less calling", "Faster coverage", "More shifts filled"], "shots/today.png", false), r: (l, L) => renderBenefits("s6", l, L, 3, false) },
-    { html: sceneEnd("s7", "Home care shifts, covered close by.", "cercana.ai", "For agencies · the first 50 get 6 months free"), r: (l) => renderEnd("s7", l) },
+      r: (l, L) => { fx($("#s2p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(14deg)" }); fx($("#s2row"), l, 0.4, L - 0.5, { dy: 20 });
+        const hi = Math.floor(Math.max(0, l - 0.9) / 0.6); [0, 1, 2, 3].forEach((i) => $("#s2q" + i).classList.toggle("on", hi === i || (hi >= 4 && (i === 0 || i === 3))));
+        fx($("#s2m1"), l, 0.8, null, { dy: 16, blur: 0 }); fx($("#s2m2"), l, L - 2.4, null, { dy: 16, blur: 0 }); fx($("#s2m3"), l, L - 1.8, null, { dy: 16, blur: 0 }); fx($("#s2s"), l, L - 2.2, L - 0.5); } },
+    { html: `<div class="scene" id="s3">
+        ${pin("s3a", "xio", 560, 430, 230)}${pin("s3b", "client", 1360, 430, 230)}
+        <div class="orb abs" id="s3o" style="left:860px;top:300px;width:200px;height:200px;background:radial-gradient(circle at 35% 30%,#fff 0%,#DDF3E6 40%,#5BC48A 75%,#16964A 100%)">${svgCheck("#fff", 96)}</div>
+        <h2 class="abs word" id="s3h" style="left:0;right:0;top:620px;text-align:center;font-size:86px">Covered within minutes</h2>
+        <p class="abs" id="s3s" style="left:0;right:0;top:730px;text-align:center;font-size:38px;color:#475569">Xiomara R. → Sr. G. · family notified</p>
+      </div>`,
+      r: (l, L) => { fx($("#s3a"), l, 0.05, L - 0.5, { dy: 0, scale: 0.7, base: `translateX(${80 * (1 - P(l, 0.05, 0.9))}px)` }); fx($("#s3b"), l, 0.05, L - 0.5, { dy: 0, scale: 0.7, base: `translateX(${-80 * (1 - P(l, 0.05, 0.9))}px)` });
+        fx($("#s3o"), l, 0.35, L - 0.5, { dy: 0, scale: 0.5, d: 0.6 }); fx($("#s3h"), l, 0.6, L - 0.5); fx($("#s3s"), l, 0.95, L - 0.5); } },
+    { html: sceneBenefits("s4", ["More caregivers", "Faster coverage", "Fewer calls"], "shots/today.png", false), r: (l, L) => renderBenefits("s4", l, L, 3, false) },
+    { html: sceneEnd("s5", "Home care shifts, covered close by.", "cercana.ai", "For agencies · the first 50 get 6 months free"), r: (l) => renderEnd("s5", l) },
   ];
 } else {
+  const AG = [["Sunrise Home Health", 430, 230], ["Bayside Care Partners", 1190, 210], ["Golden Years Home Care", 300, 640], ["Northside Home Health", 1150, 640], ["Coral Care Services", 760, 790], ["Palm Home Aides", 1250, 410]];
+  const bld = `<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16"/><path d="M15 9h4a1 1 0 0 1 1 1v11"/><path d="M8 8h3M8 12h3M8 16h3M2 21h20"/></svg>`;
   SCENES = [
-    { html: scenePeople("s0", [{ x: 330, y: 330, s: 380, src: AV2.maria, label: "You" }, { x: 1210, y: 330, s: 380, src: AV2.client, label: "The people you care for" }], "the work you love"),
-      r: (l, L) => renderPeople("s0", l, L, 2, 1.6) },
-    { html: `<div class="scene" id="s1">${["Photo ID", "HHA certificate", "TB test", "CPR card", "Background check"].map((d, i) => `<div class="card abs" id="s1d${i}" style="left:${520 + i * 60}px;top:${150 + i * 150}px;width:680px;padding:28px 32px;display:flex;align-items:center;gap:20px"><span style="width:56px;height:56px;border-radius:16px;background:#E7EEFD;display:grid;place-items:center;color:#1D4ED8;font-weight:600;font-size:26px">▤</span><span style="flex:1"><span style="display:block;font-size:30px;font-weight:600">${d}</span><span class="cap">Sent to Agency ${"ABCDE"[i]}</span></span><span style="padding:8px 18px;border-radius:999px;background:#FDE8E8;color:#D22C2C;font-weight:600;font-size:22px">again</span></div>`).join("")}</div>`,
-      r: (l, L) => { for (let i = 0; i < 5; i++) fx($("#s1d" + i), l, 0.15 + i * 0.4, L - 0.5, { dy: 40, scale: 0.92, d: 0.5, base: `rotate(${(i % 2 ? 1 : -1) * (2 + i)}deg)` }); } },
-    { html: sceneOrb("s2"), r: (l, L) => renderOrb("s2", l, L) },
-    { html: `<div class="scene" id="s3">
-        <div class="phone" id="s3p" style="left:300px;top:60px;width:420px"><img src="shots/c-docs.png"/></div>
-        <div class="abs kin" id="s3k" style="left:880px;top:300px;font-size:92px;line-height:1.05">Upload once.<br/><span style="color:#1D4ED8">Share by choice.</span></div>
-        <div class="chip abs" id="s3c1" style="left:880px;top:600px">${svgCheck("#16964A", 30)} Shared with Sunrise Home Health · 30 days</div>
-        <div class="chip abs" id="s3c2" style="left:880px;top:700px">View-only · you see every view</div>
+    { html: sceneOrb("s0"), r: (l, L) => renderOrb("s0", l, L) },
+    { html: `<div class="scene" id="s1">${mapFrame("s1", `
+        <svg width="1620" height="900" style="position:absolute;left:0;top:0">${AG.map(([n, x, y], i) => `<path id="s1ln${i}" d="M810 450 L ${x} ${y}" stroke="#1D4ED8" stroke-width="4" stroke-dasharray="2 14" stroke-linecap="round" fill="none" opacity="0"/>`).join("")}</svg>
+        ${AG.map(([n, x, y], i) => `<div class="chip" id="s1a${i}" style="position:absolute;left:${x - 40}px;top:${y - 36}px;font-weight:500"><span style="width:52px;height:52px;border-radius:16px;background:#E7EEFD;display:grid;place-items:center">${bld}</span>${n}</div>`).join("")}
+        ${pin("s1me", "maria", 810, 450, 170, "#1D4ED8")}
+        <div class="chip" id="s1mel" style="position:absolute;left:715px;top:555px;font-weight:600">María L. · HHA</div>`)}
+        <div class="chip abs" id="s1t1" style="left:90px;top:160px">One profile · every agency near you</div>
+        <div class="chip abs" id="s1t2" style="left:1290px;top:870px"><span style="width:14px;height:14px;border-radius:50%;background:#16964A"></span>Sunrise Home Health viewed your profile</div>
       </div>`,
-      r: (l, L) => { fx($("#s3p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(16deg) rotateX(4deg)" }); fx($("#s3k"), l, 0.5, L - 0.5, { dy: 0, blur: 24 }); fx($("#s3c1"), l, 1.8, L - 0.5); fx($("#s3c2"), l, 2.5, L - 0.5); } },
+      r: (l, L) => { fx($("#s1m"), l, 0.05, L - 0.5, { dy: 40, base: "perspective(2600px) rotateX(10deg)" });
+        fx($("#s1me"), l, 0.3, null, { dy: 0, scale: 0.6 }); fx($("#s1mel"), l, 0.6, null, { dy: 10 });
+        AG.forEach((a, i) => { const k = P(l, 0.9 + i * 0.3, 0.6); $("#s1ln" + i).setAttribute("opacity", (0.55 * k).toFixed(2)); fx($("#s1a" + i), l, 1.0 + i * 0.3, null, { dy: 14, scale: 0.85, d: 0.5 }); });
+        fx($("#s1t1"), l, 1.4, L - 0.5); fx($("#s1t2"), l, L - 1.8, L - 0.5); } },
+    { html: `<div class="scene" id="s2">
+        <div class="phone" id="s2p" style="left:1220px;top:60px;width:420px"><img src="shots/c-home.png"/></div>
+        <div class="card abs" id="s2m" style="left:220px;top:250px;width:780px;padding:30px 34px;font-size:32px;line-height:1.4"><span class="cap" style="display:block;margin-bottom:10px">Cercana · text message</span>New shift near you: HHA · Northside · Tue 8a–2p<br/><b style="color:#1D4ED8;font-weight:600">$18–20/h · 1.5 mi</b> · Reply 1 to accept</div>
+        <div class="abs" id="s2row" style="left:220px;top:540px;display:flex;gap:24px"><span class="pill" id="s2q0">Pay up front</span><span class="pill" id="s2q1">Distance up front</span></div>
+        <div class="abs" id="s2r" style="left:900px;top:440px;background:#1D4ED8;color:#fff;border-radius:28px;border-bottom-right-radius:8px;padding:20px 34px;font-size:34px;font-weight:600">1</div>
+        <div class="chip abs" id="s2ok" style="left:220px;top:680px;font-size:30px">${svgCheck("#16964A", 34)} The shift is yours. Address sent by text.</div>
+      </div>`,
+      r: (l, L) => { fx($("#s2p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(-16deg) rotateX(4deg)" }); fx($("#s2m"), l, 0.4, L - 0.5, { dy: 24 }); fx($("#s2row"), l, 1.0, L - 0.5, { dy: 20 });
+        $("#s2q0").classList.toggle("on", l > 1.8); $("#s2q1").classList.toggle("on", l > 2.5); fx($("#s2r"), l, L - 2.6, L - 0.5, { dy: 16, blur: 0 }); fx($("#s2ok"), l, L - 1.9, L - 0.5); } },
+    { html: sceneBenefits("s3", ["More agencies", "More shifts", "No applying one by one"], "shots/c-shifts.png", true), r: (l, L) => renderBenefits("s3", l, L, 3, true) },
     { html: `<div class="scene" id="s4">
-        <div class="phone" id="s4p" style="left:1220px;top:60px;width:420px"><img src="shots/c-home.png"/></div>
-        <div class="card abs" id="s4m" style="left:260px;top:330px;width:760px;padding:30px 34px;font-size:32px;line-height:1.4"><span class="cap" style="display:block;margin-bottom:10px">Cercana · text message</span>New shift near you: HHA · Northside · Tue 8a–2p<br/><b style="color:#1D4ED8;font-weight:600">$18–20/h · 1.5 mi</b> · Reply 1 to accept</div>
-        <div class="abs" id="s4row" style="left:260px;top:620px;display:flex;gap:24px"><span class="pill" id="s4q0">Pay up front</span><span class="pill" id="s4q1">Distance up front</span></div>
+        <div class="phone" id="s4p" style="left:300px;top:60px;width:420px"><img src="shots/c-docs.png"/></div>
+        <div class="abs kin" id="s4k" style="left:880px;top:250px;font-size:92px;line-height:1.05">Private until<br/><span style="color:#1D4ED8">you share.</span></div>
+        <div class="chip abs" id="s4c1" style="left:880px;top:540px">${svgCheck("#16964A", 30)} You choose who sees your documents</div>
+        <div class="chip abs" id="s4c2" style="left:880px;top:640px">${svgCheck("#16964A", 30)} Your number stays private</div>
+        <div class="chip abs" id="s4c3" style="left:880px;top:740px"><b style="color:#1D4ED8;font-weight:600;font-size:30px">$0</b> Free for caregivers, always</div>
       </div>`,
-      r: (l, L) => { fx($("#s4p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(-16deg) rotateX(4deg)" }); fx($("#s4m"), l, 0.5, L - 0.5, { dy: 24 }); fx($("#s4row"), l, 1.2, L - 0.5, { dy: 20 });
-        $("#s4q0").classList.toggle("on", l > 1.9); $("#s4q1").classList.toggle("on", l > 2.6); } },
-    { html: sceneConfirmed("s5", "The shift is yours", "Address sent by text · you're all set", null), r: (l, L) => renderConfirmed("s5", l, L) },
-    { html: sceneBenefits("s6", ["No fees", "Number private", "Free, always"], "shots/c-shifts.png", true), r: (l, L) => renderBenefits("s6", l, L, 3, true) },
-    { html: sceneEnd("s7", "Free for caregivers, always.", "Join free · cercana.ai", "Your documents, your shifts, your choice"), r: (l) => renderEnd("s7", l) },
+      r: (l, L) => { fx($("#s4p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(16deg) rotateX(4deg)" }); fx($("#s4k"), l, 0.4, L - 0.5, { dy: 0, blur: 24 });
+        fx($("#s4c1"), l, 1.0, L - 0.5); fx($("#s4c2"), l, 2.4, L - 0.5); fx($("#s4c3"), l, 3.8, L - 0.5); } },
+    { html: sceneEnd("s5", "Free for caregivers, always.", "Join free · cercana.ai", "One profile. Every agency near you."), r: (l) => renderEnd("s5", l) },
   ];
 }
 $("#stage").innerHTML = SCENES.map((s) => s.html).join("");

@@ -1,68 +1,63 @@
-"""Amy voice-over with one consistent 'Cercana' clip spliced into every occurrence."""
-import json, re, sys, wave
+"""Voice-over with Kokoro (open-source, voice af_heart), plus light polish and scene timing.
+
+Usage: python synth_voice.py /path/to/kokoro-v1.0.onnx /path/to/voices-v1.0.bin
+Needs: pip install kokoro-onnx soundfile, and ffmpeg on PATH.
+Writes voiceover/<vid>-<n>.wav, voiceover/durations.json, timing.json and timing.js.
+"""
+import json, subprocess, sys
 from pathlib import Path
 import numpy as np
-from piper import PiperVoice, SynthesisConfig
-# Usage: python synth_voice.py /path/to/en_US-amy-medium.onnx   (needs piper-tts, numpy, onnx)
+import soundfile as sf
+from kokoro_onnx import Kokoro
+
 HERE = Path(__file__).parent
 OUT = HERE / "voiceover"
-voice = PiperVoice.load(sys.argv[1], include_alignments=True)
-SR = voice.config.sample_rate
-cfg = SynthesisConfig(length_scale=1.06, noise_scale=0.6, noise_w_scale=0.85)
-TOKEN = list("seɾkˈana")
-PAUSE = 0.38
+VOICE, SPEED = "af_heart", 0.95
+# "Cercana" in Latin American Spanish (ser-KAH-na, tapped r). Swapped in for the
+# English guess so every occurrence uses the same phonemes.
+CERCANA = "sɛɾkˈɑnə"
 
-def synth_aligned(text):
-    c = list(voice.synthesize(text, syn_config=cfg, include_alignments=True))[0]
-    al = c.phoneme_alignments
-    starts = np.cumsum([0] + [int(a.num_samples) for a in al])
-    return c.audio_float_array.copy(), [a.phoneme for a in al], starts
+k = Kokoro(sys.argv[1], sys.argv[2])
+EN_GUESS = k.tokenizer.phonemize("Cercana", "en-us").strip().rstrip(".")
 
-def token_spans(phs, starts):
-    spans = []
-    for i in range(len(phs) - len(TOKEN) + 1):
-        if phs[i:i + len(TOKEN)] == TOKEN:
-            spans.append((int(starts[i]), int(starts[i + len(TOKEN)])))
-    return spans
-
-def fade(x, ms=8):
-    n = int(SR * ms / 1000); x = x.copy()
-    if len(x) > 2 * n: x[:n] *= np.linspace(0, 1, n); x[-n:] *= np.linspace(1, 0, n)
-    return x
-
-# 1) The reference "Cercana": taken from the sentence the listener liked.
-REF = "[[ seɾkˈana ]] finds the right caregivers near your client."
-ref_audio, ref_phs, ref_starts = synth_aligned(REF)
-s0, e0 = token_spans(ref_phs, ref_starts)[0]
-CLIP = fade(ref_audio[s0:e0])
-
-def render_sentence(text):
-    if text.strip() == REF:
-        return ref_audio  # the source sentence itself, unchanged
-    a, phs, starts = synth_aligned(text)
-    out, prev = [], 0
-    for s, e in token_spans(phs, starts):
-        out += [a[prev:s], CLIP]; prev = e
-    out.append(a[prev:])
-    a = np.concatenate(out)
+def say(text):
+    ph = k.tokenizer.phonemize(text, "en-us").replace(EN_GUESS, CERCANA)
+    a, sr = k.create(ph, voice=VOICE, speed=SPEED, lang="en-us", is_phonemes=True)
     nz = np.where(np.abs(a) > 0.01)[0]
-    return a[max(0, nz[0] - int(.02 * SR)): nz[-1] + int(.06 * SR)] if len(nz) else a
+    a = a[max(0, nz[0] - int(.02 * sr)): nz[-1] + int(.08 * sr)]
+    return a, sr
+
+def polish(src, dst):
+    # Rumble cut, a touch of warmth, de-harsh the 3-6 kHz range, gentle compression,
+    # and a very short, quiet room so the voice doesn't sit "inside your head".
+    af = ("highpass=f=75,equalizer=f=180:t=q:w=1:g=1.5,equalizer=f=4500:t=q:w=1.4:g=-2.5,"
+          "acompressor=threshold=-20dB:ratio=2.5:attack=8:release=120:makeup=2,"
+          "aecho=0.9:0.25:28|47:0.12|0.07,loudnorm=I=-18:TP=-2:LRA=9")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(src), "-af", af, "-ar", "44100", "-ac", "1", "-sample_fmt", "s16", str(dst)], check=True)
 
 scripts = json.load(open(OUT / "scripts.json"))
 dur = {}
 for vid, lines in scripts.items():
     dur[vid] = []
     for i, line in enumerate(lines):
-        sents = [x for x in re.split(r"(?<=[.!?])\s+(?![^\[]*\]\])", line) if x.strip()]
-        parts = []
-        for k, s in enumerate(sents):
-            parts.append(render_sentence(s))
-            if k < len(sents) - 1: parts.append(np.zeros(int(PAUSE * SR)))
-        audio = np.concatenate(parts)
-        with wave.open(f"{OUT}/{vid}-{i}.wav", "wb") as w:
-            w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
-            w.writeframes((np.clip(audio, -1, 1) * 32767).astype(np.int16).tobytes())
-        dur[vid].append(round(len(audio) / SR, 2))
-json.dump(dur, open(f"{OUT}/durations.json", "w"))
-json.dump(scripts, open(f"{OUT}/scripts.json", "w"), indent=2, ensure_ascii=False)
-print("clip seconds", round(len(CLIP) / SR, 3), {k: round(sum(v), 1) for k, v in dur.items()})
+        a, sr = say(line)
+        raw = OUT / f"{vid}-{i}.raw.wav"
+        sf.write(raw, a, sr)
+        polish(raw, OUT / f"{vid}-{i}.wav"); raw.unlink()
+        dur[vid].append(round(len(a) / sr, 2))
+        print(vid, i, dur[vid][-1], line)
+json.dump(dur, open(OUT / "durations.json", "w"))
+
+# Each scene lasts as long as its line plus a breath, with a minimum for the visuals.
+MINS = {"agency": [3.2, 6.6, 6.4, 3.6, 4.4, 4.6], "caregiver": [3.2, 6.0, 6.2, 4.4, 6.0, 4.6]}
+def plan(durs, mins, lead=0.4, pad=0.7):
+    t, sc, vo = 0.0, [], []
+    for d, m in zip(durs, mins):
+        L = round(max(m, lead + d + pad), 2)
+        sc.append([round(t, 2), round(t + L, 2)]); vo.append(round(t + lead, 2)); t += L
+    sc[-1][1] = round(sc[-1][1] + 1.0, 2)
+    return {"scenes": sc, "vo": vo, "total": sc[-1][1]}
+T = {v: plan(dur[v], MINS[v]) for v in scripts}
+json.dump(T, open(HERE / "timing.json", "w"), indent=1)
+(HERE / "timing.js").write_text("window.TIMING=" + json.dumps(T) + ";")
+print({v: T[v]["total"] for v in T})
