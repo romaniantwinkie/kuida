@@ -1,16 +1,16 @@
 # Cercana videos
 
-Two separate videos (1920×1080, 30fps, voice-over + original music), about 30s and 27s:
+Two separate videos (1920×1080, 30fps, female voice-over + original music). Agencies and caregivers never share a video.
 
-- `public/brand/cercana-agency.mp4`: for agencies (call-out → ranked roster → bilingual text outreach → covered → pre-verified caregivers → 6 months free for the first 50)
-- `public/brand/cercana-caregiver.mp4`: for caregivers (care for people, not paperwork → upload once → share per agency → offers by text → number private, never pay → join free)
+- `public/brand/cercana-agency.mp4` (about 47s): every shift is a person → calls, voicemails, scramble → Meet Cercana → ranked caregivers near the client with reasons → bilingual text offer, first yes wins → shift confirmed → less calling, faster coverage → end card.
+- `public/brand/cercana-caregiver.mp4` (about 41s): the work you love → the same papers for every agency → Meet Cercana → upload once, choose who sees them → shifts by text with pay and distance → reply 1 → no fees, number private, free always → join free at cercana.ai.
 
 ## How they're made
-1. **Voice-over**: `voiceover-scripts.json`, read by Piper TTS (open-source, voice `en_US-ryan-high`, noise_w 0.9).
-   "Cercana" is pronounced the Spanish way using raw IPA phonemes: `[[ seɾkˈana ]]` (Latin American Spanish: ser-KAH-na).
-   Put punctuation inside the brackets (`[[ seɾkˈana, ]]`), or the pause after the word is lost.
-2. **Timing**: each scene lasts as long as its line plus a short pause (`timing.json`).
-3. **Music + mix**: `audio.py` synthesizes an original soft track (C–G–Am–F, 88 bpm) and mixes it under the voice with ducking.
-4. **Picture**: `agency.html` / `caregiver.html` are frame-accurate timelines (`window.__render(t)`); `render.mjs <agency|caregiver>` captures 900 frames and muxes the audio with ffmpeg.
-
-To change wording: edit the scripts and the HTML, regenerate the voice lines, rerun `audio.py`, then `node marketing/visualizer/render.mjs agency` (and `caregiver`).
+1. **Voice-over**: `voiceover/scripts.json`, read by Piper TTS (open-source voice `en_US-amy-medium`), one sentence at a time with a 0.38s pause so lines don't run on.
+   `python synth_voice.py /path/to/en_US-amy-medium.onnx` (needs `piper-tts`, `numpy`, `onnx`).
+2. **"Cercana", pronounced the same every time**: it's written as Spanish IPA (`[[ seɾkˈana ]]`, ser-KAH-na). The script records it once, in
+   "Cercana finds the right caregivers near your client.", cuts that exact word out using Piper's phoneme alignments, and splices the same clip into every other occurrence.
+3. **Timing**: each scene lasts as long as its line plus a short pause (`timing.json` / `timing.js`).
+4. **Music + mix**: `python audio.py` synthesizes an original soft track and mixes it under the voice with ducking (`<vid>-mix.wav`, not committed).
+5. **Picture**: `video.html?v=agency|caregiver` is a frame-accurate timeline (`window.__render(t)`) using real app screenshots in `shots/`.
+   `node render.mjs agency` (and `caregiver`) captures the frames with Playwright and muxes the audio with ffmpeg into `public/brand/`.

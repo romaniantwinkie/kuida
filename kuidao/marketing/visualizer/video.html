@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="avatars2.js"></script>
+<script src="timing.js"></script>
+<style>
+  :root { --blue:#1D4ED8; --sky:#8AB4FF; --soft:#E7EEFD; --ink:#0F141B; --muted:#5D6774; --line:#DFE3E8; --ok:#16964A; --okbg:#E3F4EA; --red:#D22C2C; }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; font-family: Inter, sans-serif; color: var(--ink); background: #F3F6FB; }
+  #bg { position: absolute; inset: 0; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(110px); }
+  .scene { position: absolute; inset: 0; opacity: 0; }
+  .abs { position: absolute; }
+  .card { background: rgba(255,255,255,.92); border: 1px solid rgba(15,20,27,.06); border-radius: 26px; box-shadow: 0 30px 60px -30px rgba(29,78,216,.25), 0 2px 6px rgba(15,20,27,.05); }
+  .kin { font-weight: 600; letter-spacing: -0.035em; color: #1E3A7B; }
+  .pill { display: inline-flex; align-items: center; justify-content: center; height: 76px; padding: 0 40px; border-radius: 999px; font-size: 34px; font-weight: 500; white-space: nowrap; border: 2px solid rgba(29,78,216,.25); color: #5B6B8C; background: rgba(255,255,255,.55); }
+  .pill.on { background: #fff; color: var(--ink); border-color: #fff; box-shadow: 0 16px 40px -16px rgba(29,78,216,.45); }
+  .orb { border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffffff 0%, #DCE8FF 35%, #8AB4FF 70%, #B9E8DC 100%); box-shadow: 0 30px 80px -20px rgba(29,78,216,.45), inset 0 0 0 10px rgba(255,255,255,.55); display: grid; place-items: center; }
+  .word { font-weight: 600; letter-spacing: -0.045em; line-height: 1; }
+  .dot { color: var(--blue); }
+  .shot { position: absolute; border-radius: 22px; overflow: hidden; box-shadow: 0 60px 120px -40px rgba(15,30,80,.45), 0 0 0 1px rgba(15,20,27,.06); background: #fff; }
+  .shot img { display: block; width: 100%; }
+  .phone { position: absolute; border-radius: 58px; padding: 14px; background: #fff; box-shadow: 0 60px 120px -40px rgba(15,30,80,.5), 0 0 0 1px rgba(15,20,27,.08); }
+  .phone img { display: block; width: 100%; border-radius: 44px; }
+  .chip { display: inline-flex; align-items: center; gap: 12px; padding: 16px 24px; border-radius: 20px; background: #fff; font-size: 24px; font-weight: 500; box-shadow: 0 24px 48px -20px rgba(15,30,80,.35); white-space: nowrap; }
+  .cap { font-size: 22px; color: var(--muted); }
+  .avc { position: absolute; border-radius: 50%; overflow: hidden; background: #fff; box-shadow: 0 40px 80px -30px rgba(15,30,80,.45), 0 0 0 8px rgba(255,255,255,.85); }
+  .avc img { width: 100%; height: 100%; display: block; }
+  .label { position: absolute; font-size: 26px; font-weight: 600; color: #1E3A7B; text-align: center; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="bg">
+  <div class="blob" id="b1" style="width:900px;height:900px;background:rgba(138,180,255,.55)"></div>
+  <div class="blob" id="b2" style="width:800px;height:800px;background:rgba(185,232,220,.6)"></div>
+  <div class="blob" id="b3" style="width:700px;height:700px;background:rgba(214,226,255,.9)"></div>
+</div>
+<div id="stage"></div>
+
+<script>
+const VID = new URLSearchParams(location.search).get("v") || "agency";
+const T = TIMING[VID];
+const $ = (s) => document.querySelector(s);
+const clamp = (x) => Math.max(0, Math.min(1, x));
+const ease = (x) => { x = clamp(x); return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; }; // ease-in-out cubic
+const eo = (x) => 1 - Math.pow(1 - clamp(x), 3);
+const P = (t, a, d) => eo((t - a) / d);
+
+// Generic enter/exit for any element: blur-to-sharp, rise, scale.
+function fx(el, l, inAt, outAt, o = {}) {
+  if (!el) return;
+  const d = o.d ?? 0.7, dy = o.dy ?? 30, blur = o.blur ?? 16, sc = o.scale ?? 0.98;
+  const pin = P(l, inAt, d), pout = outAt == null ? 0 : ease((l - outAt) / 0.5);
+  const k = pin * (1 - pout);
+  el.style.opacity = k.toFixed(3);
+  el.style.filter = `blur(${((1 - pin) * blur + pout * 10).toFixed(1)}px)`;
+  const base = o.base || "";
+  el.style.transform = `${base} translateY(${((1 - pin) * dy - pout * 20).toFixed(1)}px) scale(${(sc + (1 - sc) * pin + pout * 0.02).toFixed(4)})`;
+}
+const svgCheck = (c = "#fff", s = 64) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5 10 17 19 7"/></svg>`;
+const cMark = (s) => `<svg width="${s}" height="${s}" viewBox="0 0 32 32"><path d="M19.31 12.19A6.8 6.8 0 1 0 19.31 21.81" fill="none" stroke="#1D4ED8" stroke-width="3.6"/><circle cx="23.6" cy="22.4" r="2.4" fill="#1D4ED8" opacity=".55"/></svg>`;
+
+// ---------- shared scene builders ----------
+function sceneOrb(id) {
+  return `<div class="scene" id="${id}">
+    <div class="orb abs" id="${id}o" style="left:810px;top:390px;width:300px;height:300px">${cMark(150)}</div>
+    <div class="abs word" id="${id}w" style="left:0;right:0;top:470px;text-align:center;font-size:120px;opacity:0">Meet cercana<span class="dot">.</span></div>
+  </div>`;
+}
+function renderOrb(id, l, L) {
+  const o = $("#" + id + "o"), w = $("#" + id + "w");
+  const a = P(l, 0.05, 0.8), m = ease((l - 0.9) / 0.9);
+  o.style.opacity = a * (1 - ease((l - (L - 0.5)) / 0.5));
+  o.style.transform = `translateX(${-470 * m}px) scale(${(0.6 + 0.4 * a) * (1 - 0.35 * m)}) rotate(${(1 - a) * -20}deg)`;
+  fx(w, l, 1.15, L - 0.5, { dy: 0, blur: 22, base: `translateX(${110}px)` });
+}
+function sceneEnd(id, line1, line2, small) {
+  return `<div class="scene" id="${id}">
+    <div class="orb abs" id="${id}o" style="left:600px;top:330px;width:170px;height:170px">${cMark(86)}</div>
+    <div class="abs word" id="${id}w" style="left:810px;top:358px;font-size:118px">cercana<span class="dot">.</span></div>
+    <p class="abs" id="${id}t" style="left:0;right:0;top:560px;text-align:center;font-size:44px;color:#334155">${line1}</p>
+    <div class="abs" id="${id}u" style="left:0;right:0;top:660px;text-align:center"><span style="display:inline-block;padding:16px 44px;border-radius:999px;border:2px solid #1E3A7B;font-size:36px;font-weight:600;color:#1E3A7B;background:rgba(255,255,255,.6)">${line2}</span></div>
+    <p class="abs cap" id="${id}s" style="left:0;right:0;top:770px;text-align:center;font-size:28px">${small}</p>
+  </div>`;
+}
+function renderEnd(id, l) {
+  fx($("#" + id + "o"), l, 0.1, null, { dy: 0, scale: 0.6 }); fx($("#" + id + "w"), l, 0.35, null, { dy: 0, blur: 20 });
+  fx($("#" + id + "t"), l, 0.9, null); fx($("#" + id + "u"), l, 1.3, null); fx($("#" + id + "s"), l, 1.7, null);
+}
+function sceneConfirmed(id, title, sub, bgShot) {
+  return `<div class="scene" id="${id}">
+    ${bgShot ? `<div class="shot" id="${id}bg" style="left:260px;top:120px;width:1400px;opacity:.0"><img src="${bgShot}"/></div>` : ""}
+    <div class="orb abs" id="${id}o" style="left:830px;top:300px;width:260px;height:260px;background:radial-gradient(circle at 35% 30%,#fff 0%,#DDF3E6 40%,#5BC48A 75%,#16964A 100%)">${svgCheck("#fff", 120)}</div>
+    <h2 class="abs word" id="${id}h" style="left:0;right:0;top:610px;text-align:center;font-size:86px">${title}</h2>
+    <p class="abs" id="${id}s" style="left:0;right:0;top:720px;text-align:center;font-size:38px;color:#475569">${sub}</p>
+  </div>`;
+}
+function renderConfirmed(id, l, L) {
+  const bg = $("#" + id + "bg"); if (bg) { bg.style.opacity = 0.18 * P(l, 0, 0.6) * (1 - ease((l - (L - 0.5)) / 0.5)); bg.style.filter = "blur(10px)"; }
+  fx($("#" + id + "o"), l, 0.05, L - 0.5, { dy: 0, scale: 0.5, d: 0.6 }); fx($("#" + id + "h"), l, 0.4, L - 0.5); fx($("#" + id + "s"), l, 0.75, L - 0.5);
+}
+function sceneBenefits(id, items, shot, isPhone) {
+  return `<div class="scene" id="${id}">
+    ${isPhone ? `<div class="phone" id="${id}d" style="left:300px;top:110px;width:400px"><img src="${shot}"/></div>`
+              : `<div class="shot" id="${id}d" style="left:120px;top:200px;width:980px"><img src="${shot}"/></div>`}
+    ${items.map((x, i) => `<div class="abs" id="${id}p${i}" style="left:1190px;top:${330 + i * 130}px"><span class="pill" id="${id}q${i}">${x}</span></div>`).join("")}
+  </div>`;
+}
+function renderBenefits(id, l, L, n, phone) {
+  fx($("#" + id + "d"), l, 0.05, L - 0.5, { dy: 40, base: phone ? "perspective(1600px) rotateY(16deg) rotateX(4deg)" : "perspective(2000px) rotateY(18deg) rotateX(6deg)" });
+  for (let i = 0; i < n; i++) {
+    fx($("#" + id + "p" + i), l, 0.3 + i * 0.12, L - 0.5, { dy: 20 });
+    const on = l > 0.7 + i * 0.75; $("#" + id + "q" + i).classList.toggle("on", on);
+  }
+}
+function scenePeople(id, people, word) {
+  return `<div class="scene" id="${id}">
+    <svg class="abs" id="${id}line" width="1920" height="1080" style="left:0;top:0"><path id="${id}path" d="M520 520 C 760 300, 1160 300, 1400 520" fill="none" stroke="#1D4ED8" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 18" opacity=".55"/><circle id="${id}dot" r="12" fill="#1D4ED8"/></svg>
+    ${people.map((p, i) => `<div class="avc" id="${id}a${i}" style="left:${p.x}px;top:${p.y}px;width:${p.s}px;height:${p.s}px"><img src="${p.src}"/></div><div class="label" id="${id}l${i}" style="left:${p.x}px;width:${p.s}px;top:${p.y + p.s + 30}px">${p.label}</div>`).join("")}
+    <div class="abs kin" id="${id}k" style="left:0;right:0;top:860px;text-align:center;font-size:84px">${word}</div>
+  </div>`;
+}
+function renderPeople(id, l, L, n, kinAt) {
+  for (let i = 0; i < n; i++) { fx($("#" + id + "a" + i), l, 0.1 + i * 0.35, L - 0.5, { dy: 0, scale: 0.7, d: 0.9 }); fx($("#" + id + "l" + i), l, 0.5 + i * 0.35, L - 0.5, { dy: 12 }); }
+  const path = $("#" + id + "path"), dot = $("#" + id + "dot"), len = path.getTotalLength();
+  const k = P(l, 1.1, 1.6); const pt = path.getPointAtLength(len * k);
+  dot.setAttribute("cx", pt.x); dot.setAttribute("cy", pt.y);
+  $("#" + id + "line").style.opacity = P(l, 0.9, 0.5) * (1 - ease((l - (L - 0.5)) / 0.5));
+  fx($("#" + id + "k"), l, kinAt, L - 0.5, { dy: 0, blur: 26, scale: 1.04 });
+}
+
+// ---------- videos ----------
+let SCENES = [];
+if (VID === "agency") {
+  SCENES = [
+    { html: scenePeople("s0", [{ x: 330, y: 330, s: 380, src: AV2.client, label: "A client counting on care" }, { x: 1210, y: 330, s: 380, src: AV2.xio, label: "A caregiver close by" }], "close by"),
+      r: (l, L) => renderPeople("s0", l, L, 2, 2.6) },
+    { html: `<div class="scene" id="s1">
+        <div class="card abs" id="s1c" style="left:700px;top:400px;width:520px;padding:32px 36px;border-left:10px solid #1D4ED8">
+          <p style="font-size:34px;font-weight:600">Sra. G. · HHA</p><p class="cap" style="margin-top:10px;font-size:28px">Tue · 8:00a – 2:00p · Northside</p>
+          <span id="s1x" style="position:absolute;right:-22px;top:-22px;width:56px;height:56px;border-radius:50%;background:#D22C2C;color:#fff;font:600 34px Inter;display:grid;place-items:center;opacity:0">!</span></div>
+        ${[["Missed call", "(555) 014-2290", 260, 230, "#D22C2C"], ["No answer", "(555) 018-7731", 1240, 200, "#1E3A7B"], ["Voicemail · 0:42", "Niurka D.", 1300, 640, "#1E3A7B"], ["Text sent", "“Can anyone cover 8am?”", 220, 650, "#1E3A7B"], ["No reply", "3 caregivers", 820, 760, "#1E3A7B"]]
+          .map((c, i) => `<div class="chip abs" id="s1n${i}" style="left:${c[2]}px;top:${c[3]}px"><span style="width:44px;height:44px;border-radius:14px;background:${i === 0 ? "#FDE8E8" : "#E7EEFD"};display:grid;place-items:center;color:${c[4]};font-weight:600">${i < 2 ? "☏" : i === 2 ? "◉" : "✉"}</span><span><span style="display:block;font-size:20px;color:${c[4]};font-weight:600">${c[0]}</span><span style="font-size:24px">${c[1]}</span></span></div>`).join("")}
+      </div>`,
+      r: (l, L) => { fx($("#s1c"), l, 0.1, L - 0.5, { dy: 20 }); [0, 1, 2, 3, 4].forEach((i) => fx($("#s1n" + i), l, 0.7 + i * 0.45, L - 0.5, { dy: 30, scale: 0.9, d: 0.5 }));
+        const red = P(l, 3.2, 0.4); $("#s1c").style.borderLeftColor = red > 0.5 ? "#D22C2C" : "#1D4ED8"; $("#s1c").style.boxShadow = red > 0.5 ? "0 0 0 4px rgba(210,44,44,.25), 0 30px 60px -30px rgba(210,44,44,.4)" : ""; $("#s1x").style.opacity = red; } },
+    { html: sceneOrb("s2"), r: (l, L) => renderOrb("s2", l, L) },
+    { html: `<div class="scene" id="s3">
+        <div class="shot" id="s3a" style="left:330px;top:120px;width:1260px"><img src="shots/match.png"/></div>
+        <div class="shot" id="s3b" style="left:330px;top:120px;width:1260px;opacity:0"><img src="shots/match-why.png"/></div>
+        <div class="chip abs" id="s3c1" style="left:150px;top:700px"><b style="color:#1D4ED8;font-weight:600">Ranked</b> in seconds</div>
+        <div class="chip abs" id="s3c2" style="left:1460px;top:240px">Reasons for every score</div>
+        <div class="chip abs" id="s3c3" style="left:1440px;top:820px">Expired credentials screened out</div>
+      </div>`,
+      r: (l, L) => { const base = `perspective(2400px) rotateX(${8 - 6 * ease(l / L)}deg) rotateY(${-14 + 10 * ease(l / L)}deg)`;
+        fx($("#s3a"), l, 0.05, L - 0.5, { dy: 60, base }); const sw = P(l, 2.4, 0.6); $("#s3b").style.opacity = sw * (1 - ease((l - (L - 0.5)) / 0.5)); $("#s3b").style.transform = base;
+        fx($("#s3c1"), l, 0.8, L - 0.5); fx($("#s3c2"), l, 1.5, L - 0.5); fx($("#s3c3"), l, 3.0, L - 0.5); } },
+    { html: `<div class="scene" id="s4">
+        <div class="phone" id="s4p" style="left:300px;top:90px;width:430px;height:900px;padding:40px 28px">
+          <p class="cap" style="text-align:center">Cercana · text message</p>
+          <div id="s4m1" style="margin-top:36px;background:#EEF1F5;border-radius:28px;border-bottom-left-radius:8px;padding:22px 26px;font-size:27px;line-height:1.35">Cercana: Turno HHA en Northside, mar 8a–2p, $18–20/h. Responde <b>1</b> para aceptar.</div>
+          <div id="s4m2" style="margin:24px 0 0 auto;width:fit-content;background:#1D4ED8;color:#fff;border-radius:28px;border-bottom-right-radius:8px;padding:20px 30px;font-size:30px;font-weight:600">1</div>
+          <div id="s4m3" style="margin-top:24px;background:#EEF1F5;border-radius:28px;border-bottom-left-radius:8px;padding:22px 26px;font-size:27px;line-height:1.35">¡Confirmado! Te enviamos la dirección.</div>
+        </div>
+        <div class="abs" style="left:860px;top:330px;display:flex;gap:28px" id="s4row">${["Text", "App", "English", "Español"].map((x, i) => `<span class="pill" id="s4q${i}">${x}</span>`).join("")}</div>
+        <div class="chip abs" id="s4s" style="left:860px;top:520px"><span style="width:16px;height:16px;border-radius:50%;background:#16964A"></span> Xiomara R. accepted · offers to others closed automatically</div>
+      </div>`,
+      r: (l, L) => { fx($("#s4p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(14deg)" }); fx($("#s4row"), l, 0.4, L - 0.5, { dy: 20 });
+        const hi = Math.floor(Math.max(0, l - 0.9) / 0.7); [0, 1, 2, 3].forEach((i) => $("#s4q" + i).classList.toggle("on", hi === i || (hi >= 4 && (i === 0 || i === 3))));
+        fx($("#s4m1"), l, 0.8, null, { dy: 16, blur: 0 }); fx($("#s4m2"), l, 3.3, null, { dy: 16, blur: 0 }); fx($("#s4m3"), l, 4.0, null, { dy: 16, blur: 0 }); fx($("#s4s"), l, 4.2, L - 0.5); } },
+    { html: sceneConfirmed("s5", "Shift confirmed", "Family notified · visit scheduled", "shots/match-filled.png"), r: (l, L) => renderConfirmed("s5", l, L) },
+    { html: sceneBenefits("s6", ["Less calling", "Faster coverage", "More shifts filled"], "shots/today.png", false), r: (l, L) => renderBenefits("s6", l, L, 3, false) },
+    { html: sceneEnd("s7", "Home care shifts, covered close by.", "cercana.ai", "For agencies · the first 50 get 6 months free"), r: (l) => renderEnd("s7", l) },
+  ];
+} else {
+  SCENES = [
+    { html: scenePeople("s0", [{ x: 330, y: 330, s: 380, src: AV2.maria, label: "You" }, { x: 1210, y: 330, s: 380, src: AV2.client, label: "The people you care for" }], "the work you love"),
+      r: (l, L) => renderPeople("s0", l, L, 2, 1.6) },
+    { html: `<div class="scene" id="s1">${["Photo ID", "HHA certificate", "TB test", "CPR card", "Background check"].map((d, i) => `<div class="card abs" id="s1d${i}" style="left:${520 + i * 60}px;top:${150 + i * 150}px;width:680px;padding:28px 32px;display:flex;align-items:center;gap:20px"><span style="width:56px;height:56px;border-radius:16px;background:#E7EEFD;display:grid;place-items:center;color:#1D4ED8;font-weight:600;font-size:26px">▤</span><span style="flex:1"><span style="display:block;font-size:30px;font-weight:600">${d}</span><span class="cap">Sent to Agency ${"ABCDE"[i]}</span></span><span style="padding:8px 18px;border-radius:999px;background:#FDE8E8;color:#D22C2C;font-weight:600;font-size:22px">again</span></div>`).join("")}</div>`,
+      r: (l, L) => { for (let i = 0; i < 5; i++) fx($("#s1d" + i), l, 0.15 + i * 0.4, L - 0.5, { dy: 40, scale: 0.92, d: 0.5, base: `rotate(${(i % 2 ? 1 : -1) * (2 + i)}deg)` }); } },
+    { html: sceneOrb("s2"), r: (l, L) => renderOrb("s2", l, L) },
+    { html: `<div class="scene" id="s3">
+        <div class="phone" id="s3p" style="left:300px;top:60px;width:420px"><img src="shots/c-docs.png"/></div>
+        <div class="abs kin" id="s3k" style="left:880px;top:300px;font-size:92px;line-height:1.05">Upload once.<br/><span style="color:#1D4ED8">Share by choice.</span></div>
+        <div class="chip abs" id="s3c1" style="left:880px;top:600px">${svgCheck("#16964A", 30)} Shared with Sunrise Home Health · 30 days</div>
+        <div class="chip abs" id="s3c2" style="left:880px;top:700px">View-only · you see every view</div>
+      </div>`,
+      r: (l, L) => { fx($("#s3p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(16deg) rotateX(4deg)" }); fx($("#s3k"), l, 0.5, L - 0.5, { dy: 0, blur: 24 }); fx($("#s3c1"), l, 1.8, L - 0.5); fx($("#s3c2"), l, 2.5, L - 0.5); } },
+    { html: `<div class="scene" id="s4">
+        <div class="phone" id="s4p" style="left:1220px;top:60px;width:420px"><img src="shots/c-home.png"/></div>
+        <div class="card abs" id="s4m" style="left:260px;top:330px;width:760px;padding:30px 34px;font-size:32px;line-height:1.4"><span class="cap" style="display:block;margin-bottom:10px">Cercana · text message</span>New shift near you: HHA · Northside · Tue 8a–2p<br/><b style="color:#1D4ED8;font-weight:600">$18–20/h · 1.5 mi</b> · Reply 1 to accept</div>
+        <div class="abs" id="s4row" style="left:260px;top:620px;display:flex;gap:24px"><span class="pill" id="s4q0">Pay up front</span><span class="pill" id="s4q1">Distance up front</span></div>
+      </div>`,
+      r: (l, L) => { fx($("#s4p"), l, 0.05, L - 0.5, { dy: 60, base: "perspective(1800px) rotateY(-16deg) rotateX(4deg)" }); fx($("#s4m"), l, 0.5, L - 0.5, { dy: 24 }); fx($("#s4row"), l, 1.2, L - 0.5, { dy: 20 });
+        $("#s4q0").classList.toggle("on", l > 1.9); $("#s4q1").classList.toggle("on", l > 2.6); } },
+    { html: sceneConfirmed("s5", "The shift is yours", "Address sent by text · you're all set", null), r: (l, L) => renderConfirmed("s5", l, L) },
+    { html: sceneBenefits("s6", ["No fees", "Number private", "Free, always"], "shots/c-shifts.png", true), r: (l, L) => renderBenefits("s6", l, L, 3, true) },
+    { html: sceneEnd("s7", "Free for caregivers, always.", "Join free · cercana.ai", "Your documents, your shifts, your choice"), r: (l) => renderEnd("s7", l) },
+  ];
+}
+$("#stage").innerHTML = SCENES.map((s) => s.html).join("");
+
+window.__DURATION = T.total;
+window.__render = function (t) {
+  // drifting background
+  $("#b1").style.transform = `translate(${-200 + 160 * Math.sin(t * 0.18)}px, ${-260 + 120 * Math.cos(t * 0.15)}px)`;
+  $("#b2").style.transform = `translate(${1250 + 140 * Math.cos(t * 0.14)}px, ${480 + 110 * Math.sin(t * 0.2)}px)`;
+  $("#b3").style.transform = `translate(${700 + 200 * Math.sin(t * 0.11 + 1)}px, ${-120 + 140 * Math.sin(t * 0.17)}px)`;
+  SCENES.forEach((s, i) => {
+    const [a, b] = T.scenes[i]; const el = $("#s" + i); const vis = t >= a && (i === SCENES.length - 1 || t < b);
+    el.style.opacity = vis ? 1 : 0; if (vis) s.r(t - a, b - a);
+  });
+};
+window.__render(0);
+</script>
+</body>
+</html>

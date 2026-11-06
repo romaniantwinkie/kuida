@@ -13,7 +13,7 @@ rmSync(frames, { recursive: true, force: true });
 mkdirSync(frames);
 const b = await chromium.launch();
 const p = await b.newPage({ viewport: { width: 1920, height: 1080 } });
-await p.goto("file://" + path.join(dir, `${vid}.html`), { waitUntil: "networkidle" });
+await p.goto("file://" + path.join(dir, "video.html") + "?v=" + vid, { waitUntil: "networkidle" });
 await p.evaluate(() => document.fonts.ready);
 const n = Math.round((await p.evaluate(() => window.__DURATION)) * 30);
 for (let f = 0; f < n; f++) {

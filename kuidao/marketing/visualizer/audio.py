@@ -17,7 +17,7 @@ def tone(freq, nsamp, harmonics=(1, .35, .12, .05), detune=0.0):
 
 def env(n, a, r, sustain=1.0):
     e = np.ones(n) * sustain
-    ai, ri = int(a * SR), int(r * SR)
+    ai, ri = min(n // 2, int(a * SR)), min(n // 2, int(r * SR))
     e[:ai] = np.linspace(0, sustain, ai) if ai else e[:ai]
     if ri: e[-ri:] = np.linspace(sustain, 0, ri)
     return e
@@ -103,9 +103,12 @@ def write_wav(path, L, R):
     w = wave.open(path, "wb"); w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
     w.writeframes((st * 32767).astype(np.int16).tobytes()); w.close()
 
-S = sys.argv[1]
-timing = json.load(open(f"{S}/video/timing.json"))
-VO = sys.argv[2] if len(sys.argv) > 2 else "vo"
+# Usage: python audio.py   (reads voiceover/<vid>-<n>.wav + timing.json, writes <vid>-mix.wav)
+from pathlib import Path
+S = Path(__file__).parent
+timing = json.load(open(S / "timing.json"))
+VO = "voiceover"
+OUTDIR = S
 for vid in ("agency", "caregiver"):
     DUR = timing[vid]["total"]
     mL, mR = music(DUR)
@@ -126,6 +129,5 @@ for vid in ("agency", "caregiver"):
     R = voice + mR * duck * gain
     peak = max(np.abs(L).max(), np.abs(R).max())
     L, R = L / peak * 0.89, R / peak * 0.89
-    write_wav(f"{S}/video/{vid}-mix.wav", L, R)
-    write_wav(f"{S}/video/music-only.wav", mL / np.abs(mL).max() * 0.8, mR / np.abs(mR).max() * 0.8)
+    write_wav(f"{OUTDIR}/{vid}-mix.wav", L, R)
     print(vid, "mixed")

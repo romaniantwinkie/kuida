@@ -5,3 +5,4 @@ node_modules
 marketing/visualizer/frames/
 marketing/visualizer/frames-*/
 marketing/visualizer/*-mix.wav
+marketing/visualizer/voiceover/*.wav
