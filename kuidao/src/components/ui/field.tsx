@@ -20,15 +20,19 @@ export function Field({
   validate,
   className,
   onValue,
+  serverError,
   ...input
 }: Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> & {
   label: string;
   hint?: string;
   validate?: Validator;
   onValue?: (v: string) => void;
+  /** An error returned by the server for this field; cleared by the parent on edit. */
+  serverError?: string | null;
 }) {
   const id = useId();
-  const [error, setError] = useState<string | null>(null);
+  const [localError, setError] = useState<string | null>(null);
+  const error = localError ?? serverError ?? null;
   const describedBy = [hint && `${id}-hint`, error && `${id}-err`].filter(Boolean).join(" ") || undefined;
   return (
     <div className={cn("block", className)}>

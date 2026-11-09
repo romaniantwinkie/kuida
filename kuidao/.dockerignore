@@ -1,0 +1,9 @@
+node_modules
+.next
+.env
+.env.local
+backups
+data
+marketing
+public/brand/*.mp4
+*.log

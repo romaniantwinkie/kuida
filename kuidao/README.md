@@ -10,6 +10,35 @@ npm install
 npm run dev        # http://localhost:3001 (the original app keeps :3000)
 ```
 
+Without a database the site runs as a clickable **demo** with sample data. With one, accounts are live.
+
+## Live mode (accounts, shifts, profiles)
+
+**Homelab / server:** see [`deploy/HOMELAB.md`](deploy/HOMELAB.md): `cp .env.example .env`, then `docker compose --profile mail up -d --build`.
+
+**Local development with a real database:**
+
+```bash
+docker run -d --name cercana-db -e POSTGRES_USER=cercana -e POSTGRES_PASSWORD=devpass -e POSTGRES_DB=cercana -p 5432:5432 postgis/postgis:16-3.4-alpine
+docker run -d --name cercana-mail -p 8025:8025 -p 1025:1025 axllent/mailpit:v1.20
+printf 'DATABASE_URL=postgres://cercana:devpass@localhost:5432/cercana\nSMTP_URL=smtp://localhost:1025\nAPP_URL=http://localhost:3001\n' > .env.local
+node --env-file=.env.local scripts/migrate.mjs
+npm run dev        # login codes appear at http://localhost:8025
+```
+
+What's live today:
+
+| Area | Live | Still sample data |
+|---|---|---|
+| Accounts | Agency sign-up (office + owner), caregiver sign-up, email-code login (no passwords), log out | |
+| Agency console | Today (real counts), Shifts (add, edit, mark filled, cancel), Team (invite / remove schedulers) | Find caregivers, Roster, Messages, Copilot, Compliance log (marked "Sample data") |
+| Caregiver app | Profile, photo, availability, travel radius, show/hide to nearby agencies | Offers and document vault (next batches) |
+| Admin | `node scripts/admin.mjs list / approve / suspend` | Admin panel |
+
+**Privacy by design:** Cercana stores no client (patient) data. A shift holds the neighborhood, ZIP, time, role and pay.
+Locations are rounded to ~1 km. The agency gives the visit address to the confirmed caregiver itself.
+Server code lives in `src/server/` (database, sessions, email, server actions); the schema is `db/migrations/`.
+
 ## What's inside
 
 | Route | What it is |

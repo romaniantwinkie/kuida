@@ -10,6 +10,8 @@ import { ScoreRing } from "@/components/ui/score-ring";
 import { CAREGIVERS, clientById, DAYS, SHIFTS, shiftLabel } from "@/lib/data";
 
 import { fillChance, rankForShift } from "@/lib/match";
+import { LiveToday } from "@/components/live/live-today";
+import { getSession } from "@/server/auth";
 
 export const metadata = { title: "Today" };
 
@@ -27,9 +29,9 @@ const WEEK: Array<[number, number]> = [
 ];
 
 const ACTIVITY = [
-  { who: "Cercana", text: "Filled Sr. R. Thu 10a–4p with Daniel S. (score 91)", t: "6:12a", icon: Zap },
+  { who: "Cercana", text: "Filled Northgate #1046 Thu 10a–4p with Daniel S. (score 91)", t: "6:12a", icon: Zap },
   { who: "Cercana", text: "Caught Rosa V.'s expired CPR — removed from 2 offers", t: "5:40a", icon: ShieldAlert },
-  { who: "Niurka D.", text: "Called out Tue 8a–2p (Sra. G.) — reason: sick", t: "5:31a", icon: AlertTriangle },
+  { who: "Niurka D.", text: "Called out Tue 8a–2p (Northside #1042) — reason: sick", t: "5:31a", icon: AlertTriangle },
   { who: "Ana M.", text: "Approved Yanelis M.'s schedule change (Fri)", t: "Yesterday", icon: Clock },
 ];
 
@@ -43,7 +45,13 @@ function FillChance({ shift }: { shift: Parameters<typeof fillChance>[0] }) {
   );
 }
 
-export default function TodayPage() {
+export default async function TodayPage() {
+  const s = await getSession();
+  if (s?.agency) return <LiveToday s={s as Parameters<typeof LiveToday>[0]["s"]} />;
+  return <DemoToday />;
+}
+
+function DemoToday() {
   const open = SHIFTS.filter((s) => s.status !== "filled");
   const expiring = CAREGIVERS.flatMap((c) => c.credentials.filter((cr) => cr.expiresInDays <= 30).map((cr) => ({ c, cr })));
 
@@ -75,7 +83,7 @@ export default function TodayPage() {
           <div className="min-w-0 flex-1">
             <p className="eyebrow">Overnight brief · 9p–7a</p>
             <p className="mt-2 max-w-3xl leading-relaxed">
-              <b>3 call-outs came in.</b> Cercana filled 2 automatically (avg 3m 40s). <b>Sra. G. Tue 8a–2p is still open</b> — Niurka called out sick and the
+              <b>3 call-outs came in.</b> Cercana filled 2 automatically (avg 3m 40s). <b>Northside #1042 Tue 8a–2p is still open</b> — Niurka called out sick and the
               Spanish-required rule narrows the roster to 6. Rosa V.&apos;s CPR expired, so she was held back from 2 offers.
             </p>
           </div>

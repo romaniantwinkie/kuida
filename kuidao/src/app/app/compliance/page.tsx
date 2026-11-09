@@ -22,7 +22,7 @@ const EVENTS: { at: string; kind: Kind; who: string; subject: string; detail: st
   { at: "Today 8:14a", kind: "view", who: "Ana M.", subject: "Niurka D.", detail: "Viewed CPR / First aid (shared until Dec 2)" },
   { at: "Today 6:02a", kind: "check", who: "Cercana", subject: "Daniel S.", detail: "HHA certificate and background check current before assignment" },
   { at: "Today 5:40a", kind: "block", who: "Cercana", subject: "Rosa V.", detail: "CPR expired 4 days ago; removed from 2 offers" },
-  { at: "Today 5:33a", kind: "offer", who: "Cercana", subject: "Wave 1 · Sra. G.", detail: "Offers sent to 3 caregivers (Spanish)" },
+  { at: "Today 5:33a", kind: "offer", who: "Cercana", subject: "Wave 1 · Northside #1042", detail: "Offers sent to 3 caregivers (Spanish)" },
   { at: "Mon 3:02p", kind: "view", who: "Luis T.", subject: "Jennifer L.", detail: "Viewed background check" },
   { at: "Mon 11:20a", kind: "share", who: "Gisela N.", subject: "Gisela N.", detail: "Shared 5 documents with your agency for 30 days" },
   { at: "Sun 7:45p", kind: "check", who: "Cercana", subject: "Yanelis M.", detail: "CNA license verified · expires in 90 days" },

@@ -57,7 +57,7 @@ const FEATURES = [
   {
     icon: PhoneOff,
     title: "Private by design",
-    body: "Agencies never see a caregiver's phone; caregivers never see a client's address until assigned.",
+    body: "Agencies never see a caregiver's phone. Cercana never stores client names or addresses; your office shares visit details with the confirmed caregiver.",
     className: "md:col-span-4",
   },
 ];
@@ -211,7 +211,7 @@ export default function Home() {
             <p className="eyebrow">Coordinator copilot</p>
             <h2 className="mt-3 font-display text-4xl tracking-tight">Ask it like you&apos;d ask your best coordinator.</h2>
             <p className="mt-4 leading-relaxed text-muted">
-              &ldquo;Who can cover Sra. G. tomorrow?&rdquo; &ldquo;Whose CPR expires this month?&rdquo; Copilot answers from your live schedule, roster and
+              &ldquo;Who can cover Northside #1042 tomorrow?&rdquo; &ldquo;Whose CPR expires this month?&rdquo; Copilot answers from your live schedule, roster and
               credentials, and always shows the reasons behind its pick. English or Spanish.
             </p>
             <ul className="mt-6 space-y-2 text-sm">

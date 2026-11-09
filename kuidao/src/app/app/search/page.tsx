@@ -15,7 +15,7 @@ import { rankForShift } from "@/lib/match";
 import { latLngToGrid, nearestRegion, regionById } from "@/lib/regions";
 
 const HOURS = Array.from({ length: 17 }, (_, i) => i + 6);
-const SKILLS = ["Dementia care", "Hoyer lift", "Diabetic care", "Wound care", "Companionship", "Meal prep"];
+const SKILLS = ["Memory care", "Hoyer lift", "Mobility support", "Wound care", "Meal prep", "Companionship"];
 const SAMPLE: Place = { address: "1600 NW 27th Ave, Miami, Florida, 33125", lat: 25.789071, lng: -80.239843 };
 const PREFS_KEY = "cercana-search-prefs";
 

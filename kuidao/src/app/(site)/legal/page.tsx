@@ -14,8 +14,9 @@ export default function LegalPage() {
           the factors behind each score are visible to them.
         </p>
         <p>
-          Client addresses are used only to compute distance and are shown to a caregiver only after they are assigned. Caregiver phone
-          numbers are never shown to agencies; messages are relayed.
+          Cercana stores no client (patient) information: no names, addresses, diagnoses or care notes. A shift holds only the area, an
+          approximate location, the time, the role and the pay. The agency shares visit details directly with the caregiver it confirms.
+          Caregiver phone numbers are never shown to agencies; messages are relayed.
         </p>
         <h2 id="founding-offer" className="pt-4 text-xl font-semibold text-ink">
           Founding offer terms

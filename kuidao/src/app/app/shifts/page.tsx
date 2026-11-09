@@ -7,12 +7,27 @@ import { Card } from "@/components/ui/card";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { clientById, SHIFTS, shiftLabel } from "@/lib/data";
 import { fillChance, rankForShift } from "@/lib/match";
+import { LiveShiftsTable } from "@/components/live/shifts-table";
+import { getSession } from "@/server/auth";
+import { agencyDetails, listShifts } from "@/server/queries";
 
 export const metadata = { title: "Shifts" };
 
 const STATUS = { open: { label: "Open", tone: "accent" }, outreach: { label: "Outreach", tone: "info" }, filled: { label: "Filled", tone: "ok" } } as const;
 
-export default function ShiftsPage() {
+export default async function ShiftsPage({ searchParams }: { searchParams: Promise<{ new?: string }> }) {
+  const s = await getSession();
+  if (!s?.agency) return <DemoShifts />;
+  const [shifts, a, { new: isNew }] = await Promise.all([listShifts(s.agency.id, s.agency.timezone), agencyDetails(s.agency.id), searchParams]);
+  return (
+    <>
+      <PageHead eyebrow="Schedule" title="Shifts" sub="Open shifts for your office. Job details only: area, time, role and pay." />
+      <LiveShiftsTable shifts={shifts} defaultZip={a?.zip ?? ""} autoNew={isNew === "1"} />
+    </>
+  );
+}
+
+function DemoShifts() {
   return (
     <>
       <PageHead
@@ -30,7 +45,7 @@ export default function ShiftsPage() {
           <table className="w-full min-w-[720px] text-sm">
             <thead className="border-b border-line bg-surface-2/60 text-left text-xs text-muted">
               <tr>
-                <th className="px-5 py-3 font-semibold">Client</th>
+                <th className="px-5 py-3 font-semibold">Shift</th>
                 <th className="px-3 py-3 font-semibold">When</th>
                 <th className="px-3 py-3 font-semibold">Role</th>
                 <th className="px-3 py-3 font-semibold">Reason</th>

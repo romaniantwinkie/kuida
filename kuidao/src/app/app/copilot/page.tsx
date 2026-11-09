@@ -145,7 +145,7 @@ export default function CopilotPage() {
           </p>
         )}
         <div className="flex items-center gap-2">
-        <input value={input} onChange={(e) => { setInput(e.target.value); setHint(null); }} placeholder="e.g. Who can cover Sra. G. on Tuesday?" className="min-h-11 flex-1 bg-transparent px-1 text-base outline-none placeholder:text-muted" id="copilot-input" />
+        <input value={input} onChange={(e) => { setInput(e.target.value); setHint(null); }} placeholder="e.g. Who can cover Northside #1042 on Tuesday?" className="min-h-11 flex-1 bg-transparent px-1 text-base outline-none placeholder:text-muted" id="copilot-input" />
         <button type="submit" className="grid size-11 place-items-center rounded-full bg-brand text-brand-ink transition-colors hover:bg-brand/90" aria-label="Send question">
           <ArrowUp className="size-4" />
         </button>

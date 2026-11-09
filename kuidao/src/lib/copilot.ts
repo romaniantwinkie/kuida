@@ -4,7 +4,7 @@ import { rankForShift, type Match } from "./match";
 export type Reply = { text: string; matches?: Match[]; link?: { href: string; label: string }; bullets?: string[] };
 
 export const SUGGESTIONS = [
-  "Who can cover Sra. G. on Tuesday?",
+  "Who can cover Northside #1042 on Tuesday?",
   "Whose credentials expire this month?",
   "Who's free this weekend?",
   "Give me the overnight brief",
@@ -42,11 +42,11 @@ export function answer(q: string): Reply {
     return {
       text: "Overnight (9p–7a): 3 call-outs. 2 filled automatically, average 3m 40s. One still open:",
       bullets: [
-        "Sra. G. · Tue 8a–2p · HHA, Spanish required — Niurka D. called out sick",
+        "Northside #1042 · Tue 8a–2p · HHA, Spanish required — Niurka D. called out sick",
         "Rosa V. held back from 2 offers (CPR expired 4 days ago)",
-        "Daniel S. confirmed Sr. R. Thu 10a–4p (score 91, 8 prior visits)",
+        "Daniel S. confirmed Northgate #1046 Thu 10a–4p (score 91, 8 prior visits)",
       ],
-      link: { href: "/app/shifts/s-1042", label: "Resolve Sra. G." },
+      link: { href: "/app/shifts/s-1042", label: "Resolve Northside #1042" },
     };
   }
 

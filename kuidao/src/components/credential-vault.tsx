@@ -30,8 +30,9 @@ const START_AGENCIES: Agency[] = [
 const START_REQUESTS: Request[] = [{ id: "r1", agency: "Golden Years Home Care", doc: "tb" }];
 
 const FORMS = [
-  { id: "i9", name: { en: "I-9 · work authorization", es: "I-9 · autorización de trabajo" }, from: "Sunrise Home Health" },
-  { id: "w4", name: { en: "W-4 · tax withholding", es: "W-4 · retención de impuestos" }, from: "Sunrise Home Health" },
+  // Caregivers are independent contractors: W-9 (not I-9 / W-4), plus the agency's contractor agreement.
+  { id: "w9", name: { en: "W-9 · taxpayer ID for 1099", es: "W-9 · número fiscal para el 1099" }, from: "Sunrise Home Health" },
+  { id: "ica", name: { en: "Independent contractor agreement", es: "Acuerdo de contratista independiente" }, from: "Sunrise Home Health" },
 ];
 
 const LOG = [

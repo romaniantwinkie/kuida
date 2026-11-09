@@ -1,81 +1,91 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useState } from "react";
-import { ArrowRight } from "lucide-react";
-import { Button, ButtonLink } from "@/components/ui/button";
+import { FormEvent, useState, useTransition } from "react";
+import { CodeStep } from "@/components/auth/code-step";
+import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
 import type { Audience } from "@/lib/audience";
 import { useLang } from "@/lib/i18n";
+import { requestCode } from "@/server/actions/auth";
 
 const ES = {
   title: "Entrar",
-  sub: "Usa el celular de tu perfil.",
-  id: "Número de celular",
-  go: { href: "/c", label: "Ver mis turnos" },
+  sub: "Te enviamos un código a tu correo. Sin contraseña.",
+  id: "Correo electrónico",
+  send: "Enviarme un código",
   newHere: { text: "¿Nuevo aquí?", href: "/caregivers/signup", label: "Crea tu perfil gratis" },
 };
 
 const COPY = {
   agency: {
     title: "Agency log in",
-    sub: "For coordinators and office staff.",
+    sub: "For coordinators and office staff. We email you a one-time code; there's no password.",
     id: "Work email",
-    go: { href: "/app", label: "Open the agency console" },
+    send: "Email me a code",
     newHere: { text: "New agency?", href: "/signup/agency", label: "Create your office, free for 6 months" },
   },
   caregiver: {
     title: "Caregiver log in",
-    sub: "Use the mobile number on your profile.",
-    id: "Mobile number",
-    go: { href: "/c", label: "Open my shifts" },
+    sub: "We email you a one-time code. No password needed.",
+    id: "Email",
+    send: "Email me a code",
     newHere: { text: "New here?", href: "/caregivers/signup", label: "Create a free profile" },
   },
 } as const;
 
-export function SignInForm({ audience }: { audience: Audience }) {
+export function SignInForm({ audience, live }: { audience: Audience; live: boolean }) {
   const [lang] = useLang();
-  const c = audience === "caregiver" && lang === "es" ? ES : COPY[audience];
   const es = audience === "caregiver" && lang === "es";
-  const [done, setDone] = useState(false);
+  const c = es ? ES : COPY[audience];
+  const [email, setEmail] = useState("");
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, start] = useTransition();
+
   function onSubmit(e: FormEvent) {
     e.preventDefault();
-    setDone(true);
+    start(async () => {
+      const r = await requestCode({ email, es });
+      if (r.ok) setSent(true);
+      else setError(r.error);
+    });
   }
+
   return (
     <main className="mx-auto max-w-md px-4 py-16 sm:px-6">
       <h1 className="text-4xl font-semibold tracking-tight">{c.title}</h1>
       <p className="mt-2 text-sm text-muted">{c.sub}</p>
       <div className="mt-8 rounded-3xl border border-line bg-surface p-6 shadow-card">
-        {done ? (
-          <div>
-            <p className="text-sm">{es ? "Entrada de prueba. Las cuentas aún no están activas." : "Preview login only. Accounts aren't live yet."}</p>
-            <ButtonLink href={c.go.href} className="mt-5 w-full">
-              {c.go.label} <ArrowRight className="size-4" />
-            </ButtonLink>
-          </div>
+        {!live ? (
+          <p className="text-sm text-muted">
+            {es ? "Las cuentas no están activas en esta vista previa. " : "Accounts aren't switched on in this preview. "}
+            <Link href={audience === "caregiver" ? "/c" : "/app"} className="font-semibold text-brand hover:underline">
+              {es ? "Ver la demo" : "Open the demo"}
+            </Link>
+          </p>
+        ) : sent ? (
+          <CodeStep email={email.trim().toLowerCase()} es={es} onBack={() => setSent(false)} />
         ) : (
-          <form onSubmit={onSubmit} className="space-y-4">
-            <label className="block text-sm font-medium">
-              {c.id}
-              <input
-                required
-                className="field"
-                type={audience === "agency" ? "email" : "tel"}
-                inputMode={audience === "agency" ? "email" : "tel"}
-                autoComplete={audience === "agency" ? "username" : "tel"}
-              />
-            </label>
-            {audience === "agency" ? (
-              <label className="block text-sm font-medium">
-                Password
-                <input type="password" required className="field" autoComplete="current-password" />
-              </label>
-            ) : (
-              <p className="text-xs text-muted">{es ? "Te enviamos un código por texto. Sin contraseña." : "We'll text you a one-time code. No password needed."}</p>
-            )}
-            <Button type="submit" className="w-full">
-              {audience === "agency" ? "Log in" : es ? "Enviarme un código" : "Text me a code"}
+          <form onSubmit={onSubmit} className="space-y-4" noValidate>
+            <Field
+              label={c.id}
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              value={email}
+              onValue={(v) => {
+                setEmail(v);
+                setError(null);
+              }}
+              serverError={error}
+            />
+            <Button type="submit" className="w-full" disabled={pending || !email.trim()}>
+              {pending ? (es ? "Enviando…" : "Sending…") : c.send}
             </Button>
+            <p className="text-xs text-muted">
+              {es ? "Si hay una cuenta con este correo, el código llega en menos de un minuto." : "If there's an account for this email, the code arrives within a minute."}
+            </p>
           </form>
         )}
       </div>

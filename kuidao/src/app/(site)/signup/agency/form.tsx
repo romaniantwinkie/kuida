@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2, Upload } from "lucide-react";
 import { Stepper } from "@/components/stepper";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -9,13 +9,20 @@ import { useDraft } from "@/lib/drafts";
 import { lookupZip } from "@/lib/geocode";
 import { FOUNDING_OFFER, PLANS } from "@/lib/product";
 import { cn } from "@/lib/cn";
+import { CodeStep } from "@/components/auth/code-step";
+import { signupAgency } from "@/server/actions/auth";
+import { AGENCY_TYPES } from "@/lib/catalog";
 
-const STEPS = ["Office", "Plan", "Roster"];
 const email: (v: string) => string | null = (v) =>
   !v.trim() ? "Enter your work email so we can send your login link." : /^\S+@\S+\.\S+$/.test(v) ? null : "Enter an email like name@agency.com.";
 
-export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
+export function AgencySignupForm({ initialPlan, live }: { initialPlan: string; live: boolean }) {
+  // Live: roster import happens in the console after login.
+  const STEPS = live ? ["Office", "Plan"] : ["Office", "Plan", "Roster"];
   const [step, setStep] = useState(0);
+  const [serverError, setServerError] = useState<{ field?: string; error: string } | null>(null);
+  const [pending, start] = useTransition();
+  const [codeFor, setCodeFor] = useState<string | null>(null);
   const [done, setDone] = useState(false);
   const draft = useDraft("cercana-draft-agency", {
     name: "",
@@ -53,11 +60,22 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
   function next(e: FormEvent) {
     e.preventDefault();
     if (form.current && firstInvalid(form.current)) return;
-    if (step < STEPS.length - 1) setStep(step + 1);
-    else {
+    if (step < STEPS.length - 1) return setStep(step + 1);
+    if (!live) {
       setDone(true);
       draft.clear();
+      return;
     }
+    start(async () => {
+      const r = await signupAgency({ name: d.name, zip: d.zip, type: d.type as (typeof AGENCY_TYPES)[number], license: d.license, email: d.email, plan: d.plan });
+      if (r.ok) {
+        setCodeFor(d.email.trim().toLowerCase());
+        draft.clear();
+      } else {
+        setServerError(r);
+        if (r.field && r.field !== "plan") setStep(0);
+      }
+    });
   }
 
   return (
@@ -67,7 +85,13 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
       <p className="mt-2 text-sm text-muted">Licensed home health agency, home care agency or nurse registry, in any state.</p>
 
       <div className="mt-8 rounded-3xl border border-line bg-surface p-6 shadow-card sm:p-8">
-        {done ? (
+        {codeFor ? (
+          <div>
+            <h2 className="text-2xl font-semibold">Confirm your email</h2>
+            <p className="mb-5 mt-2 text-sm text-muted">Your office is created. Enter the code to log in. We'll verify your license within one business day; you can add shifts meanwhile.</p>
+            <CodeStep email={codeFor} />
+          </div>
+        ) : done ? (
           <div className="text-center">
             <CheckCircle2 className="mx-auto size-12 text-brand" />
             <h2 className="mt-4 text-2xl font-semibold">Your office request is in</h2>
@@ -96,6 +120,7 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
                     value={d.name}
                     onValue={(v) => draft.patch({ name: v })}
                     validate={required("Enter your agency's legal name as it appears on your license.")}
+                    serverError={serverError?.field === "name" ? serverError.error : null}
                     autoComplete="organization"
                   />
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -113,9 +138,9 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
                     <label className="block text-sm font-medium">
                       Agency type
                       <select className="field" value={d.type} onChange={(e) => draft.patch({ type: e.target.value })}>
-                        <option>Home health agency</option>
-                        <option>Home care (non-medical) agency</option>
-                        <option>Nurse registry</option>
+                        {AGENCY_TYPES.map((t) => (
+                          <option key={t}>{t}</option>
+                        ))}
                       </select>
                     </label>
                   </div>
@@ -127,7 +152,20 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
                     validate={required("Enter your state license number so we can verify your agency.")}
                     hint="Example: HHA-1234567"
                   />
-                  <Field label="Work email" data-required type="email" value={d.email} onValue={(v) => draft.patch({ email: v })} validate={email} autoComplete="email" hint="We send your login link here." />
+                  <Field
+                    label="Work email"
+                    data-required
+                    type="email"
+                    value={d.email}
+                    onValue={(v) => {
+                      draft.patch({ email: v });
+                      if (serverError?.field === "email") setServerError(null);
+                    }}
+                    validate={email}
+                    autoComplete="email"
+                    hint="We email your login code here. No password."
+                    serverError={serverError?.field === "email" ? serverError.error : null}
+                  />
                 </>
               )}
               {step === 1 && (
@@ -170,14 +208,19 @@ export function AgencySignupForm({ initialPlan }: { initialPlan: string }) {
                 </div>
               )}
             </div>
+            {serverError && !["name", "email"].includes(serverError.field ?? "") && (
+              <p role="alert" className="mt-6 rounded-xl bg-danger/10 px-4 py-3 text-sm font-medium text-danger">
+                {serverError.error}
+              </p>
+            )}
             <div className="mt-8 flex gap-2">
               {step > 0 && (
                 <Button type="button" variant="secondary" onClick={() => setStep(step - 1)}>
                   <ArrowLeft className="size-4" /> Back
                 </Button>
               )}
-              <Button type="submit" className="flex-1">
-                {step === STEPS.length - 1 ? "Create office" : "Continue"} <ArrowRight className="size-4" />
+              <Button type="submit" className="flex-1" disabled={pending}>
+                {pending ? "Creating your office…" : step === STEPS.length - 1 ? "Create office" : "Continue"} <ArrowRight className="size-4" />
               </Button>
             </div>
           </form>
