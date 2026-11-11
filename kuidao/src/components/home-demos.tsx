@@ -19,7 +19,7 @@ const ranked = rankForShift(shift).eligible;
 /** Homepage: the Find caregivers map with a ranked list beside it. */
 export function FindCaregiversDemo() {
   const [selected, setSelected] = useState<string | null>(ranked[0]?.caregiver.id ?? null);
-  const pins = ranked.map((m) => ({ id: m.caregiver.id, x: m.caregiver.x, y: m.caregiver.y, label: `${m.caregiver.firstName} · ${m.score}` }));
+  const pins = ranked.map((m) => ({ id: m.caregiver.id, x: m.caregiver.x, y: m.caregiver.y, label: `${m.caregiver.firstName} · ${m.miles} mi` }));
   return (
     <div className="grid overflow-hidden rounded-3xl border border-line bg-surface shadow-lift lg:grid-cols-5">
       <div className="h-80 lg:col-span-3 lg:h-auto lg:min-h-[420px]">

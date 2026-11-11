@@ -172,7 +172,7 @@ export function MatchBoard({
     id: m.caregiver.id,
     x: m.caregiver.x,
     y: m.caregiver.y,
-    label: `${m.caregiver.firstName} · ${m.score}`,
+    label: `${m.caregiver.firstName} · ${m.miles} mi`,
     tone: (["interested", "connected"].includes(statuses[m.caregiver.id] ?? "") ? "ok" : statuses[m.caregiver.id] === "declined" ? "muted" : "brand") as "ok" | "muted" | "brand",
   }));
 

@@ -50,7 +50,7 @@ export function LiveMatchList({
   const toast = useToast();
 
   const pins: LatLngPin[] = useMemo(
-    () => eligible.filter((m) => m.c.lat != null && m.c.lng != null).map((m) => ({ id: m.c.id, lat: m.c.lat!, lng: m.c.lng!, label: `${m.c.firstName} ${m.c.lastInitial}. · ${m.score}`, tone: m.c.connection === "connected" || m.c.onRoster ? "ok" : "brand" })),
+    () => eligible.filter((m) => m.c.lat != null && m.c.lng != null).map((m) => ({ id: m.c.id, lat: m.c.lat!, lng: m.c.lng!, label: `${m.c.firstName} ${m.c.lastInitial}. · ${m.c.miles.toFixed(1)} mi`, tone: m.c.connection === "connected" || m.c.onRoster ? "ok" : "brand" })),
     [eligible],
   );
 
