@@ -141,6 +141,9 @@ export function LiveCaregiverHome({ profile: p, cardUrl, connections, vault, doc
           {/* Agencies asking to connect */}
           {connections}
 
+          {/* Documents */}
+          {vault}
+
           {/* Shareable card */}
           <section className="rounded-3xl border border-line bg-surface p-5">
             <p className="eyebrow">{t({ en: "Your Cercana card", es: "Tu tarjeta Cercana" })}</p>
@@ -177,8 +180,6 @@ export function LiveCaregiverHome({ profile: p, cardUrl, connections, vault, doc
             </p>
           </section>
 
-          {/* Documents */}
-          {vault}
         </main>
       </div>
       {editing && <ProfileForm profile={p} es={es} onClose={() => setEditing(false)} />}
