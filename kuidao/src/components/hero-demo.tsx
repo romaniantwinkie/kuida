@@ -5,6 +5,7 @@ import { Check, Zap } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge, type Tone } from "@/components/ui/badge";
 import { ScoreRing } from "@/components/ui/score-ring";
+import { avatarUri } from "@/lib/avatar";
 
 const ROWS = [
   { name: "Xiomara R.", meta: "HHA · 0.5 mi · knows client", score: 96 },
@@ -56,6 +57,8 @@ export function HeroDemo() {
             return (
               <li key={r.name} className={`flex items-center gap-3 px-5 py-3 transition-colors ${label === "Interested" ? "bg-ok/10" : ""}`}>
                 <ScoreRing score={r.score} size={38} />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={avatarUri(r.name)} alt="" className="size-9 shrink-0 rounded-full object-cover ring-1 ring-line" />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold">{r.name}</p>
                   <p className="truncate text-xs text-muted">{r.meta}</p>
