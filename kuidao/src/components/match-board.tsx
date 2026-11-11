@@ -338,7 +338,7 @@ export function MatchBoard({
                     Filled by {winner.caregiver.firstName} {winner.caregiver.lastInitial}. in {simClock(lastStep)}
                   </p>
                   <p className="text-xs text-muted">
-                    {DAYS[shift.day]} {fmtHour(shift.start)}–{fmtHour(shift.end)} · EVV visit created
+                    {DAYS[shift.day]} {fmtHour(shift.start)}–{fmtHour(shift.end)} · connected through Cercana
                   </p>
                 </div>
               </div>

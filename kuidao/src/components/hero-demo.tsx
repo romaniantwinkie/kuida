@@ -74,7 +74,7 @@ export function HeroDemo() {
                 <Check className="size-3.5" />
               </span>
               <span className="flex-1">
-                <b>Example: covered in under 2 minutes.</b> Family and EVV updated.
+                <b>Example: a match in under 2 minutes.</b> Your office takes it from here.
               </span>
               <button type="button" onClick={() => setRun((r) => r + 1)} className="min-h-11 shrink-0 rounded-full px-3 text-sm font-medium text-brand hover:bg-surface-2">
                 Replay demo
