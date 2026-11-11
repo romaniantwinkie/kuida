@@ -13,7 +13,7 @@ const PHOTOS: Record<string, string> = {
   "Yanelis M": "/people/yanelis.jpg",
   "Daniel S": "/people/daniel.jpg",
   "Odalys F": "/people/odalys.jpg",
-  "Keisha B": "/people/keisha.jpg",
+  "Kathy B": "/people/kathy.jpg",
   "Mayelin C": "/people/mayelin.jpg",
   "Rosa V": "/people/rosa.jpg",
   "Lázaro P": "/people/lazaro.jpg",
