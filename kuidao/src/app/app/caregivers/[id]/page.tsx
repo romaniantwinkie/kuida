@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { CalendarDays, Clock, Languages, Lock, MapPin, ShieldCheck } from "lucide-react";
+import { Clock, Languages, Lock, MapPin, ShieldCheck } from "lucide-react";
 import { PageHead } from "@/components/page-head";
 import { Card } from "@/components/ui/card";
 import { SLOTS } from "@/lib/catalog";
@@ -62,7 +62,7 @@ export default async function CaregiverProfilePage({ params }: { params: Promise
           )}
           <p className="flex items-start gap-2 rounded-2xl bg-surface-2 px-4 py-3 text-sm text-muted">
             <Lock className="mt-0.5 size-4 shrink-0" />
-            <span><b className="text-ink">Contact goes through Cercana.</b> Phone, email and documents stay private until the caregiver shares them with your office. <CalendarDays className="inline size-4" /> Offering shifts directly arrives with text offers.</span>
+            <span><b className="text-ink">Contact goes through Cercana.</b> Phone, email and documents stay private until the caregiver shares them with your office. Sending this caregiver a shift offer arrives with text offers.</span>
           </p>
         </div>
       </div>
