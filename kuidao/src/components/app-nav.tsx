@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bot, CalendarRange, FileClock, Home, LogOut, MessageSquare, Search, UserPlus, Users } from "lucide-react";
+import { Bot, CalendarRange, FileCheck2, FileClock, Home, LogOut, MessageSquare, Search, UserPlus, Users } from "lucide-react";
 import { signOut } from "@/server/actions/auth";
 import { Logo } from "@/components/logo";
 import { OfficeSwitcher } from "@/components/office-switcher";
@@ -26,6 +26,7 @@ export const APP_NAV = [
   { href: "/app/messages", label: "Messages", icon: MessageSquare, count: unreadCount },
   { href: "/app/copilot", label: "Copilot", icon: Bot },
   { href: "/app/compliance", label: "Compliance log", icon: FileClock },
+  { href: "/app/settings", label: "Required documents", icon: FileCheck2 },
 ];
 
 const openSearch = () => window.dispatchEvent(new Event("cercana:command"));

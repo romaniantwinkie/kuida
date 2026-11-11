@@ -7,27 +7,42 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/toast";
 import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
+import { DEFAULT_DOCUMENTS } from "@/lib/documents";
 
 type Status = "verified" | "expiring" | "pending" | "missing";
-type Doc = { id: string; name: { en: string; es: string }; status: Status; note: { en: string; es: string } };
-type Agency = { id: string; name: string; verified: boolean; docs: string[]; daysLeft: number | null };
+type Doc = { id: string; name: { en: string; es: string }; status: Status; note: { en: string; es: string }; sensitive?: boolean };
+type Agency = { id: string; name: string; verified: boolean; connected: boolean; asks: string[]; docs: string[]; daysLeft: number | null };
 type Request = { id: string; agency: string; doc: string };
 
-const DOCS: Doc[] = [
-  { id: "id", name: { en: "Photo ID", es: "Identificación con foto" }, status: "verified", note: { en: "Verified · front and back", es: "Verificada · frente y reverso" } },
-  { id: "cert", name: { en: "HHA / CNA certificate", es: "Certificado HHA / CNA" }, status: "verified", note: { en: "Verified", es: "Verificado" } },
-  { id: "bg", name: { en: "Background check", es: "Verificación de antecedentes" }, status: "verified", note: { en: "Valid until Aug 2027", es: "Válido hasta ago 2027" } },
-  { id: "tb", name: { en: "TB test", es: "Prueba de TB" }, status: "verified", note: { en: "Negative · valid until Mar 2026", es: "Negativa · válida hasta mar 2026" } },
-  { id: "cpr", name: { en: "CPR / First aid", es: "RCP / Primeros auxilios" }, status: "expiring", note: { en: "Expires in 21 days", es: "Vence en 21 días" } },
-];
+// The 12 documents most agencies ask for (see src/lib/documents.ts). Agencies can edit their own checklist.
+const N = (en: string, es: string) => ({ en, es });
+const DOC_STATE: Record<string, [Status, { en: string; es: string }]> = {
+  license: ["verified", N("Valid until Aug 2027", "Válida hasta ago 2027")],
+  work_authorization: ["verified", N("Private · shared only after you connect", "Privado · se comparte solo después de conectar")],
+  ssn_card: ["verified", N("Private · shared only after you connect", "Privado · se comparte solo después de conectar")],
+  drivers_license: ["verified", N("Valid until Jan 2029", "Válida hasta ene 2029")],
+  cpr: ["expiring", N("Expires in 21 days", "Vence en 21 días")],
+  physical_exam: ["verified", N("Valid until Jun 2026", "Válido hasta jun 2026")],
+  vehicle_insurance: ["verified", N("Renews Mar 2026", "Se renueva mar 2026")],
+  vehicle_registration: ["verified", N("Valid until Oct 2026", "Válido hasta oct 2026")],
+  liability_insurance: ["missing", N("Not uploaded yet", "Aún no lo subes")],
+  bank_info: ["verified", N("Private · shared only after you connect", "Privado · se comparte solo después de conectar")],
+  inservice_12h: ["verified", N("12 of 12 hours · 2026", "12 de 12 horas · 2026")],
+  adrd: ["verified", N("Completed", "Completado")],
+};
+const DOCS: Doc[] = DEFAULT_DOCUMENTS.map((d): Doc => {
+  const [status, note] = DOC_STATE[d.key] ?? ["missing", N("Not uploaded yet", "Aún no lo subes")];
+  return { id: d.key, name: N(d.en, d.es), status, note, sensitive: d.sensitive };
+});
 
 const START_AGENCIES: Agency[] = [
-  { id: "a1", name: "Sunrise Home Health", verified: true, docs: ["id", "cert", "bg", "tb", "cpr"], daysLeft: 24 },
-  { id: "a2", name: "Bayside Care Partners", verified: true, docs: ["id", "cert", "bg"], daysLeft: 9 },
-  { id: "a3", name: "Golden Years Home Care", verified: false, docs: [], daysLeft: null },
+  // asks = that agency's own checklist (it edits it in Settings).
+  { id: "a1", name: "Sunrise Home Health", verified: true, connected: true, asks: DEFAULT_DOCUMENTS.map((d) => d.key), docs: ["license", "drivers_license", "cpr", "physical_exam", "inservice_12h", "adrd", "work_authorization", "ssn_card"], daysLeft: 24 },
+  { id: "a2", name: "Bayside Care Partners", verified: true, connected: false, asks: ["license", "cpr", "physical_exam", "liability_insurance", "adrd", "ssn_card"], docs: ["license", "cpr"], daysLeft: 9 },
+  { id: "a3", name: "Golden Years Home Care", verified: false, connected: false, asks: ["license", "cpr", "drivers_license"], docs: [], daysLeft: null },
 ];
 
-const START_REQUESTS: Request[] = [{ id: "r1", agency: "Golden Years Home Care", doc: "tb" }];
+const START_REQUESTS: Request[] = [{ id: "r1", agency: "Golden Years Home Care", doc: "physical_exam" }];
 
 const FORMS = [
   // Caregivers are independent contractors: W-9 (not I-9 / W-4), plus the agency's contractor agreement.
@@ -36,8 +51,8 @@ const FORMS = [
 ];
 
 const LOG = [
-  { who: "Sunrise Home Health", what: { en: "viewed CPR / First aid", es: "vio RCP / Primeros auxilios" }, when: { en: "Today, 8:14a", es: "Hoy, 8:14a" } },
-  { who: "Bayside Care Partners", what: { en: "viewed Background check", es: "vio Verificación de antecedentes" }, when: { en: "Mon, 3:02p", es: "Lun, 3:02p" } },
+  { who: "Sunrise Home Health", what: { en: "viewed CPR certificate", es: "vio Certificado de CPR" }, when: { en: "Today, 8:14a", es: "Hoy, 8:14a" } },
+  { who: "Bayside Care Partners", what: { en: "viewed HHA or CNA license", es: "vio Licencia de HHA o CNA" }, when: { en: "Mon, 3:02p", es: "Lun, 3:02p" } },
 ];
 
 /**
@@ -123,10 +138,10 @@ export function CredentialVault({ compact = false, className }: { compact?: bool
       )}
 
       <ul className="divide-y divide-line">
-        {docs.map((d) => (
+        {(compact ? docs.slice(0, 5) : docs).map((d) => (
           <li key={d.id} className="flex items-center gap-3 px-6 py-3">
             <span className={cn("grid size-9 shrink-0 place-items-center rounded-xl", d.status === "verified" ? "bg-ok/10 text-ok" : d.status === "expiring" ? "bg-warn/10 text-warn" : "bg-surface-2 text-muted")}>
-              {d.status === "verified" ? <BadgeCheck className="size-4" /> : <FileText className="size-4" />}
+              {d.sensitive ? <Lock className="size-4" /> : d.status === "verified" ? <BadgeCheck className="size-4" /> : <FileText className="size-4" />}
             </span>
             <div className="min-w-0 flex-1">
               <p className="text-sm font-semibold">{t(d.name)}</p>
@@ -153,6 +168,9 @@ export function CredentialVault({ compact = false, className }: { compact?: bool
           </li>
         ))}
       </ul>
+      {compact && docs.length > 5 && (
+        <p className="border-t border-line px-6 py-3 text-sm text-muted">{t({ en: `+ ${docs.length - 5} more in your vault`, es: `+ ${docs.length - 5} más en tu bóveda` })}</p>
+      )}
 
       {!compact && (
         <>
@@ -184,15 +202,55 @@ export function CredentialVault({ compact = false, className }: { compact?: bool
                     </button>
                     {open && (
                       <div className="border-t border-line px-4 py-3">
-                        <ul className="grid gap-1 sm:grid-cols-2">
-                          {docs.map((d) => (
-                            <li key={d.id}>
-                              <label className="flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-2 text-sm hover:bg-surface-2">
-                                <input type="checkbox" className="size-4 accent-[rgb(var(--brand))]" checked={a.docs.includes(d.id)} onChange={() => toggleDoc(a.id, d.id)} />
-                                {t(d.name)}
-                              </label>
-                            </li>
-                          ))}
+                        <p className="text-sm">
+                          {t({
+                            en: `${a.name} asks for ${a.asks.length} documents. You've shared ${a.asks.filter((k) => a.docs.includes(k)).length}.`,
+                            es: `${a.name} pide ${a.asks.length} documentos. Has compartido ${a.asks.filter((k) => a.docs.includes(k)).length}.`,
+                          })}
+                        </p>
+                        {(() => {
+                          const shareable = a.asks.filter((k) => {
+                            const d = docs.find((x) => x.id === k);
+                            return d && d.status !== "missing" && (!d.sensitive || a.connected) && !a.docs.includes(k);
+                          });
+                          return shareable.length > 0 ? (
+                            <Button
+                              size="sm"
+                              className="mt-2"
+                              onClick={() => {
+                                setAgencies((x) => x.map((y) => (y.id === a.id ? { ...y, docs: [...new Set([...y.docs, ...shareable])], daysLeft: 30 } : y)));
+                                toast(t({ en: `Shared ${shareable.length} documents with ${a.name}`, es: `Compartiste ${shareable.length} documentos con ${a.name}` }));
+                              }}
+                            >
+                              {t({ en: `Share the ${shareable.length} they ask for`, es: `Compartir los ${shareable.length} que piden` })}
+                            </Button>
+                          ) : null;
+                        })()}
+                        <ul className="mt-3 grid gap-1 sm:grid-cols-2">
+                          {a.asks.map((k) => {
+                            const d = docs.find((x) => x.id === k);
+                            if (!d) return null;
+                            const locked = d.sensitive && !a.connected;
+                            const missing = d.status === "missing";
+                            return (
+                              <li key={d.id}>
+                                <label className={cn("flex min-h-11 items-center gap-3 rounded-xl px-2 text-sm", locked || missing ? "text-muted" : "cursor-pointer hover:bg-surface-2")}>
+                                  <input
+                                    type="checkbox"
+                                    className="size-4 accent-[rgb(var(--brand))]"
+                                    disabled={locked || missing}
+                                    checked={a.docs.includes(d.id)}
+                                    onChange={() => toggleDoc(a.id, d.id)}
+                                  />
+                                  <span className="min-w-0 flex-1">
+                                    {t(d.name)}
+                                    {locked && <span className="block text-xs">{t({ en: "After you connect", es: "Después de conectar" })}</span>}
+                                    {missing && <span className="block text-xs">{t({ en: "Upload it first", es: "Súbelo primero" })}</span>}
+                                  </span>
+                                </label>
+                              </li>
+                            );
+                          })}
                         </ul>
                         {a.docs.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-2">

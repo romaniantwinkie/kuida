@@ -127,6 +127,15 @@ const ok = (c, m) => { if (!c) throw new Error("FAIL: " + m); console.log("ok -"
   const cgId = execSync(`docker exec cercana-dev-db psql -U cercana -tAc "select id from users where email='${cg}'"`).toString().trim();
   await q.getByRole("button", { name: "Show my profile to nearby agencies" }).click(); await q.getByText("Agencies near you can see your profile").waitFor();
   await o.goto(`${BASE}/app/caregivers/${cgId}`); await o.getByRole("heading", { name: "María L." }).waitFor(); ok(!(await o.getByText("López").count()), "agency sees caregiver profile without last name");
+  // ---- required documents (owner edits, scheduler read-only)
+  await o.goto(`${BASE}/app/settings`); await o.getByText("12 required").waitFor();
+  await o.getByRole("group", { name: /Physical exam: required or optional/ }).getByRole("button", { name: "optional" }).click();
+  await o.getByRole("button", { name: "Remove Vehicle registration" }).click();
+  await o.getByRole("button", { name: /TB test/ }).click();
+  await o.getByLabel("Name (English)").last().fill("Signed handbook acknowledgment"); await o.getByRole("button", { name: "Add to list" }).click();
+  await o.getByRole("button", { name: "Save document list" }).click(); await o.getByText("Document list saved").waitFor();
+  await o.reload(); await o.getByText("Signed handbook acknowledgment", { exact: true }).first().waitFor(); ok(await o.getByText("12 required · 1 optional").count() > 0, "document list edited and saved (12 required, 1 optional, custom doc kept)");
+  await p.goto(`${BASE}/app/settings`); await p.getByText("Only the office owner can change this list.").first().waitFor(); ok(true, "scheduler sees the list read-only");
   // ---- copilot history
   await o.goto(`${BASE}/app/copilot`); await o.getByRole("button", { name: /free this weekend/i }).click(); await o.getByRole("button", { name: "New conversation" }).waitFor();
   await o.getByRole("button", { name: "History" }).click(); await o.getByRole("menuitem", { name: /free this weekend/i }).waitFor(); ok(true, "copilot history remembers the question");

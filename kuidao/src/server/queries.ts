@@ -90,3 +90,12 @@ export async function caregiverForAgency(caregiverId: string) {
     from caregiver_profiles where user_id = ${caregiverId} and visible`;
   return p ?? null;
 }
+
+/** The agency's document checklist, or the standard list if it hasn't customized one. */
+export async function agencyRequirements(agencyId: string) {
+  const { DEFAULT_REQUIREMENTS } = await import("@/lib/documents");
+  const rows = await sql<{ key: string; labelEn: string; labelEs: string; status: "required" | "optional"; custom: boolean }[]>`
+    select key, label_en, label_es, status, custom from agency_documents where agency_id = ${agencyId} order by position`;
+  if (!rows.length) return { list: DEFAULT_REQUIREMENTS, customized: false };
+  return { list: rows.map((r) => ({ key: r.key, en: r.labelEn, es: r.labelEs, status: r.status, custom: r.custom })), customized: true };
+}

@@ -57,7 +57,7 @@ const FEATURES = [
   {
     icon: FileSignature,
     title: "Pre-credentialed caregivers",
-    body: "Caregivers keep verified documents in their Cercana vault and share them with you in one tap. Hire without chasing paperwork; get alerts 30 days before anything expires.",
+    body: "Set the documents your office requires once. Caregivers keep theirs in a Cercana vault and share your whole checklist in one tap. No chasing paperwork; alerts 30 days before anything expires.",
     className: "md:col-span-2",
     demo: "vault",
   },
@@ -206,9 +206,9 @@ export default async function Home() {
                 {f.demo === "vault" && (
                   <div className="mt-5 grid gap-2 rounded-xl border border-line bg-surface p-4 text-sm sm:grid-cols-2">
                     <p className="text-xs text-muted sm:col-span-2">
-                      <b className="text-ink">Xiomara R.</b> shared 5 verified documents with you · view-only · logged
+                      <b className="text-ink">Xiomara R.</b> shared 8 of the 12 documents you ask for · view-only · logged
                     </p>
-                    {["Photo ID", "HHA certificate", "Background check", "TB test"].map((d) => (
+                    {["HHA license", "Physical exam", "12 h in-service", "ADRD training"].map((d) => (
                       <p key={d} className="flex items-center gap-2 rounded-lg bg-ok/10 px-3 py-2 text-xs font-medium text-ok">
                         <ShieldCheck className="size-3.5" /> {d}
                       </p>

@@ -185,8 +185,8 @@ export function LiveCaregiverHome({ profile: p, cardUrl }: { profile: CaregiverP
             </div>
             <p className="mt-2 text-sm text-muted">
               {t({
-                en: "Upload once, then choose which agency sees each document. Have these ready: photo ID, your certificate or license, CPR card, TB test, background check and a W-9.",
-                es: "Súbelos una vez y elige qué agencia ve cada uno. Ten listos: identificación, tu certificado o licencia, tarjeta de CPR, prueba de TB, verificación de antecedentes y un W-9.",
+                en: "Upload once, then choose which agency sees each document. Most agencies ask for: your HHA or CNA license, proof of residency or work permit, Social Security card, driver's license, CPR, physical exam, vehicle insurance and registration, liability insurance, bank details, 12 hours of in-service (HIV/AIDS) and ADRD Alzheimer's training.",
+                es: "Súbelos una vez y elige qué agencia ve cada uno. La mayoría de las agencias pide: licencia de HHA o CNA, prueba de residencia o permiso de trabajo, tarjeta del Seguro Social, licencia de conducir, CPR, examen físico, seguro y registro del vehículo, seguro de responsabilidad, información bancaria, 12 horas de in-services (HIV/AIDS) y training de Alzheimer's ADRD.",
               })}
             </p>
           </section>

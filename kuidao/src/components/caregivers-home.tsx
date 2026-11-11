@@ -17,7 +17,7 @@ const STEPS = [
   {
     icon: FolderLock,
     title: { en: "Upload credentials once", es: "Sube tus documentos una vez" },
-    body: { en: "ID, certificate, background check, TB, CPR. We remind you before anything expires.", es: "ID, certificado, antecedentes, TB, RCP. Te avisamos antes de que algo venza." },
+    body: { en: "Your license, CPR, physical, insurance, in-service hours and the rest of the usual list. We remind you before anything expires.", es: "Tu licencia, CPR, examen físico, seguros, horas de in-service y el resto de la lista de siempre. Te avisamos antes de que algo venza." },
   },
   {
     icon: MessageSquareText,
@@ -130,11 +130,12 @@ export function CaregiversHome({ openNear }: { openNear: number | null }) {
               area: "Little Havana, Miami · 10 mi",
               availability: es ? "Lun–Vie · mañanas" : "Mon–Fri · mornings",
               docs: [
-                { name: es ? "Identificación" : "Photo ID", ok: true },
-                { name: es ? "Certificado HHA" : "HHA certificate", ok: true, note: "2027" },
-                { name: es ? "Antecedentes nivel 2" : "Level 2 background", ok: true },
-                { name: es ? "Prueba de TB" : "TB test", ok: true, note: es ? "vence en 4 m" : "4 mo left" },
-                { name: es ? "RCP" : "CPR card", ok: false, note: es ? "subir" : "upload" },
+                { name: es ? "Licencia de HHA" : "HHA license", ok: true, note: "2027" },
+                { name: es ? "Certificado de CPR" : "CPR certificate", ok: true, note: es ? "vence en 4 m" : "4 mo left" },
+                { name: es ? "Examen físico" : "Physical exam", ok: true },
+                { name: es ? "12 h de in-services" : "12 h in-service", ok: true },
+                { name: es ? "Training ADRD" : "ADRD training", ok: true },
+                { name: es ? "Seguro de responsabilidad" : "Liability insurance", ok: false, note: es ? "subir" : "upload" },
               ],
               qrText: "https://cercana.ai/caregivers",
             }}
