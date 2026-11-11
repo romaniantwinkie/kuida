@@ -110,3 +110,25 @@ Database changes are applied automatically when the app starts.
 Cercana keeps **no client (patient) data**: no names, addresses, diagnoses or care notes. Shifts hold the neighborhood,
 ZIP, time, role and pay; locations are rounded to about 1 km. Caregiver phone numbers and emails are never shown to agencies.
 Database files live in `./data/postgres`; protect that folder like any other private data.
+
+## Scripted testing
+
+The upload form uses a Next.js server action, which encodes its fields in its own format, so a hand-made multipart
+POST to the page won't work. Scripts use the plain endpoint instead (same checks and encryption):
+
+```bash
+# cercana_session = the cookie from a logged-in caregiver's browser
+curl -b "cercana_session=<token>" -F docKey=cpr -F expiresOn=2027-06-30 -F file=@cpr.pdf http://<server>:<port>/api/vault/upload
+# → {"ok":true}  or  {"ok":false,"error":"..."}
+```
+
+`docKey` is a key from the agency checklist (`license`, `cpr`, `drivers_license`, ...); custom documents also send `label`.
+
+Browser end-to-end tests (need Node, Playwright and `docker exec` access to the database container):
+
+```bash
+BASE=http://<server>:<port> MAIL=http://<server>:8025 DB_CONTAINER=cercana-db-1 node tests/e2e-batch2.cjs
+BASE=http://<server>:<port> MAIL=http://<server>:8025 DB_CONTAINER=cercana-db-1 node tests/e2e-live.cjs
+```
+
+They create their own test accounts with `@example.test` emails.

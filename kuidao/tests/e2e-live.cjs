@@ -1,7 +1,8 @@
 const { chromium } = require("playwright");
 // End-to-end check of the live flows against a running stack with Mailpit.
-// Usage: node tests/e2e-live.cjs [screenshot-dir]   (BASE and MAIL env vars override the defaults)
+// Usage: node tests/e2e-live.cjs [screenshot-dir]   (BASE, MAIL and DB_CONTAINER env vars override the defaults)
 const BASE = process.env.BASE ?? "http://localhost:3001", MAIL = process.env.MAIL ?? "http://localhost:8025";
+const DB = process.env.DB_CONTAINER ?? "cercana-dev-db";
 const shots = process.argv[2] ?? require("node:os").tmpdir();
 async function clearMail(email) {
   const r = await (await fetch(`${MAIL}/api/v1/search?query=${encodeURIComponent("to:" + email)}`)).json();
@@ -123,8 +124,8 @@ const ok = (c, m) => { if (!c) throw new Error("FAIL: " + m); console.log("ok -"
   await p.getByRole("tab", { name: /Past/ }).click(); await p.getByText("No shifts match").waitFor(); ok(true, "past tab with empty filter state");
   // ---- caregiver profile page via QR link (after approval)
   const { execSync } = require("node:child_process");
-  execSync(`docker exec cercana-dev-db psql -U cercana -qc "update agencies set status='approved' where id=(select agency_id from agency_members m join users u on u.id=m.user_id where u.email='${owner}')"`);
-  const cgId = execSync(`docker exec cercana-dev-db psql -U cercana -tAc "select id from users where email='${cg}'"`).toString().trim();
+  execSync(`docker exec ${DB} psql -U cercana -qc "update agencies set status='approved' where id=(select agency_id from agency_members m join users u on u.id=m.user_id where u.email='${owner}')"`);
+  const cgId = execSync(`docker exec ${DB} psql -U cercana -tAc "select id from users where email='${cg}'"`).toString().trim();
   await q.getByRole("button", { name: "Show my profile to nearby agencies" }).click(); await q.getByText("Agencies near you can see your profile").waitFor();
   await o.goto(`${BASE}/app/caregivers/${cgId}`); await o.getByRole("heading", { name: "María L." }).waitFor(); ok(!(await o.getByText("López").count()), "agency sees caregiver profile without last name");
   // ---- required documents (owner edits, scheduler read-only)
