@@ -5,6 +5,9 @@ import { MatchBoard } from "@/components/match-board";
 import { Badge } from "@/components/ui/badge";
 import { clientById, SHIFTS, shiftById, shiftLabel } from "@/lib/data";
 import { rankForShift } from "@/lib/match";
+import { LiveShiftDetail } from "@/components/live/live-shift-detail";
+import { getSession } from "@/server/auth";
+import { getShift } from "@/server/queries";
 
 export function generateStaticParams() {
   return SHIFTS.map((s) => ({ id: s.id }));
@@ -12,6 +15,13 @@ export function generateStaticParams() {
 
 export default async function ShiftPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  if (/^[0-9a-f-]{36}$/i.test(id)) {
+    const s = await getSession();
+    if (!s?.agency) notFound();
+    const live = await getShift(s.agency.id, s.agency.timezone, id);
+    if (!live) notFound();
+    return <LiveShiftDetail s={s as Parameters<typeof LiveShiftDetail>[0]["s"]} shift={live} />;
+  }
   const shift = shiftById(id);
   if (!shift) notFound();
   const client = clientById(shift.clientId);

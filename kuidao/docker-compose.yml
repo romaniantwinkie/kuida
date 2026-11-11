@@ -20,6 +20,9 @@ services:
         condition: service_healthy
     ports:
       - "${APP_PORT:-3001}:3000"
+    volumes:
+      # Caregiver documents, encrypted (see VAULT_KEY in .env)
+      - vault:/app/data/files
 
   db:
     image: postgis/postgis:16-3.4-alpine
@@ -45,6 +48,7 @@ services:
     volumes:
       - ./backups:/backups
       - ./deploy/backup.sh:/backup.sh:ro
+      - vault:/vault:ro
     depends_on:
       db:
         condition: service_healthy
@@ -75,3 +79,6 @@ services:
     profiles: ["tunnel"]
     restart: unless-stopped
     command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+
+volumes:
+  vault:

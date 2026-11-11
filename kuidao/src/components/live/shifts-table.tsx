@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useRef, useState, useTransition } from "react";
 import { CalendarPlus, Check, Pencil, RotateCcw, Search, X } from "lucide-react";
 import { UnderlineTabs } from "@/components/ui/underline-tabs";
@@ -162,9 +163,13 @@ export function LiveShiftsTable({ shifts: all, defaultZip, autoNew = false }: { 
                   return (
                     <tr key={s.id} className={done ? "text-muted" : "hover:bg-surface-2/50"}>
                       <td className="px-5 py-3">
-                        <button type="button" disabled={done} onClick={() => setEditing(s)} className="text-left font-semibold enabled:hover:text-brand">
-                          {s.area}
-                        </button>
+                        {done ? (
+                          <span className="font-semibold">{s.area}</span>
+                        ) : (
+                          <Link href={`/app/shifts/${s.id}`} className="font-semibold hover:text-brand">
+                            {s.area}
+                          </Link>
+                        )}
                         <p className="text-xs text-muted">
                           #{s.number} · {s.zip}
                         </p>

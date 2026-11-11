@@ -14,7 +14,7 @@ RUN npm run build
 FROM node:22-alpine AS run
 WORKDIR /app
 ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3000 HOSTNAME=0.0.0.0
-RUN addgroup -S cercana && adduser -S cercana -G cercana
+RUN addgroup -S cercana && adduser -S cercana -G cercana && mkdir -p /app/data/files && chown -R cercana:cercana /app/data
 COPY --from=build --chown=cercana:cercana /app/.next/standalone ./
 COPY --from=build --chown=cercana:cercana /app/.next/static ./.next/static
 COPY --from=build --chown=cercana:cercana /app/public ./public

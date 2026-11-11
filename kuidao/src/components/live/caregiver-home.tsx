@@ -26,7 +26,7 @@ const chip = (on: boolean) =>
   cn("min-h-11 rounded-full border px-4 text-sm font-medium transition-colors", on ? "border-brand bg-brand text-brand-ink" : "border-line bg-surface hover:bg-surface-2");
 
 /** Signed-in caregiver home: what agencies see, visibility, and profile editing. */
-export function LiveCaregiverHome({ profile: p, cardUrl }: { profile: CaregiverProfile; cardUrl: string }) {
+export function LiveCaregiverHome({ profile: p, cardUrl, connections, vault, docCount }: { profile: CaregiverProfile; cardUrl: string; connections: React.ReactNode; vault: React.ReactNode; docCount: number }) {
   const t = useT();
   const [lang] = useLang();
   const es = lang === "es";
@@ -138,6 +138,9 @@ export function LiveCaregiverHome({ profile: p, cardUrl }: { profile: CaregiverP
             </p>
           </section>
 
+          {/* Agencies asking to connect */}
+          {connections}
+
           {/* Shareable card */}
           <section className="rounded-3xl border border-line bg-surface p-5">
             <p className="eyebrow">{t({ en: "Your Cercana card", es: "Tu tarjeta Cercana" })}</p>
@@ -154,7 +157,7 @@ export function LiveCaregiverHome({ profile: p, cardUrl }: { profile: CaregiverP
                 languages: p.languages.map((l) => (es ? LANGUAGE_ES[l] ?? l : l)),
                 area: `${p.city ?? p.zip} · ${p.radiusMiles} mi`,
                 availability: `${days} · ${slots || t({ en: "times not set", es: "sin horario" })}`,
-                docs: [{ name: t({ en: "Document vault opens soon", es: "Tus documentos, muy pronto" }), ok: false }],
+                docs: [{ name: t({ en: `${docCount} documents in your vault`, es: `${docCount} documentos en tu bóveda` }), ok: docCount > 0, note: t({ en: "private", es: "privados" }) }],
                 qrText: cardUrl,
               }}
             />
@@ -175,21 +178,7 @@ export function LiveCaregiverHome({ profile: p, cardUrl }: { profile: CaregiverP
           </section>
 
           {/* Documents */}
-          <section className="rounded-3xl border border-line bg-surface p-5">
-            <div className="flex items-center justify-between gap-3">
-              <span className="flex items-center gap-3">
-                <FileText className="size-5 text-muted" />
-                <span className="font-semibold">{t({ en: "Document vault", es: "Tus documentos" })}</span>
-              </span>
-              <Badge tone="info">{t({ en: "Coming soon", es: "Muy pronto" })}</Badge>
-            </div>
-            <p className="mt-2 text-sm text-muted">
-              {t({
-                en: "Upload once, then choose which agency sees each document. Most agencies ask for: your HHA or CNA license, proof of residency or work permit, Social Security card, driver's license, CPR, physical exam, vehicle insurance and registration, liability insurance, bank details, 12 hours of in-service (HIV/AIDS) and ADRD Alzheimer's training.",
-                es: "Súbelos una vez y elige qué agencia ve cada uno. La mayoría de las agencias pide: licencia de HHA o CNA, prueba de residencia o permiso de trabajo, tarjeta del Seguro Social, licencia de conducir, CPR, examen físico, seguro y registro del vehículo, seguro de responsabilidad, información bancaria, 12 horas de in-services (HIV/AIDS) y training de Alzheimer's ADRD.",
-              })}
-            </p>
-          </section>
+          {vault}
         </main>
       </div>
       {editing && <ProfileForm profile={p} es={es} onClose={() => setEditing(false)} />}

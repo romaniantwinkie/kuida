@@ -107,6 +107,13 @@ export async function signupCaregiver(input: z.input<typeof CaregiverInput>): Pr
       insert into caregiver_profiles (user_id, first_name, last_name, mobile, zip, city, location, role, languages, days, slots, photo)
       values (${u.id}, ${d.firstName}, ${d.lastName}, ${d.mobile || null}, ${d.zip}, ${z5 ? `${z5.city}, ${z5.stateAbbr}` : null},
               ${z5 ? tx`st_makepoint(${z5.lng}, ${z5.lat})::geography` : null}, ${d.role}, ${d.languages}, ${d.days}, ${d.slots}, ${d.photo ?? null})`;
+    // Invited from an agency's roster with this email: link the roster entry and connect them with that agency.
+    const linked = await tx<{ agencyId: string }[]>`
+      update roster_entries set caregiver_id = ${u.id} where email = ${d.email} and caregiver_id is null returning agency_id`;
+    for (const r of linked) {
+      await tx`insert into connections (agency_id, caregiver_id, status, responded_at) values (${r.agencyId}, ${u.id}, 'connected', now())
+               on conflict (agency_id, caregiver_id) do update set status = 'connected', responded_at = now()`;
+    }
   });
   await sendLoginCode(d.email, es);
   return { ok: true };

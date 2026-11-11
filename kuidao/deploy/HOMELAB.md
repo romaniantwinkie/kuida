@@ -23,7 +23,7 @@ HTTPS and Cloudflare Tunnel. Cost: $0.
 git clone https://github.com/romaniantwinkie/kuida.git
 cd kuida/kuidao
 cp .env.example .env
-nano .env       # set POSTGRES_PASSWORD (run: openssl rand -hex 24) and APP_URL
+nano .env       # set POSTGRES_PASSWORD (openssl rand -hex 24), VAULT_KEY (openssl rand -base64 32) and APP_URL
 docker compose --profile mail up -d --build
 ```
 
@@ -82,6 +82,13 @@ Resend and Postmark have free tiers that cover early use. Then you can drop `--p
   gunzip -c backups/cercana-YYYY-MM-DD_HHMM.sql.gz | docker compose exec -T db psql -U cercana -d cercana
   docker compose start app
   ```
+
+### Caregiver documents
+
+Uploaded documents are encrypted with a per-file key, which is itself encrypted with `VAULT_KEY`. The files live in the
+`vault` Docker volume and are copied nightly to `./backups/files-*.tar.gz` (still encrypted).
+**Store `VAULT_KEY` separately from your backups** (a password manager is fine). Without it nobody can open the files,
+including you; with it and the backups, everything can be restored.
 
 ## 7. Updates
 

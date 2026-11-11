@@ -6,7 +6,8 @@ import { SLOTS } from "@/lib/catalog";
 import { DAYS } from "@/lib/data";
 import { getSession } from "@/server/auth";
 import { audit } from "@/server/db";
-import { caregiverForAgency } from "@/server/queries";
+import { caregiverForAgency, documentsForAgency } from "@/server/queries";
+import { AgencyCaregiverDocs } from "@/components/live/agency-caregiver-docs";
 
 export const metadata = { title: "Caregiver profile" };
 
@@ -27,6 +28,7 @@ export default async function CaregiverProfilePage({ params }: { params: Promise
   const p = await caregiverForAgency(id);
   if (!p) notFound();
   await audit("caregiver.profile_viewed", { caregiver: id }, { agencyId: s.agency.id, userId: s.user.id });
+  const docs = await documentsForAgency(s.agency.id, id);
   const name = `${p.firstName} ${p.lastInitial}.`;
   return (
     <>
@@ -60,9 +62,10 @@ export default async function CaregiverProfilePage({ params }: { params: Promise
               <p className="mt-2 text-sm leading-relaxed">{p.bio}</p>
             </Card>
           )}
+          <AgencyCaregiverDocs caregiverId={id} firstName={p.firstName} checklist={docs.checklist} shared={docs.shared} inVault={docs.inVault} requested={docs.requested} connection={docs.connection} />
           <p className="flex items-start gap-2 rounded-2xl bg-surface-2 px-4 py-3 text-sm text-muted">
             <Lock className="mt-0.5 size-4 shrink-0" />
-            <span><b className="text-ink">Contact goes through Cercana.</b> Phone, email and documents stay private until the caregiver shares them with your office. Sending this caregiver a shift offer arrives with text offers.</span>
+            <span><b className="text-ink">Contact goes through Cercana.</b> Phone, email and documents stay private until the caregiver shares them with your office. You hire and schedule in your own system.</span>
           </p>
         </div>
       </div>

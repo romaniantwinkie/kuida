@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Info } from "lucide-react";
 
-const NOT_LIVE_YET = ["/app/search", "/app/roster", "/app/messages", "/app/copilot", "/app/compliance"];
+const NOT_LIVE_YET = ["/app/messages", "/app/copilot", "/app/compliance"];
 
 /** For signed-in offices: marks pages that still show sample data until they connect to the account. */
 export function SampleDataBanner() {

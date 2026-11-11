@@ -81,7 +81,7 @@ const ok = (c, m) => { if (!c) throw new Error("FAIL: " + m); console.log("ok -"
   await p.getByLabel("Work email").fill(sched); await p.getByRole("button", { name: "Send invite" }).click();
   await p.getByText(sched).first().waitFor(); ok(true, "teammate invited");
   // sample-data banner on not-yet-live pages
-  await p.goto(`${BASE}/app/roster`); await p.getByText("Sample data.").waitFor(); ok(true, "sample-data banner on roster");
+  await p.goto(`${BASE}/app/messages`); await p.getByText("Sample data.").waitFor(); ok(true, "sample-data banner on messages");
   // sign out
   await p.getByRole("button", { name: "Log out" }).first().click(); await p.waitForURL(`${BASE}/`); ok(true, "logged out");
   await p.goto(`${BASE}/app/team`); await p.waitForURL(/sign-in/); ok(true, "team page requires login");

@@ -31,8 +31,8 @@ What's live today:
 | Area | Live | Still sample data |
 |---|---|---|
 | Accounts | Agency sign-up (office + owner), caregiver sign-up, email-code login (no passwords), log out | |
-| Agency console | Today (real counts), Shifts (add, edit, mark filled, cancel), Team (invite / remove schedulers) | Find caregivers, Roster, Messages, Copilot, Compliance log (marked "Sample data") |
-| Caregiver app | Profile, photo, availability, travel radius, show/hide to nearby agencies | Offers and document vault (next batches) |
+| Agency console | Today, Shifts (add, edit, fill, cancel) with **ranked real caregivers** per shift, **Find caregivers** by address, **Roster** import + email invites, **Connect** requests, caregiver profiles with **documents vs. your checklist**, Required documents, Team | Messages, Copilot, Compliance log (marked "Sample data") |
+| Caregiver app | Profile, availability, visibility, **connect requests**, **encrypted document vault** (upload, share per agency for 30 days, view log, requests) | Shift offers by text (needs Twilio) |
 | Admin | `node scripts/admin.mjs list / approve / suspend` | Admin panel |
 
 **Homepage and UI details (Nov 2026):** hero timeline (call-out → offers → filled), live status line, founding-offer ticker counting real
