@@ -18,7 +18,7 @@ const STATUS = { open: { label: "Open", tone: "accent" }, outreach: { label: "Ou
 export default async function ShiftsPage({ searchParams }: { searchParams: Promise<{ new?: string }> }) {
   const s = await getSession();
   if (!s?.agency) return <DemoShifts />;
-  const [shifts, a, { new: isNew }] = await Promise.all([listShifts(s.agency.id, s.agency.timezone), agencyDetails(s.agency.id), searchParams]);
+  const [shifts, a, { new: isNew }] = await Promise.all([listShifts(s.agency.id, s.agency.timezone, { includePast: true }), agencyDetails(s.agency.id), searchParams]);
   return (
     <>
       <PageHead eyebrow="Schedule" title="Shifts" sub="Open shifts for your office. Job details only: area, time, role and pay." />

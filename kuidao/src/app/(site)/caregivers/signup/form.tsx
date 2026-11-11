@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
-import { ArrowLeft, ArrowRight, Camera, CheckCircle2, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Save, Camera, CheckCircle2, Lock } from "lucide-react";
 import { CodeStep } from "@/components/auth/code-step";
 import { Stepper } from "@/components/stepper";
 import { Button, ButtonLink } from "@/components/ui/button";
@@ -313,6 +313,9 @@ export function CaregiverSignupForm({ live }: { live: boolean }) {
                 <ArrowRight className="size-4" />
               </Button>
             </div>
+            <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted">
+              <Save className="size-3.5" aria-hidden="true" /> {t({ en: "Saved automatically on this device as you type.", es: "Se guarda solo en este dispositivo mientras escribes." })}
+            </p>
           </form>
         )}
       </div>

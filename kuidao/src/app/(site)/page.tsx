@@ -17,6 +17,18 @@ import { CopilotDemo, FindCaregiversDemo } from "@/components/home-demos";
 import { FoundingOfferBanner } from "@/components/founding-offer";
 import { PricingCards } from "@/components/pricing-cards";
 import { ButtonLink } from "@/components/ui/button";
+import { BookDemo } from "@/components/home/book-demo";
+import { HeroTimeline } from "@/components/home/hero-timeline";
+import { LiveStatus } from "@/components/home/live-status";
+import { ProductClips, type Clip } from "@/components/home/product-clips";
+import { SectionLabel } from "@/components/home/section-label";
+import { Ticker } from "@/components/home/ticker";
+import { InlinePin } from "@/components/illustrations";
+import { FOUNDING_OFFER } from "@/lib/product";
+import { LIVE } from "@/server/db";
+import { MIAMI, foundingSpotsLeft, openShiftsNear } from "@/server/public-stats";
+
+export const revalidate = 60;
 
 const FEATURES = [
   {
@@ -63,11 +75,31 @@ const FEATURES = [
 ];
 
 const STEPS = [
-  { icon: CalendarClock, t: "0:00", title: "Call-out logged", body: "Text, call or one tap in the console. Cercana reads the client's needs and the visit window." },
-  { icon: Sparkles, t: "0:05", title: "Roster ranked", body: "Hard rules screen out anyone ineligible. Everyone else is scored and sorted, with the reasons." },
-  { icon: Waves, t: "0:10", title: "Offers go out", body: "Bilingual SMS + app push to the top wave. Declines and silences roll to the next wave." },
-  { icon: ShieldCheck, t: "0:04+", title: "Confirmed", body: "First yes wins. Credentials re-checked, family notified, EVV visit created." },
+  { icon: CalendarClock, title: "Post", body: "Add the open shift: neighborhood, time, role and pay. One tap from a call-out, no client details needed." },
+  { icon: Sparkles, title: "Match", body: "Cercana screens out anyone ineligible, then ranks your roster and verified caregivers nearby, with the reasons." },
+  { icon: Waves, title: "Fill", body: "Offers go out by text in English or Spanish, in waves. The first yes takes the shift and the rest close automatically." },
 ];
+
+const CLIPS: Clip[] = [
+  { id: "new-shift", title: "Post a shift in seconds", caption: "Area, time, role and pay. Nothing about the client." },
+  { id: "match", title: "Ranked, with the reasons", caption: "Open any score to see the points behind it.", wide: true },
+  { id: "search", title: "Search by exact address", caption: "Everyone eligible around the visit, on a real map.", wide: true },
+  { id: "copilot", title: "Ask the copilot", caption: "“Who can cover Saturday?” answered from your schedule." },
+  { id: "caregiver", title: "The caregiver's side", caption: "Offers, documents and hours, in English or Spanish." },
+  { id: "vault", title: "Documents, shared by choice", caption: "Caregivers pick which agency sees what, and for how long.", wide: true },
+];
+
+const AUDIT = [
+  ["05:31:04", "shift.created", "#1042 · Little Havana · Tue 8a–2p", "ana@sunrise"],
+  ["05:33:12", "credential.check", "6 caregivers · all current", "cercana"],
+  ["05:33:12", "offer.sent", "#1042 → wave 1 · 3 caregivers · ES", "cercana"],
+  ["05:35:40", "offer.declined", "Niurka D. · reply “2”", "sms"],
+  ["05:37:48", "offer.accepted", "Xiomara R. · reply “1”", "sms"],
+  ["05:37:49", "shift.filled", "#1042 · 4 open offers closed", "cercana"],
+];
+
+const STORED = ["Neighborhood and ZIP of the visit", "Approximate pin, rounded to about 1 km", "Visit time, role, pay and experience needed", "Who changed what, and when"];
+const NEVER = ["Client names", "Home addresses", "Diagnoses, medications or care notes", "Insurance or Medicaid numbers"];
 
 const FAQ = [
   ["Is Cercana a nurse registry or staffing agency?", "No. Cercana is software. Caregivers contract with your licensed agency, never with us, and we don't set pay or employ anyone."],
@@ -76,7 +108,16 @@ const FAQ = [
   ["What is the founding offer?", "The first 50 agencies to sign up get 6 months free on any plan, with every feature. No card is needed to start, and you can cancel any time."],
 ];
 
-export default function Home() {
+export default async function Home() {
+  const [spots, nearMiami] = await Promise.all([foundingSpotsLeft(), openShiftsNear(MIAMI.lat, MIAMI.lng, 15)]);
+  const ticker = [
+    spots != null ? `Founding offer · ${spots} of ${FOUNDING_OFFER.agencies} spots left · ${FOUNDING_OFFER.freeMonths} months free` : `Founding offer · first ${FOUNDING_OFFER.agencies} agencies get ${FOUNDING_OFFER.freeMonths} months free`,
+    "No patient data stored. Ever.",
+    "Offers in English and Spanish",
+    "No passwords: one-time email codes",
+    "Caregivers join free, always",
+    "Licensed agencies in all 50 states",
+  ];
   return (
     <main>
       {/* Hero */}
@@ -87,11 +128,28 @@ export default function Home() {
               <MapPinned className="size-4" /> For licensed home care agencies, nationwide
             </p>
             <h1 className="mt-6 font-display text-[40px] leading-[1.1] sm:text-6xl">
-              The call-out is covered <span className="text-brand">before</span> the family calls.
+              Every call-out covered,{" "}
+              <span className="whitespace-nowrap">
+                <InlinePin />
+                close by.
+              </span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-              Cercana ranks your caregivers for every open shift and texts offers in English or Spanish until someone accepts. You stay in control.
+              Cercana ranks your caregivers, and verified caregivers nearby who aren&apos;t on your roster yet, then texts offers in English or Spanish until
+              someone says yes. You stay in control.
             </p>
+            <LiveStatus
+              className="mt-5"
+              city={MIAMI.city}
+              tz={MIAMI.tz}
+              detail={
+                nearMiami != null && nearMiami > 0
+                  ? `${nearMiami} open ${nearMiami === 1 ? "shift" : "shifts"} on Cercana within 15 mi`
+                  : LIVE
+                    ? "Founding offices are joining now"
+                    : "Demo office"
+              }
+            />
             <div className="mt-8 flex flex-wrap gap-3">
               <ButtonLink href="/app" size="lg">
                 Try the agency console <ArrowRight className="size-4" />
@@ -100,27 +158,18 @@ export default function Home() {
                 See pricing
               </ButtonLink>
             </div>
-            <dl className="mt-10 grid max-w-md grid-cols-3 gap-4 border-t border-line pt-6">
-              {[
-                ["EN · ES", "offers by text"],
-                ["6 mo free", "first 50 agencies"],
-                ["50 states", "license-aware onboarding"],
-              ].map(([k, v]) => (
-                <div key={v}>
-                  <dt className="font-display text-2xl">{k}</dt>
-                  <dd className="mt-1 text-xs text-muted">{v}</dd>
-                </div>
-              ))}
-            </dl>
+            <HeroTimeline className="mt-10 border-t border-line pt-6" />
           </div>
           <HeroDemo />
         </div>
       </section>
 
+      <Ticker items={ticker} />
+
       {/* Product bento */}
       <section id="product" className="border-y border-line bg-surface">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <p className="eyebrow">Product</p>
+          <SectionLabel n={1}>Product</SectionLabel>
           <h2 className="mt-3 max-w-2xl font-display text-4xl tracking-tight">Matching you can explain to a family, and outreach you never have to do by hand.</h2>
           <div className="mt-12 grid gap-4 md:grid-cols-4">
             {FEATURES.map((f) => (
@@ -187,11 +236,23 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Product clips */}
+      <section id="see-it">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <SectionLabel n={2}>See it work</SectionLabel>
+          <h2 className="mt-3 max-w-2xl font-display text-4xl tracking-tight">Short clips of the real product.</h2>
+          <p className="mt-3 max-w-xl text-muted">Recorded from the demo office. Hover or tap to pause.</p>
+          <div className="mt-10">
+            <ProductClips clips={CLIPS} />
+          </div>
+        </div>
+      </section>
+
       {/* Find caregivers map */}
-      <section id="map">
+      <section id="map" className="border-t border-line">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="max-w-2xl">
-            <p className="eyebrow">Find caregivers</p>
+            <SectionLabel n={3}>Find caregivers</SectionLabel>
             <h2 className="mt-3 font-display text-4xl tracking-tight">See who&apos;s free near the case, on a real map.</h2>
             <p className="mt-3 text-muted">
               Enter the visit and Cercana plots every eligible caregiver around the client, ranked and explained. Switch to aerial, streets or drive-time
@@ -208,7 +269,7 @@ export default function Home() {
       <section id="copilot" className="border-y border-line bg-surface">
         <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_1.2fr]">
           <div>
-            <p className="eyebrow">Coordinator copilot</p>
+            <SectionLabel n={4}>Coordinator copilot</SectionLabel>
             <h2 className="mt-3 font-display text-4xl tracking-tight">Ask it like you&apos;d ask your best coordinator.</h2>
             <p className="mt-4 leading-relaxed text-muted">
               &ldquo;Who can cover Northside #1042 tomorrow?&rdquo; &ldquo;Whose CPR expires this month?&rdquo; Copilot answers from your live schedule, roster and
@@ -231,25 +292,21 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="eyebrow">How it works</p>
-              <h2 className="mt-3 font-display text-4xl tracking-tight">From call-out to confirmed.</h2>
+              <SectionLabel n={5}>How it works</SectionLabel>
+              <h2 className="mt-3 font-display text-4xl tracking-tight">Post. Match. Fill.</h2>
             </div>
             <Link href="/app/shifts/s-1042" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand hover:underline">
               Watch it run on a live shift <ArrowRight className="size-4" />
             </Link>
           </div>
-          <ol className="mt-12 grid gap-4 md:grid-cols-4">
+          <ol className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line md:grid-cols-3">
             {STEPS.map((s, i) => (
-              <li key={s.title} className="relative rounded-2xl border border-line bg-surface p-6">
+              <li key={s.title} className="bg-surface p-6 md:p-8">
                 <div className="flex items-center justify-between">
-                  <span className="grid size-10 place-items-center rounded-full bg-ink text-bg">
-                    <s.icon className="size-[18px]" strokeWidth={1.8} />
-                  </span>
-                  <span className="font-mono text-xs text-muted">{s.t}</span>
+                  <span className="font-mono text-xs text-muted">{["I", "II", "III"][i]}</span>
+                  <s.icon className="size-5 text-brand" strokeWidth={1.8} />
                 </div>
-                <h3 className="mt-5 font-semibold">
-                  <span className="text-muted">{i + 1}.</span> {s.title}
-                </h3>
+                <h3 className="mt-8 text-2xl font-semibold tracking-tight">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
               </li>
             ))}
@@ -257,11 +314,89 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Audit */}
+      <section id="audit" className="border-y border-line bg-surface">
+        <div className="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_1.3fr] [&>*]:min-w-0">
+          <div>
+            <SectionLabel n={6}>Compliance</SectionLabel>
+            <h2 className="mt-3 font-display text-4xl tracking-tight">Built for offices that get audited.</h2>
+            <p className="mt-4 leading-relaxed text-muted">
+              Every shift change, offer, reply and document view is written to your office&apos;s log with who did it and when. When a surveyor asks how a
+              visit was staffed, you open the record instead of reconstructing it.
+            </p>
+            <ul className="mt-6 space-y-2 text-sm">
+              {["Who, what and when for every action", "Credentials checked before each offer", "Caregiver replies kept with the shift"].map((t) => (
+                <li key={t} className="flex items-center gap-2">
+                  <ShieldCheck className="size-4 text-ok" /> {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <figure className="overflow-hidden rounded-2xl border border-line bg-bg font-mono text-xs">
+            <figcaption className="flex items-center justify-between gap-3 border-b border-line px-4 py-3 text-muted">
+              <span>shift #1042 · record</span>
+              <span>sample</span>
+            </figcaption>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[520px]">
+                <tbody>
+                  {AUDIT.map(([t, a, d, who], i) => (
+                    <tr key={i} className={i === AUDIT.length - 1 ? "bg-ok/10" : "border-b border-line/70"}>
+                      <td className="px-4 py-2.5 tabular-nums text-muted">{t}</td>
+                      <td className={`px-2 py-2.5 ${a === "shift.filled" ? "text-ok" : a === "offer.declined" ? "text-muted" : "text-brand"}`}>{a}</td>
+                      <td className="px-2 py-2.5 text-ink">{d}</td>
+                      <td className="px-4 py-2.5 text-right text-muted">{who}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="border-t border-line px-4 py-3 text-muted">Filled in 6 min 45 s · no client name, address or health detail in the record</p>
+          </figure>
+        </div>
+      </section>
+
+      {/* No patient data */}
+      <section id="privacy">
+        <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+          <SectionLabel n={7}>Privacy</SectionLabel>
+          <h2 className="mt-3 max-w-2xl font-display text-4xl tracking-tight">No patient data. Ever.</h2>
+          <p className="mt-3 max-w-2xl text-muted">
+            Cercana staffs visits without knowing who the visit is for. Client details stay in your own system; you share the address with the caregiver you
+            confirm.
+          </p>
+          <div className="mt-10 grid gap-4 md:grid-cols-2">
+            <div className="rounded-2xl border border-line bg-surface p-6">
+              <p className="font-semibold">What a shift holds</p>
+              <ul className="mt-4 space-y-3 text-sm">
+                {STORED.map((t) => (
+                  <li key={t} className="flex gap-3">
+                    <span className="mt-1.5 size-2 shrink-0 rounded-full bg-brand" /> {t}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-line bg-surface p-6">
+              <p className="font-semibold">What Cercana never stores</p>
+              <ul className="mt-4 space-y-3 text-sm">
+                {NEVER.map((t) => (
+                  <li key={t} className="flex gap-3 text-muted">
+                    <span className="mt-[9px] h-0.5 w-2.5 shrink-0 rounded-full bg-danger" /> <span className="line-through decoration-muted/50">{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Pricing */}
       <section id="pricing">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <div className="text-center">
-            <p className="eyebrow">Pricing</p>
+            <div className="flex justify-center">
+              <SectionLabel n={8}>Pricing</SectionLabel>
+            </div>
             <h2 className="mt-3 font-display text-4xl tracking-tight">Flat per location. Unlimited fills.</h2>
             <p className="mt-3 text-muted">No per-shift fees, no placement fees, no charge per caregiver on your roster.</p>
           </div>
@@ -293,18 +428,32 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Book a demo */}
+      <section id="demo">
+        <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_1.6fr] [&>*]:min-w-0">
+          <div>
+            <SectionLabel n={9}>Talk to us</SectionLabel>
+            <h2 className="mt-3 font-display text-4xl tracking-tight">Book a 15-minute demo.</h2>
+            <p className="mt-3 text-muted">We&apos;ll walk through a real call-out with your roster size and state in mind. No slides.</p>
+          </div>
+          <BookDemo live={LIVE} />
+        </div>
+      </section>
+
       {/* CTA */}
-      <section className="px-4 py-16 sm:px-6">
-        <div className="mx-auto max-w-6xl rounded-3xl border border-line bg-surface px-8 py-14 shadow-card sm:px-14">
-          <h2 className="max-w-xl font-display text-4xl tracking-tight">Next call-out, let Cercana make the calls.</h2>
-          <p className="mt-3 max-w-lg text-muted">Set up an office in ten minutes with your state license number, then import your roster from a spreadsheet.</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <ButtonLink href="/signup/agency" size="lg">
-              Create your office
-            </ButtonLink>
-            <ButtonLink href="/app" size="lg" variant="secondary">
+      <section className="px-4 pb-20 sm:px-6">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-8 rounded-3xl bg-ink px-8 py-12 text-bg sm:px-14">
+          <div>
+            <h2 className="max-w-xl font-display text-4xl tracking-tight">Need a shift covered by morning?</h2>
+            <p className="mt-3 max-w-lg text-bg/70">Set up your office in ten minutes with your state license number. Free for six months if you&apos;re one of the first {FOUNDING_OFFER.agencies}.</p>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/signup/agency" className="inline-flex min-h-12 items-center gap-2 whitespace-nowrap rounded-full bg-bg px-6 font-semibold text-ink transition-colors hover:bg-bg/90">
+              Create your office <ArrowRight className="size-4" />
+            </Link>
+            <Link href="/app" className="inline-flex min-h-12 items-center whitespace-nowrap rounded-full border border-bg/30 px-6 font-semibold text-bg transition-colors hover:bg-bg/10">
               Explore the demo
-            </ButtonLink>
+            </Link>
           </div>
         </div>
       </section>

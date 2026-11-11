@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useSlashFocus } from "@/components/ui/use-slash-focus";
 import { ChevronRight, Search, Upload, UserPlus, Users } from "lucide-react";
 import { CaregiverAvatar } from "@/components/caregiver-avatar";
 import { CaregiverCard, CardActions } from "@/components/caregiver-card";
@@ -27,23 +28,44 @@ function credIssues(c: Caregiver) {
   return c.credentials.filter((cr) => cr.expiresInDays <= 30);
 }
 
+const SORTS = [
+  { id: "name", label: "Name" },
+  { id: "reliability", label: "Most reliable" },
+  { id: "hours", label: "Fewest hours this week" },
+  { id: "issues", label: "Credential issues first" },
+] as const;
+type SortId = (typeof SORTS)[number]["id"];
+
+function matches(c: Caregiver, filter: FilterId) {
+  if (filter === "compliance") return credIssues(c).length > 0;
+  if (filter === "weekends") return c.availability.days.some((d) => d >= 5);
+  if (filter === "spanish") return c.languages.includes("Spanish");
+  if (filter === "invited") return false;
+  return true;
+}
+
 export default function RosterPage() {
   const [filter, setFilter] = useState<FilterId>("all");
+  const [sort, setSort] = useState<SortId>("name");
   const [q, setQ] = useState("");
+  const search = useRef<HTMLInputElement>(null);
+  useSlashFocus(search);
   const [openId, setOpenId] = useState<string | null>(null);
   const [importing, setImporting] = useState(false);
   const [invited, setInvited] = useState<Invitee[]>([{ name: "Carmen Ruiz", mobile: "", role: "HHA", zip: "33135", languages: "Spanish" }]);
 
+  const searched = useMemo(() => CAREGIVERS.filter((c) => !q || `${c.firstName} ${c.lastInitial} ${c.area} ${c.role}`.toLowerCase().includes(q.toLowerCase())), [q]);
   const rows = useMemo(() => {
-    return CAREGIVERS.filter((c) => {
-      if (q && !`${c.firstName} ${c.lastInitial} ${c.area} ${c.role}`.toLowerCase().includes(q.toLowerCase())) return false;
-      if (filter === "compliance") return credIssues(c).length > 0;
-      if (filter === "weekends") return c.availability.days.some((d) => d >= 5);
-      if (filter === "spanish") return c.languages.includes("Spanish");
-      if (filter === "invited") return false;
-      return true;
-    });
-  }, [filter, q]);
+    const list = searched.filter((c) => matches(c, filter));
+    const by: Record<SortId, (a: Caregiver, b: Caregiver) => number> = {
+      name: (a, b) => a.firstName.localeCompare(b.firstName),
+      reliability: (a, b) => b.reliability - a.reliability,
+      hours: (a, b) => a.weeklyHours - b.weeklyHours,
+      issues: (a, b) => credIssues(b).length - credIssues(a).length || a.firstName.localeCompare(b.firstName),
+    };
+    return [...list].sort(by[sort]);
+  }, [searched, filter, sort]);
+  const invitedCount = invited.filter((p) => !q || p.name.toLowerCase().includes(q.toLowerCase())).length;
   const invitedRows = invited.filter((p) => (filter === "all" || filter === "invited") && (!q || p.name.toLowerCase().includes(q.toLowerCase())));
   const filtered = filter !== "all" || q.length > 0;
   const open = CAREGIVERS.find((c) => c.id === openId);
@@ -74,7 +96,10 @@ export default function RosterPage() {
             </label>
             <div className="relative mt-2">
               <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden="true" />
-              <input id="roster-search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="e.g. Xiomara, Northside, CNA" className="field mt-0 pl-11" />
+              <input ref={search} id="roster-search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="e.g. Xiomara, Northside, CNA" className="field mt-0 pl-11 pr-10" />
+              <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-md border border-line px-1.5 font-mono text-xs text-muted" aria-hidden="true">
+                /
+              </kbd>
             </div>
           </div>
           <div className="flex flex-wrap gap-2" role="group" aria-label="Filter roster">
@@ -90,9 +115,20 @@ export default function RosterPage() {
                 )}
               >
                 {f.label}
+                <span className="ml-1.5 tabular-nums opacity-70">{f.id === "invited" ? invitedCount : searched.filter((c) => matches(c, f.id)).length + (f.id === "all" ? invitedCount : 0)}</span>
               </button>
             ))}
           </div>
+          <label className="ml-auto block text-sm font-medium">
+            Sort
+            <select className="field mt-2 min-w-48" value={sort} onChange={(e) => setSort(e.target.value as SortId)}>
+              {SORTS.map((x) => (
+                <option key={x.id} value={x.id}>
+                  {x.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
 
         {rows.length === 0 && invitedRows.length === 0 ? (

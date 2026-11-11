@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { CalendarPlus, Check, Pencil, RotateCcw, X } from "lucide-react";
+import { useMemo, useRef, useState, useTransition } from "react";
+import { CalendarPlus, Check, Pencil, RotateCcw, Search, X } from "lucide-react";
+import { UnderlineTabs } from "@/components/ui/underline-tabs";
+import { useSlashFocus } from "@/components/ui/use-slash-focus";
+import { cn } from "@/lib/cn";
 import { Badge, type Tone } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,8 +26,33 @@ const STATUS: Record<LiveShift["status"], { label: string; tone: Tone }> = {
 
 export const shiftWhen = (s: LiveShift) => `${s.dayLabel} · ${fmt12(s.start)}–${fmt12(s.end)}`;
 
-export function LiveShiftsTable({ shifts, defaultZip, autoNew = false }: { shifts: LiveShift[]; defaultZip: string; autoNew?: boolean }) {
+type When = "upcoming" | "past";
+type StatusFilter = "all" | "open" | "filled" | "cancelled";
+type Sort = "soonest" | "newest" | "pay";
+
+export function LiveShiftsTable({ shifts: all, defaultZip, autoNew = false }: { shifts: LiveShift[]; defaultZip: string; autoNew?: boolean }) {
   const [editing, setEditing] = useState<LiveShift | "new" | null>(autoNew ? "new" : null);
+  const [when, setWhen] = useState<When>("upcoming");
+  const [status, setStatus] = useState<StatusFilter>("all");
+  const [sort, setSort] = useState<Sort>("soonest");
+  const [q, setQ] = useState("");
+  const search = useRef<HTMLInputElement>(null);
+  useSlashFocus(search);
+
+  const inWhen = useMemo(() => all.filter((x) => (when === "past" ? x.past : !x.past)), [all, when]);
+  const searched = useMemo(() => inWhen.filter((x) => !q || `${x.area} ${x.zip} ${x.role} #${x.number} ${x.language ?? ""}`.toLowerCase().includes(q.toLowerCase())), [inWhen, q]);
+  const statusOf = (x: LiveShift): StatusFilter => (x.status === "outreach" ? "open" : (x.status as StatusFilter));
+  const count = (f: StatusFilter) => (f === "all" ? searched.length : searched.filter((x) => statusOf(x) === f).length);
+  const shifts = useMemo(() => {
+    const list = searched.filter((x) => status === "all" || statusOf(x) === status);
+    const key = (x: LiveShift) => `${x.date} ${x.start}`;
+    const by: Record<Sort, (a: LiveShift, b: LiveShift) => number> = {
+      soonest: (a, b) => (when === "past" ? key(b).localeCompare(key(a)) : key(a).localeCompare(key(b))),
+      newest: (a, b) => b.number - a.number,
+      pay: (a, b) => b.payMax - a.payMax,
+    };
+    return [...list].sort(by[sort]);
+  }, [searched, status, sort, when]);
   const [cancelling, setCancelling] = useState<LiveShift | null>(null);
   const [pending, start] = useTransition();
   const toast = useToast();
@@ -38,13 +66,74 @@ export function LiveShiftsTable({ shifts, defaultZip, autoNew = false }: { shift
 
   return (
     <>
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-4">
+        <UnderlineTabs<When>
+          label="Shift dates"
+          tabs={[
+            { id: "upcoming", label: "Upcoming", count: all.filter((x) => !x.past).length },
+            { id: "past", label: "Past", count: all.filter((x) => x.past).length },
+          ]}
+          value={when}
+          onChange={setWhen}
+        />
         <Button onClick={() => setEditing("new")}>
           <CalendarPlus className="size-4" /> New shift
         </Button>
       </div>
       <Card className="overflow-hidden">
-        {shifts.length === 0 ? (
+        {all.length > 0 && (
+          <div className="flex flex-wrap items-end gap-3 border-b border-line p-4">
+            <div className="relative w-full sm:w-64">
+              <label htmlFor="shift-search" className="sr-only">
+                Search shifts
+              </label>
+              <Search className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted" aria-hidden="true" />
+              <input ref={search} id="shift-search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search area, ZIP, role, #" className="field mt-0 pl-11 pr-10" />
+              <kbd className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 rounded-md border border-line px-1.5 font-mono text-xs text-muted" aria-hidden="true">
+                /
+              </kbd>
+            </div>
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by status">
+              {(["all", "open", "filled", "cancelled"] as StatusFilter[]).map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  aria-pressed={status === f}
+                  onClick={() => setStatus(f)}
+                  className={cn("min-h-11 rounded-full border px-4 text-sm font-medium capitalize transition-colors", status === f ? "border-brand bg-brand-soft text-brand" : "border-line text-muted hover:text-ink")}
+                >
+                  {f} <span className="ml-1 tabular-nums opacity-70">{count(f)}</span>
+                </button>
+              ))}
+            </div>
+            <label className="ml-auto flex items-center gap-2 text-sm font-medium">
+              Sort
+              <select className="field mt-0 w-auto" value={sort} onChange={(e) => setSort(e.target.value as Sort)}>
+                <option value="soonest">{when === "past" ? "Most recent" : "Soonest"}</option>
+                <option value="newest">Newest added</option>
+                <option value="pay">Highest pay</option>
+              </select>
+            </label>
+          </div>
+        )}
+        {all.length > 0 && shifts.length === 0 ? (
+          <EmptyState
+            icon={Search}
+            title="No shifts match"
+            body="Try another search or status, or switch between upcoming and past."
+            action={
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setQ("");
+                  setStatus("all");
+                }}
+              >
+                Clear filters
+              </Button>
+            }
+          />
+        ) : shifts.length === 0 ? (
           <EmptyState
             icon={CalendarPlus}
             title="No shifts yet"

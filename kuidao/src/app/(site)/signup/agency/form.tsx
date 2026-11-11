@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useRef, useState, useTransition } from "react";
-import { ArrowLeft, ArrowRight, CheckCircle2, Upload } from "lucide-react";
+import { ArrowLeft, ArrowRight, Save, CheckCircle2, Upload } from "lucide-react";
 import { Stepper } from "@/components/stepper";
 import { Button, ButtonLink } from "@/components/ui/button";
 import { Field, firstInvalid, required } from "@/components/ui/field";
@@ -223,6 +223,9 @@ export function AgencySignupForm({ initialPlan, live }: { initialPlan: string; l
                 {pending ? "Creating your office…" : step === STEPS.length - 1 ? "Create office" : "Continue"} <ArrowRight className="size-4" />
               </Button>
             </div>
+            <p className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted">
+              <Save className="size-3.5" aria-hidden="true" /> Saved automatically on this device as you type.
+            </p>
           </form>
         )}
       </div>

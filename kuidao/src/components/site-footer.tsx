@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { MiamiScene } from "@/components/illustrations";
 import { Logo } from "@/components/logo";
 import { audienceFromPath, type Copy } from "@/lib/audience";
 import { useT } from "@/lib/i18n";
@@ -26,7 +27,10 @@ export function SiteFooter() {
   const t = useT();
   const L = (c: Copy) => (audience === "caregiver" ? t(c) : c.en);
   return (
-    <footer className="border-t border-line bg-surface">
+    <footer className="bg-surface">
+      <div className="h-36 overflow-hidden border-t border-line sm:h-48">
+        <MiamiScene />
+      </div>
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-16 sm:px-6 md:grid-cols-5">
         <div className="md:col-span-2">
           <Logo href={audience === "caregiver" ? "/caregivers" : "/"} />
@@ -49,6 +53,16 @@ export function SiteFooter() {
             </ul>
           </div>
         ))}
+      </div>
+      <div className="border-t border-line">
+        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-5 text-xs text-muted sm:px-6">
+          <span>© {new Date().getFullYear()} Cercana</span>
+          <span>
+            {audience === "caregiver"
+              ? t({ en: "Cercana is software, not your employer. You contract with the agency.", es: "Cercana es software, no tu empleador. Trabajas con la agencia." })
+              : "Cercana is software, not a nurse registry or employer. No patient data is stored."}
+          </span>
+        </div>
       </div>
     </footer>
   );

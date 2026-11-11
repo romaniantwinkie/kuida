@@ -12,5 +12,5 @@ export default async function CaregiverAppPage() {
   if (s.user.kind !== "caregiver") redirect("/app");
   const profile = await caregiverProfile(s.user.id);
   if (!profile) redirect("/caregivers/signup");
-  return <LiveCaregiverHome profile={profile} />;
+  return <LiveCaregiverHome profile={profile} cardUrl={`${process.env.APP_URL ?? ""}/app/caregivers/${s.user.id}`} />;
 }

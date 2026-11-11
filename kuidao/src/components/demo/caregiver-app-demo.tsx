@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 import { Bell, CalendarDays, Check, Clock, FileText, Home, MapPin, MessageSquare, Send, ShieldCheck, Type, UserRound, Wallet, X } from "lucide-react";
 import { CaregiverAvatar } from "@/components/caregiver-avatar";
 import { CredentialVault } from "@/components/credential-vault";
+import { ShiftPass } from "@/components/shift-pass";
 import { LangToggle } from "@/components/lang-toggle";
 import { Wordmark } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -164,9 +165,11 @@ export function CaregiverAppDemo() {
                           </Button>
                         </div>
                       ) : a === "yes" ? (
-                        <p className="mt-4 rounded-xl bg-ok/10 px-3 py-2 text-sm text-ok">
-                          {t({ en: "Confirmed! The agency will send you the visit details.", es: "¡Confirmado! La agencia te enviará los detalles de la visita." })}
-                        </p>
+                        <ShiftPass
+                          className="mt-4 shadow-none"
+                          es={lang === "es"}
+                          d={{ agency: o.agency, role: o.role, area: o.area, when: t(o.when), pay: o.pay, code: o.id === "o1" ? "4827" : "1593" }}
+                        />
                       ) : null}
                     </article>
                   );

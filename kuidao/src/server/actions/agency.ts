@@ -124,3 +124,21 @@ export async function removeTeammate(userId: string): Promise<Result> {
   revalidatePath("/app/team");
   return { ok: true };
 }
+
+/** Heartbeat from an open shift editor. Returns the other teammates editing the same shift right now. */
+export async function shiftPresence(shiftId: string, leaving = false): Promise<string[]> {
+  const s = await requireAgency();
+  if (!/^[0-9a-f-]{36}$/i.test(shiftId)) return [];
+  const [own] = await sql`select 1 from shifts where id = ${shiftId} and agency_id = ${s.agency.id}`;
+  if (!own) return [];
+  if (leaving) {
+    await sql`delete from shift_presence where shift_id = ${shiftId} and user_id = ${s.user.id}`;
+    return [];
+  }
+  await sql`insert into shift_presence (shift_id, user_id) values (${shiftId}, ${s.user.id})
+            on conflict (shift_id, user_id) do update set seen_at = now()`;
+  const rows = await sql<{ who: string }[]>`
+    select coalesce(u.name, split_part(u.email, '@', 1)) as who from shift_presence p join users u on u.id = p.user_id
+    where p.shift_id = ${shiftId} and p.user_id <> ${s.user.id} and p.seen_at > now() - interval '35 seconds'`;
+  return rows.map((r) => r.who);
+}

@@ -118,3 +118,31 @@ th {
 .cercana-live-map .cercana-tip::before {
   display: none;
 }
+
+/* ---- Ambient motion (illustrations, ticker). Off under reduced motion. ---- */
+.cercana-walk {
+  transform: translate(var(--rx), var(--y));
+  animation: cercana-walk linear infinite;
+}
+.cercana-walk-a { animation-duration: 38s; animation-delay: -6s; }
+.cercana-walk-b { animation-duration: 46s; animation-delay: -27s; }
+.cercana-walk-c { animation-duration: 22s; animation-delay: -12s; }
+@keyframes cercana-walk {
+  from { transform: translate(-60px, var(--y)); }
+  to { transform: translate(1260px, var(--y)); }
+}
+.cercana-marquee { animation: cercana-marquee 48s linear infinite; }
+.cercana-marquee:hover { animation-play-state: paused; }
+@keyframes cercana-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.cercana-flip { transform-style: preserve-3d; transition: transform 450ms cubic-bezier(.2,.7,.2,1); }
+.cercana-flip[data-flipped="true"] { transform: rotateY(180deg); }
+.cercana-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.cercana-face-back { transform: rotateY(180deg); }
+@media (prefers-reduced-motion: reduce) {
+  .cercana-walk { animation: none !important; transform: translate(var(--rx), var(--y)); }
+  .cercana-marquee { animation: none !important; }
+  .cercana-flip { transition: none !important; }
+}

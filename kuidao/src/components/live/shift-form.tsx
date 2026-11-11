@@ -1,14 +1,14 @@
 "use client";
 
-import { FormEvent, useState, useTransition } from "react";
-import { ShieldCheck } from "lucide-react";
+import { FormEvent, useEffect, useState, useTransition } from "react";
+import { ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { SlideOver } from "@/components/ui/slide-over";
 import { useToast } from "@/components/ui/toast";
 import { LANGUAGES, ROLES, SKILLS } from "@/lib/catalog";
 import { cn } from "@/lib/cn";
-import { createShift, updateShift, type ShiftInput } from "@/server/actions/agency";
+import { createShift, shiftPresence, updateShift, type ShiftInput } from "@/server/actions/agency";
 import type { LiveShift } from "@/server/queries";
 
 const tomorrow = () => {
@@ -49,6 +49,21 @@ export function ShiftForm({ open, onClose, shift, defaultZip }: { open: boolean;
     if (err && Object.keys(p).includes(err.field ?? "")) setErr(null);
   };
   const fe = (f: string) => (err?.field === f ? err.error : null);
+  const [others, setOthers] = useState<string[]>([]);
+
+  // Tell teammates this shift is open for editing, and see who else is in it.
+  useEffect(() => {
+    if (!shift || !open) return;
+    let alive = true;
+    const beat = () => shiftPresence(shift.id).then((o) => alive && setOthers(o)).catch(() => {});
+    beat();
+    const id = setInterval(beat, 10_000);
+    return () => {
+      alive = false;
+      clearInterval(id);
+      shiftPresence(shift.id, true).catch(() => {});
+    };
+  }, [shift, open]);
 
   function submit(e: FormEvent) {
     e.preventDefault();
@@ -78,6 +93,14 @@ export function ShiftForm({ open, onClose, shift, defaultZip }: { open: boolean;
       }
     >
       <form id="shift-form" onSubmit={submit} className="space-y-5 p-6" noValidate>
+        {others.length > 0 && (
+          <p role="status" className="flex items-start gap-3 rounded-2xl bg-warn/10 px-4 py-3 text-sm text-warn">
+            <Users className="mt-0.5 size-4 shrink-0" />
+            <span>
+              <b className="font-semibold">{others.join(", ")}</b> {others.length === 1 ? "is" : "are"} also editing this shift. Whoever saves last wins, so check with them first.
+            </span>
+          </p>
+        )}
         <p className="flex items-start gap-3 rounded-2xl bg-surface-2 px-4 py-3 text-sm text-muted">
           <ShieldCheck className="mt-0.5 size-4 shrink-0 text-ok" />
           Job details only. Don&apos;t enter client names, addresses or health details; you share the address with the confirmed caregiver yourself.

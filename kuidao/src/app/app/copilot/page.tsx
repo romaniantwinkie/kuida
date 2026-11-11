@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { ArrowRight, ArrowUp, Bot } from "lucide-react";
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import { ArrowRight, ArrowUp, Bot, History, RotateCcw } from "lucide-react";
 import { CaregiverLink } from "@/components/caregiver-card";
 import { Badge } from "@/components/ui/badge";
 import { ScoreRing } from "@/components/ui/score-ring";
@@ -10,12 +10,90 @@ import { answer, SUGGESTIONS, type Reply } from "@/lib/copilot";
 
 type Msg = { role: "user"; text: string } | { role: "bot"; reply: Reply };
 
+const HISTORY_KEY = "cercana-copilot-history";
+function readHistory(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(HISTORY_KEY) ?? "[]");
+  } catch {
+    return [];
+  }
+}
+
+/** Past questions, newest first. Stored on this device only. */
+function HistoryMenu({ items, onPick, onClear }: { items: string[]; onPick: (q: string) => void; onClear: () => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const down = (e: MouseEvent) => !ref.current?.contains(e.target as Node) && setOpen(false);
+    const key = (e: globalThis.KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", down);
+    document.addEventListener("keydown", key);
+    return () => {
+      document.removeEventListener("mousedown", down);
+      document.removeEventListener("keydown", key);
+    };
+  }, [open]);
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        onClick={() => setOpen((o) => !o)}
+        className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line bg-surface px-4 text-sm font-medium shadow-card hover:bg-surface-2"
+      >
+        <History className="size-4" /> History
+      </button>
+      {open && (
+        <div role="menu" className="absolute right-0 z-20 mt-2 w-80 animate-fade-in overflow-hidden rounded-2xl border border-line bg-surface shadow-lift">
+          {items.length === 0 ? (
+            <p className="px-4 py-4 text-sm text-muted">Questions you ask show up here, on this device only.</p>
+          ) : (
+            <>
+              <ul className="max-h-72 overflow-y-auto py-1">
+                {items.map((q) => (
+                  <li key={q}>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      onClick={() => {
+                        setOpen(false);
+                        onPick(q);
+                      }}
+                      className="flex min-h-11 w-full items-center px-4 text-left text-sm hover:bg-surface-2"
+                    >
+                      <span className="truncate">{q}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <button type="button" role="menuitem" onClick={onClear} className="min-h-11 w-full border-t border-line px-4 text-left text-sm text-muted hover:bg-surface-2 hover:text-ink">
+                Clear history
+              </button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function CopilotPage() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [thinking, setThinking] = useState(false);
   const [hint, setHint] = useState<string | null>(null);
   const end = useRef<HTMLDivElement>(null);
+  const box = useRef<HTMLTextAreaElement>(null);
+  const [history, setHistory] = useState<string[]>([]);
+  useEffect(() => setHistory(readHistory()), []);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+  }, [input]);
 
   useEffect(() => {
     end.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -29,6 +107,11 @@ export default function CopilotPage() {
     }
     setMsgs((m) => [...m, { role: "user", text: q }]);
     setInput("");
+    const next = [q.trim(), ...history.filter((h) => h !== q.trim())].slice(0, 12);
+    setHistory(next);
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
+    } catch {}
     setThinking(true);
     setTimeout(() => {
       setMsgs((m) => [...m, { role: "bot", reply: answer(q) }]);
@@ -40,19 +123,83 @@ export default function CopilotPage() {
     e.preventDefault();
     ask(input);
   }
+  function onKey(e: KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+      e.preventDefault();
+      ask(input);
+    }
+  }
+
+  const composer = (
+    <form onSubmit={onSubmit} className={msgs.length ? "sticky bottom-4 mt-4" : "mt-8 w-full"}>
+      <div className="rounded-3xl border border-line bg-surface px-4 pb-2 pt-3 text-left shadow-lift focus-within:border-brand">
+        <label htmlFor="copilot-input" className="sr-only">
+          Ask Copilot
+        </label>
+        <textarea
+          ref={box}
+          id="copilot-input"
+          rows={1}
+          value={input}
+          onChange={(e) => {
+            setInput(e.target.value);
+            setHint(null);
+          }}
+          onKeyDown={onKey}
+          placeholder="Ask about shifts, caregivers or credentials…"
+          className="block max-h-40 min-h-11 w-full resize-none bg-transparent px-1 py-2 text-base outline-none placeholder:text-muted"
+        />
+        {hint && (
+          <p role="status" className="px-1 pb-1 text-xs text-danger">
+            {hint}
+          </p>
+        )}
+        <div className="flex items-center justify-between gap-3">
+          <p className="hidden items-center gap-3 px-1 text-xs text-muted sm:flex" aria-hidden="true">
+            <span>
+              <kbd className="rounded border border-line px-1 font-mono">↵</kbd> send
+            </span>
+            <span>
+              <kbd className="rounded border border-line px-1 font-mono">⇧ ↵</kbd> new line
+            </span>
+          </p>
+          <span className="sm:hidden" />
+          <button type="submit" disabled={thinking} className="grid size-11 place-items-center rounded-full bg-brand text-brand-ink transition-colors hover:bg-brand/90 disabled:opacity-50" aria-label="Send question">
+            <ArrowUp className="size-4" />
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+
+  const clear = () => {
+    setHistory([]);
+    try {
+      localStorage.removeItem(HISTORY_KEY);
+    } catch {}
+  };
 
   return (
     <div className="mx-auto flex min-h-[calc(100vh-9rem)] max-w-3xl flex-col">
+      <div className="flex justify-end gap-2">
+        {msgs.length > 0 && (
+          <button type="button" onClick={() => setMsgs([])} className="inline-flex min-h-11 items-center gap-2 rounded-full px-4 text-sm font-medium text-muted hover:bg-surface-2 hover:text-ink">
+            <RotateCcw className="size-4" /> New conversation
+          </button>
+        )}
+        <HistoryMenu items={history} onPick={(q) => ask(q)} onClear={clear} />
+      </div>
       {msgs.length === 0 ? (
-        <div className="flex flex-1 flex-col items-center justify-center py-10 text-center">
-          <span className="grid size-14 place-items-center rounded-2xl bg-brand text-brand-ink shadow-lift">
-            <Bot className="size-7" />
+        <div className="flex flex-1 flex-col items-center justify-center pb-16 pt-6 text-center">
+          <span className="grid size-12 place-items-center rounded-2xl bg-brand-soft text-brand">
+            <Bot className="size-6" />
           </span>
-          <h1 className="mt-5 font-display text-3xl tracking-tight">Coordinator copilot</h1>
+          <h1 className="mt-5 font-display text-4xl tracking-tight">What needs covering?</h1>
           <p className="mt-2 max-w-md text-sm text-muted">Ask in English or Spanish. Answers use the same scores and rules as the console, and always show why.</p>
-          <div className="mt-8 grid w-full gap-2 sm:grid-cols-2">
+          {composer}
+          <div className="mt-5 flex flex-wrap justify-center gap-2">
             {SUGGESTIONS.map((s) => (
-              <button key={s} type="button" onClick={() => ask(s)} className="rounded-2xl border border-line bg-surface p-4 text-left text-sm font-medium shadow-card transition hover:-translate-y-0.5 hover:border-brand">
+              <button key={s} type="button" onClick={() => ask(s)} className="min-h-11 rounded-full border border-line bg-surface px-4 text-sm font-medium transition-colors hover:border-brand hover:text-brand">
                 {s}
               </button>
             ))}
@@ -135,22 +282,7 @@ export default function CopilotPage() {
           <div ref={end} />
         </div>
       )}
-      <form onSubmit={onSubmit} className="sticky bottom-4 mt-4 rounded-3xl border border-line bg-surface px-4 pb-2 pt-3 shadow-lift">
-        <label htmlFor="copilot-input" className="block px-1 text-xs font-medium text-muted">
-          Ask Copilot
-        </label>
-        {hint && (
-          <p role="status" className="px-1 pt-1 text-xs text-danger">
-            {hint}
-          </p>
-        )}
-        <div className="flex items-center gap-2">
-        <input value={input} onChange={(e) => { setInput(e.target.value); setHint(null); }} placeholder="e.g. Who can cover Northside #1042 on Tuesday?" className="min-h-11 flex-1 bg-transparent px-1 text-base outline-none placeholder:text-muted" id="copilot-input" />
-        <button type="submit" className="grid size-11 place-items-center rounded-full bg-brand text-brand-ink transition-colors hover:bg-brand/90" aria-label="Send question">
-          <ArrowUp className="size-4" />
-        </button>
-        </div>
-      </form>
+      {msgs.length > 0 && composer}
     </div>
   );
 }

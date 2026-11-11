@@ -20,12 +20,13 @@ import { cn } from "@/lib/cn";
 import { signOut } from "@/server/actions/auth";
 import { saveProfile, setVisible, type ProfileInput } from "@/server/actions/caregiver";
 import type { CaregiverProfile } from "@/server/queries";
+import { ProfileFlipCard } from "@/components/profile-flip-card";
 
 const chip = (on: boolean) =>
   cn("min-h-11 rounded-full border px-4 text-sm font-medium transition-colors", on ? "border-brand bg-brand text-brand-ink" : "border-line bg-surface hover:bg-surface-2");
 
 /** Signed-in caregiver home: what agencies see, visibility, and profile editing. */
-export function LiveCaregiverHome({ profile: p }: { profile: CaregiverProfile }) {
+export function LiveCaregiverHome({ profile: p, cardUrl }: { profile: CaregiverProfile; cardUrl: string }) {
   const t = useT();
   const [lang] = useLang();
   const es = lang === "es";
@@ -135,6 +136,28 @@ export function LiveCaregiverHome({ profile: p }: { profile: CaregiverProfile })
               <ShieldCheck className="mt-0.5 size-4 shrink-0 text-ok" />
               {t({ en: "Never shown: your last name, phone, email or exact address.", es: "Nunca se muestra: tu apellido, teléfono, correo ni dirección." })}
             </p>
+          </section>
+
+          {/* Shareable card */}
+          <section className="rounded-3xl border border-line bg-surface p-5">
+            <p className="eyebrow">{t({ en: "Your Cercana card", es: "Tu tarjeta Cercana" })}</p>
+            <p className="mt-1 text-sm text-muted">
+              {t({ en: "Show the QR code on the back to an agency, at a job fair or an interview.", es: "Muestra el código QR de atrás a una agencia, en una feria o entrevista." })}
+            </p>
+            <ProfileFlipCard
+              className="mt-5"
+              es={es}
+              p={{
+                photo: p.photo,
+                name,
+                role: p.role,
+                languages: p.languages.map((l) => (es ? LANGUAGE_ES[l] ?? l : l)),
+                area: `${p.city ?? p.zip} · ${p.radiusMiles} mi`,
+                availability: `${days} · ${slots || t({ en: "times not set", es: "sin horario" })}`,
+                docs: [{ name: t({ en: "Document vault opens soon", es: "Tus documentos, muy pronto" }), ok: false }],
+                qrText: cardUrl,
+              }}
+            />
           </section>
 
           {/* Offers */}

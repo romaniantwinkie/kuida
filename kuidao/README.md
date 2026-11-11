@@ -35,6 +35,15 @@ What's live today:
 | Caregiver app | Profile, photo, availability, travel radius, show/hide to nearby agencies | Offers and document vault (next batches) |
 | Admin | `node scripts/admin.mjs list / approve / suspend` | Admin panel |
 
+**Homepage and UI details (Nov 2026):** hero timeline (call-out → offers → filled), live status line, founding-offer ticker counting real
+spots, numbered sections, *Post · Match · Fill*, a sample compliance record, "No patient data. Ever.", six short product clips
+(`public/clips/`, recorded from the app), a book-a-demo calendar (saved to `demo_requests`, emailed to `ADMIN_EMAIL`) and an
+illustrated Miami footer. Caregivers site: walking/cycling street scene, flip-over "Cercana card" with QR, live open-shifts line.
+In the app: flip ID cards, a shareable caregiver card (QR opens `/app/caregivers/[id]` for approved agencies), shift passes,
+a centered Copilot box with ↵/⇧↵ hints and history, count chips + sort + "/" search on Shifts and Roster, Upcoming/Past tabs,
+sliding switches, "saved automatically" drafts, and a "who's editing this shift" notice. A copy of the previous version is in
+`../snapshots/`.
+
 **Privacy by design:** Cercana stores no client (patient) data. A shift holds the neighborhood, ZIP, time, role and pay.
 Locations are rounded to ~1 km. The agency gives the visit address to the confirmed caregiver itself.
 Server code lives in `src/server/` (database, sessions, email, server actions); the schema is `db/migrations/`.

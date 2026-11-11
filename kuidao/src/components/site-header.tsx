@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { SegmentIndicator } from "@/components/ui/segment-indicator";
 import { LangToggle } from "@/components/lang-toggle";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -20,16 +21,19 @@ function AudienceTabs({ audience, className }: { audience: Audience; className?:
     { id: "agency", href: "/", label: audience === "caregiver" ? t({ en: "Agencies", es: "Agencias" }) : "Agencies" },
     { id: "caregiver", href: "/caregivers", label: audience === "caregiver" ? t({ en: "Caregivers", es: "Cuidadores" }) : "Caregivers" },
   ];
+  const ref = useRef<HTMLElement>(null);
   return (
-    <nav aria-label="Choose site" className={cn("inline-flex shrink-0 rounded-full border border-line bg-surface-2 p-0.5", className)}>
+    <nav ref={ref} aria-label="Choose site" className={cn("relative inline-flex shrink-0 rounded-full border border-line bg-surface-2 p-0.5", className)}>
+      <SegmentIndicator container={ref} deps={[audience, tabs[0].label]} />
       {tabs.map((tab) => (
         <Link
           key={tab.id}
           href={tab.href}
+          data-active={audience === tab.id}
           aria-current={audience === tab.id ? "page" : undefined}
           className={cn(
-            "inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-sm font-medium transition-colors",
-            audience === tab.id ? "bg-surface text-ink shadow-card" : "text-muted hover:text-ink",
+            "relative z-10 inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-4 text-sm font-medium transition-colors",
+            audience === tab.id ? "text-ink" : "text-muted hover:text-ink",
           )}
         >
           {tab.label}

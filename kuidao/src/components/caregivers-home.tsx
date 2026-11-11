@@ -3,7 +3,10 @@
 import { ArrowRight, BellRing, Check, Clock, EyeOff, FolderLock, Languages, MessageSquareText, ShieldCheck, Smartphone, UserRound, Wallet } from "lucide-react";
 import { CredentialVault } from "@/components/credential-vault";
 import { ButtonLink } from "@/components/ui/button";
-import { useT } from "@/lib/i18n";
+import { useLang, useT } from "@/lib/i18n";
+import { MiamiScene } from "@/components/illustrations";
+import { LiveStatus } from "@/components/home/live-status";
+import { ProfileFlipCard } from "@/components/profile-flip-card";
 
 const STEPS = [
   {
@@ -40,8 +43,10 @@ const FAQ = [
   { q: { en: "What do I need to join?", es: "¿Qué necesito para unirme?" }, a: { en: "A mobile phone and your role (HHA, CNA, LPN or companion). You can add documents now or later.", es: "Un celular y tu rol (HHA, CNA, LPN o acompañante). Puedes subir documentos ahora o después." } },
 ];
 
-export function CaregiversHome() {
+export function CaregiversHome({ openNear }: { openNear: number | null }) {
   const t = useT();
+  const [lang] = useLang();
+  const es = lang === "es";
   return (
     <main>
       {/* Hero */}
@@ -60,6 +65,16 @@ export function CaregiversHome() {
                 es: "Sube tus documentos una vez y compártelos con las agencias que elijas. Ya no tienes que mandar los mismos papeles a cada agencia. Y recibe turnos cerca de ti, por texto.",
               })}
             </p>
+            <LiveStatus
+              className="mt-5"
+              city="Little Havana"
+              tz="America/New_York"
+              detail={
+                openNear != null && openNear > 0
+                  ? t({ en: `${openNear} open shifts nearby right now`, es: `${openNear} turnos abiertos cerca ahora mismo` })
+                  : t({ en: "Agencies are joining Cercana now", es: "Las agencias se están uniendo a Cercana" })
+              }
+            />
             <div className="mt-8 flex flex-wrap gap-3">
               <ButtonLink href="/caregivers/signup" size="lg">
                 {t({ en: "Create my free profile", es: "Crear mi perfil gratis" })} <ArrowRight className="size-4" />
@@ -82,6 +97,48 @@ export function CaregiversHome() {
             </dl>
           </div>
           <CredentialVault compact />
+        </div>
+      </section>
+
+      {/* Caregivers on their way */}
+      <div className="h-40 overflow-hidden border-t border-line sm:h-52" role="img" aria-label={t({ en: "Caregivers walking and cycling to visits on a Miami street", es: "Cuidadores caminando y en bicicleta hacia sus visitas en una calle de Miami" })}>
+        <MiamiScene people />
+      </div>
+
+      {/* What agencies see */}
+      <section id="card" className="border-t border-line">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1fr_1fr] [&>*]:min-w-0">
+          <div>
+            <p className="eyebrow">{t({ en: "Your Cercana card", es: "Tu tarjeta Cercana" })}</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-tight">{t({ en: "This is what agencies see.", es: "Esto es lo que ven las agencias." })}</h2>
+            <p className="mt-4 max-w-[60ch] leading-relaxed text-muted">
+              {t({
+                en: "Your first name, last initial, photo, role, languages and the area you work in. Turn it over for your verified documents, which agencies see only after you share them. Never your phone, email or address.",
+                es: "Tu nombre, la inicial de tu apellido, foto, rol, idiomas y la zona donde trabajas. Voltéala para ver tus documentos verificados, que las agencias ven solo cuando los compartes. Nunca tu teléfono, correo ni dirección.",
+              })}
+            </p>
+            <p className="mt-4 text-sm text-muted">{t({ en: "At a job fair? Show the QR code on the back. The agency scans it to open your profile.", es: "¿En una feria de empleo? Muestra el código QR de atrás. La agencia lo escanea para ver tu perfil." })}</p>
+          </div>
+          <ProfileFlipCard
+            es={es}
+            tag={t({ en: "Example", es: "Ejemplo" })}
+            p={{
+              photo: "/people/maria.jpg",
+              name: "María L.",
+              role: es ? "Auxiliar de salud en casa (HHA)" : "Home health aide (HHA)",
+              languages: es ? ["Español", "Inglés"] : ["Spanish", "English"],
+              area: "Little Havana, Miami · 10 mi",
+              availability: es ? "Lun–Vie · mañanas" : "Mon–Fri · mornings",
+              docs: [
+                { name: es ? "Identificación" : "Photo ID", ok: true },
+                { name: es ? "Certificado HHA" : "HHA certificate", ok: true, note: "2027" },
+                { name: es ? "Antecedentes nivel 2" : "Level 2 background", ok: true },
+                { name: es ? "Prueba de TB" : "TB test", ok: true, note: es ? "vence en 4 m" : "4 mo left" },
+                { name: es ? "RCP" : "CPR card", ok: false, note: es ? "subir" : "upload" },
+              ],
+              qrText: "https://cercana.ai/caregivers",
+            }}
+          />
         </div>
       </section>
 

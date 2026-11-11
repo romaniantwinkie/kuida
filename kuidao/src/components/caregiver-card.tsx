@@ -7,6 +7,9 @@ import { CaregiverAvatar } from "@/components/caregiver-avatar";
 import { Badge } from "@/components/ui/badge";
 import { buttonClass } from "@/components/ui/button";
 import { SlideOver } from "@/components/ui/slide-over";
+import { UnderlineTabs } from "@/components/ui/underline-tabs";
+import { ProfileFlipCard } from "@/components/profile-flip-card";
+import { avatarUri } from "@/lib/avatar";
 import { CLIENTS, DAYS, fmtHour, type Caregiver } from "@/lib/data";
 import { cn } from "@/lib/cn";
 
@@ -21,12 +24,48 @@ function credTone(days: number) {
  * phone number or email: contact always goes through Cercana.
  */
 export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
+  const [view, setView] = useState<"profile" | "card">("profile");
   const known = Object.entries(c.history)
     .filter(([, n]) => n > 0)
     .map(([id, n]) => `${CLIENTS.find((x) => x.id === id)?.alias ?? "Client"} (${n} visits)`);
 
+  const dayIdx = c.availability.days;
+  const tabs = (
+    <UnderlineTabs
+      label="Profile view"
+      className="px-6"
+      tabs={[
+        { id: "profile", label: "Profile" },
+        { id: "card", label: "ID card" },
+      ]}
+      value={view}
+      onChange={setView}
+    />
+  );
+  if (view === "card")
+    return (
+      <div>
+        {tabs}
+        <div className="px-6 py-8">
+          <ProfileFlipCard
+            p={{
+              photo: avatarUri(`${c.firstName} ${c.lastInitial}`),
+              name: `${c.firstName} ${c.lastInitial}.`,
+              role: c.role,
+              languages: c.languages,
+              area: c.area,
+              availability: `${dayIdx.length === 7 ? "Every day" : dayIdx.map((d) => DAYS[d]).join(" ")} · ${fmtHour(c.availability.start)}–${fmtHour(c.availability.end)}`,
+              docs: c.credentials.map((cr) => ({ name: cr.name, ok: cr.expiresInDays > 30, note: cr.expiresInDays < 0 ? "expired" : cr.expiresInDays <= 30 ? `${cr.expiresInDays}d left` : undefined })),
+              qrText: `https://cercana.ai/app/caregivers/${c.id}`,
+              qrLabel: "Scan to open this profile in your Cercana console.",
+            }}
+          />
+        </div>
+      </div>
+    );
   return (
     <div>
+      {tabs}
       <div className="border-b border-line bg-surface-2 px-6 pb-6 pt-6">
         <div className="flex items-center gap-4">
           <CaregiverAvatar caregiver={c} className="size-20 ring-4 ring-surface" />
