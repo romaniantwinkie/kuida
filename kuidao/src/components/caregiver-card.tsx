@@ -81,7 +81,7 @@ export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
                 <BadgeCheck className="size-4" /> ID verified
               </span>
               <span className="inline-flex items-center gap-1 text-muted">
-                <Star className="size-4" /> {c.reliability}% on time
+                <Star className="size-4" /> Replies to {c.reliability}% of offers
               </span>
             </p>
           </div>
@@ -94,7 +94,7 @@ export function CaregiverCard({ caregiver: c }: { caregiver: Caregiver }) {
           { icon: MapPin, k: "Area", v: c.area },
           { icon: Languages, k: "Languages", v: c.languages.join(", ") },
           { icon: Clock, k: "Hours", v: `${fmtHour(c.availability.start)}–${fmtHour(c.availability.end)}` },
-          { icon: CalendarPlus, k: "This week", v: `${c.weeklyHours}h scheduled` },
+          { icon: CalendarPlus, k: "Looking for", v: `~${c.weeklyHours}h a week` },
         ].map((r) => (
           <div key={r.k} className="bg-surface px-6 py-3">
             <dt className="flex items-center gap-2 text-xs text-muted">

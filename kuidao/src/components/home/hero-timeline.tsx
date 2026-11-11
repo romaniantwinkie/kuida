@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle2, PhoneMissed, Send } from "lucide-react";
+import { PhoneMissed, Send, UsersRound } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 const STEPS = [
   { t: "5:31a", icon: PhoneMissed, title: "Call-out", body: "Little Havana · HHA · 8a–2p" },
   { t: "5:33a", icon: Send, title: "Offers sent", body: "6 nearby caregivers · EN / ES" },
-  { t: "5:37a", icon: CheckCircle2, title: "Filled", body: "Xiomara R. · 1.4 mi away" },
+  { t: "5:37a", icon: UsersRound, title: "3 interested", body: "You pick who to talk to" },
 ];
 
 /** One shift's morning, start to finish. Steps light up in turn; static under reduced motion. */
@@ -21,7 +21,7 @@ export function HeroTimeline({ className }: { className?: string }) {
   }, []);
   const shown = Math.min(step, STEPS.length - 1);
   return (
-    <figure className={cn("max-w-lg", className)} aria-label="Example: a call-out filled in six minutes">
+    <figure className={cn("max-w-lg", className)} aria-label="Example: three interested caregivers in six minutes">
       <div className="relative grid grid-cols-3 gap-2">
         <div className="absolute left-[16.6%] right-[16.6%] top-[19px] h-0.5 rounded-full bg-line" aria-hidden="true">
           <div className="h-full rounded-full bg-brand transition-[width] duration-500 ease-out" style={{ width: `${(shown / (STEPS.length - 1)) * 100}%` }} />
@@ -40,7 +40,7 @@ export function HeroTimeline({ className }: { className?: string }) {
           );
         })}
       </div>
-      <figcaption className="mt-3 text-center text-xs text-muted">Example morning. Six minutes, no phone tree.</figcaption>
+      <figcaption className="mt-3 text-center text-xs text-muted">Example morning. Six minutes, no phone tree. You hire and schedule as usual.</figcaption>
     </figure>
   );
 }

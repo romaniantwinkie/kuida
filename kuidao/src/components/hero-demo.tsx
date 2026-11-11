@@ -19,8 +19,8 @@ const FRAMES: Array<Array<[string, Tone]>> = [
   [["Offer sent", "info"], ["Offer sent", "info"], ["Offer sent", "info"], ["Queued", "muted"]],
   [["Declined", "danger"], ["Viewed", "warn"], ["Offer sent", "info"], ["Queued", "muted"]],
   [["Declined", "danger"], ["Viewed", "warn"], ["Viewed", "warn"], ["Offer sent", "info"]],
-  [["Declined", "danger"], ["Accepted", "ok"], ["Offer closed", "muted"], ["Offer closed", "muted"]],
-  [["Declined", "danger"], ["Accepted", "ok"], ["Offer closed", "muted"], ["Offer closed", "muted"]],
+  [["Declined", "danger"], ["Interested", "ok"], ["Viewed", "warn"], ["Offer sent", "info"]],
+  [["Declined", "danger"], ["Interested", "ok"], ["Interested", "ok"], ["Viewed", "warn"]],
 ];
 
 export function HeroDemo() {
@@ -36,7 +36,7 @@ export function HeroDemo() {
     const t = setInterval(() => setFrame((f) => (f < FRAMES.length - 1 ? f + 1 : f)), 1400);
     return () => clearInterval(t);
   }, [run]);
-  const filled = frame >= 4;
+  const filled = frame >= FRAMES.length - 1;
 
   return (
     <div className="relative sm:pb-20">
@@ -47,14 +47,14 @@ export function HeroDemo() {
             <p className="mt-1 font-semibold">HHA · Tue 8a–2p · $18–20/h</p>
           </div>
           <Badge tone={filled ? "ok" : "accent"} dot>
-            {filled ? "Filled" : "Live"}
+            {filled ? "2 interested" : "Live"}
           </Badge>
         </div>
         <ul className="divide-y divide-line">
           {ROWS.map((r, i) => {
             const [label, tone] = FRAMES[frame][i];
             return (
-              <li key={r.name} className={`flex items-center gap-3 px-5 py-3 transition-colors ${label === "Accepted" ? "bg-ok/10" : ""}`}>
+              <li key={r.name} className={`flex items-center gap-3 px-5 py-3 transition-colors ${label === "Interested" ? "bg-ok/10" : ""}`}>
                 <ScoreRing score={r.score} size={38} />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold">{r.name}</p>
@@ -74,7 +74,7 @@ export function HeroDemo() {
                 <Check className="size-3.5" />
               </span>
               <span className="flex-1">
-                <b>Example: a match in under 2 minutes.</b> Your office takes it from here.
+                <b>Example: 2 interested in under 2 minutes.</b> You pick who to talk to.
               </span>
               <button type="button" onClick={() => setRun((r) => r + 1)} className="min-h-11 shrink-0 rounded-full px-3 text-sm font-medium text-brand hover:bg-surface-2">
                 Replay demo

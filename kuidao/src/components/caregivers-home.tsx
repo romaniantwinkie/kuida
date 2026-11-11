@@ -22,7 +22,7 @@ const STEPS = [
   {
     icon: MessageSquareText,
     title: { en: "Get offers by text", es: "Recibe ofertas por texto" },
-    body: { en: "Pay, time and distance up front. Reply 1 to accept or 2 to pass.", es: "Pago, hora y distancia desde el inicio. Responde 1 para aceptar o 2 para pasar." },
+    body: { en: "Pay, time and distance up front. Reply 1 if you're interested or 2 to pass. The agency reaches out to talk next steps.", es: "Pago, hora y distancia desde el inicio. Responde 1 si te interesa o 2 para pasar. La agencia te contacta para los próximos pasos." },
   },
 ];
 

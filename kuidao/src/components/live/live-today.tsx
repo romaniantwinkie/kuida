@@ -96,7 +96,7 @@ export async function LiveToday({ s }: { s: Session & { agency: NonNullable<Sess
                 <Search className="mt-0.5 size-4 shrink-0" /> Find verified caregivers near each shift, beyond your roster
               </li>
               <li className="flex gap-3">
-                <MessageSquareText className="mt-0.5 size-4 shrink-0" /> Text offers in English or Spanish; first yes fills the shift
+                <MessageSquareText className="mt-0.5 size-4 shrink-0" /> Text offers in English or Spanish; see who's interested and connect
               </li>
             </ul>
           </Card>

@@ -29,10 +29,10 @@ const WEEK: Array<[number, number]> = [
 ];
 
 const ACTIVITY = [
-  { who: "Cercana", text: "Filled Northgate #1046 Thu 10a–4p with Daniel S. (score 91)", t: "6:12a", icon: Zap },
+  { who: "Cercana", text: "Daniel S. is interested in Northgate #1046 Thu 10a–4p (score 91)", t: "6:12a", icon: Zap },
   { who: "Cercana", text: "Caught Rosa V.'s expired CPR — removed from 2 offers", t: "5:40a", icon: ShieldAlert },
   { who: "Niurka D.", text: "Called out Tue 8a–2p (Northside #1042) — reason: sick", t: "5:31a", icon: AlertTriangle },
-  { who: "Ana M.", text: "Approved Yanelis M.'s schedule change (Fri)", t: "Yesterday", icon: Clock },
+  { who: "Ana M.", text: "Connected with Yanelis M. about Fri 9a–3p", t: "Yesterday", icon: Clock },
 ];
 
 function FillChance({ shift }: { shift: Parameters<typeof fillChance>[0] }) {
@@ -83,7 +83,7 @@ function DemoToday() {
           <div className="min-w-0 flex-1">
             <p className="eyebrow">Overnight brief · 9p–7a</p>
             <p className="mt-2 max-w-3xl leading-relaxed">
-              <b>3 call-outs came in.</b> Cercana filled 2 automatically (avg 3m 40s). <b>Northside #1042 Tue 8a–2p is still open</b> — Niurka called out sick and the
+              <b>3 call-outs came in.</b> 2 already have interested caregivers waiting for you (avg 3m 40s). <b>Northside #1042 Tue 8a–2p is still open</b> — Niurka called out sick and the
               Spanish-required rule narrows the roster to 6. Rosa V.&apos;s CPR expired, so she was held back from 2 offers.
             </p>
           </div>
@@ -191,7 +191,7 @@ function DemoToday() {
       <Card className="mt-6">
         <CardHeader
           title="This week's coverage"
-          subtitle="Visits per day · filled vs still open"
+          subtitle="Shifts per day · covered vs still open"
           action={
             <div className="flex items-center gap-3 text-xs text-muted">
               <span className="flex items-center gap-2">
@@ -207,7 +207,7 @@ function DemoToday() {
           {WEEK.map(([f, o], i) => {
             const max = 46;
             return (
-              <div key={i} className="flex flex-col items-center gap-2" title={`${DAYS[i]}: ${f} filled, ${o} open`}>
+              <div key={i} className="flex flex-col items-center gap-2" title={`${DAYS[i]}: ${f} covered, ${o} open`}>
                 <div className="flex h-32 w-full max-w-12 flex-col justify-end gap-[2px]">
                   {o > 0 && <div className="rounded-t bg-accent" style={{ height: `${Math.max(6, (o / max) * 100)}%` }} />}
                   <div className={`bg-brand ${o > 0 ? "rounded-b" : "rounded"}`} style={{ height: `${(f / max) * 100}%` }} />

@@ -40,11 +40,11 @@ export function answer(q: string): Reply {
 
   if (/brief|overnight|anoche|summary|resumen/.test(s)) {
     return {
-      text: "Overnight (9p–7a): 3 call-outs. 2 filled automatically, average 3m 40s. One still open:",
+      text: "Overnight (9p–7a): 3 call-outs. 2 already have interested caregivers, average 3m 40s. One still needs you:",
       bullets: [
         "Northside #1042 · Tue 8a–2p · HHA, Spanish required — Niurka D. called out sick",
         "Rosa V. held back from 2 offers (CPR expired 4 days ago)",
-        "Daniel S. confirmed Northgate #1046 Thu 10a–4p (score 91, 8 prior visits)",
+        "Daniel S. is interested in Northgate #1046 Thu 10a–4p (score 91, 8 prior visits)",
       ],
       link: { href: "/app/shifts/s-1042", label: "Resolve Northside #1042" },
     };

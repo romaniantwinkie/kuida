@@ -30,8 +30,8 @@ function credIssues(c: Caregiver) {
 
 const SORTS = [
   { id: "name", label: "Name" },
-  { id: "reliability", label: "Most reliable" },
-  { id: "hours", label: "Fewest hours this week" },
+  { id: "reliability", label: "Best reply rate" },
+  { id: "hours", label: "Wants the most hours" },
   { id: "issues", label: "Credential issues first" },
 ] as const;
 type SortId = (typeof SORTS)[number]["id"];
@@ -60,7 +60,7 @@ export default function RosterPage() {
     const by: Record<SortId, (a: Caregiver, b: Caregiver) => number> = {
       name: (a, b) => a.firstName.localeCompare(b.firstName),
       reliability: (a, b) => b.reliability - a.reliability,
-      hours: (a, b) => a.weeklyHours - b.weeklyHours,
+      hours: (a, b) => b.weeklyHours - a.weeklyHours,
       issues: (a, b) => credIssues(b).length - credIssues(a).length || a.firstName.localeCompare(b.firstName),
     };
     return [...list].sort(by[sort]);
@@ -164,8 +164,8 @@ export default function RosterPage() {
                 <tr>
                   <th className="px-6 py-3">Caregiver</th>
                   <th className="px-4 py-3">Availability</th>
-                  <th className="px-4 py-3">Hours this week</th>
-                  <th className="px-4 py-3">On time</th>
+                  <th className="px-4 py-3">Wants (h/week)</th>
+                  <th className="px-4 py-3">Reply rate</th>
                   <th className="px-4 py-3">Credentials</th>
                   <th className="w-12 px-4 py-3">
                     <span className="sr-only">Open</span>

@@ -90,10 +90,10 @@ export function scoreMatch(c: Caregiver, shift: Shift, client: Client = clientBy
   // Reliability (10)
   factors.push({
     key: "reliability",
-    label: "Reliability",
+    label: "Responsiveness",
     points: Math.round(Math.max(0, c.reliability - 80) / 2),
     max: 10,
-    detail: `${c.reliability}% on-time, last 90 days`,
+    detail: `replies to ${c.reliability}% of offers`,
   });
 
 

@@ -136,7 +136,7 @@ export function CaregiverAppDemo() {
                         <p className="text-sm text-muted">
                           <AgencyName name={o.agency} verified={o.verified} />
                         </p>
-                        {a === "yes" && <Badge tone="ok">{t({ en: "Accepted", es: "Aceptado" })}</Badge>}
+                        {a === "yes" && <Badge tone="ok">{t({ en: "Interested", es: "Te interesa" })}</Badge>}
                         {a === "no" && <Badge>{t({ en: "Passed", es: "Pasaste" })}</Badge>}
                       </div>
                       <p className="mt-2 text-xl font-semibold">
@@ -157,7 +157,7 @@ export function CaregiverAppDemo() {
                       {!a ? (
                         <div className="mt-4 grid grid-cols-2 gap-2">
                           <Button onClick={() => setAnswers((s) => ({ ...s, [o.id]: "yes" }))}>
-                            <Check className="size-4" /> {t({ en: "Accept shift", es: "Aceptar turno" })}
+                            <Check className="size-4" /> {t({ en: "I'm interested", es: "Me interesa" })}
                           </Button>
                           <Button variant="secondary" onClick={() => setAnswers((s) => ({ ...s, [o.id]: "no" }))}>
                             <X className="size-4" /> {t({ en: "Pass", es: "Pasar" })}
@@ -166,8 +166,8 @@ export function CaregiverAppDemo() {
                       ) : a === "yes" ? (
                         <p className="mt-4 rounded-xl bg-ok/10 px-3 py-2 text-sm text-ok">
                           {t({
-                            en: `You're connected with ${o.agency}. They'll message you here about next steps. Your number stays private.`,
-                            es: `Ya estás en contacto con ${o.agency}. Te escribirán aquí sobre los próximos pasos. Tu número sigue privado.`,
+                            en: `${o.agency} sees that you're interested. If they'd like to move forward, they'll message you here. Your number stays private.`,
+                            es: `${o.agency} ve que te interesa. Si quieren seguir, te escribirán aquí. Tu número sigue privado.`,
                           })}
                         </p>
                       ) : null}
@@ -205,10 +205,10 @@ export function CaregiverAppDemo() {
                           variant="secondary"
                           onClick={() => {
                             setRequested((r) => [...r, s.id]);
-                            toast(t({ en: "Request sent", es: "Solicitud enviada" }));
+                            toast(t({ en: "Agency notified", es: "Agencia avisada" }));
                           }}
                         >
-                          {t({ en: "Request this shift", es: "Pedir este turno" })}
+                          {t({ en: "I'm interested", es: "Me interesa" })}
                         </Button>
                       )}
                     </div>

@@ -34,7 +34,7 @@ const FEATURES = [
   {
     icon: Gauge,
     title: "Explainable match score",
-    body: "Every caregiver gets a 0–100 score you can open up: availability, distance, language, skills, continuity, reliability. No black box.",
+    body: "Every caregiver gets a 0–100 score you can open up: availability, distance, language, skills, continuity, responsiveness. No black box.",
     className: "md:col-span-2",
     demo: "score",
   },
@@ -64,7 +64,7 @@ const FEATURES = [
   {
     icon: Sunrise,
     title: "Morning brief",
-    body: "Overnight call-outs, what got filled, what still needs a human — waiting when you log in.",
+    body: "Overnight call-outs, who replied, what still needs a human — waiting when you log in.",
   },
   {
     icon: PhoneOff,
@@ -77,7 +77,7 @@ const FEATURES = [
 const STEPS = [
   { icon: CalendarClock, title: "Post", body: "Add the open shift: neighborhood, time, role and pay. One tap from a call-out, no client details needed." },
   { icon: Sparkles, title: "Match", body: "Cercana screens out anyone ineligible, then ranks your roster and verified caregivers nearby, with the reasons." },
-  { icon: Waves, title: "Fill", body: "Offers go out by text in English or Spanish, in waves. The first yes takes the shift and the rest close automatically." },
+  { icon: Waves, title: "Connect", body: "Offers go out by text in English or Spanish. Caregivers who are interested reply 1; you pick who to talk to and Cercana connects you. Hiring and scheduling stay in your system." },
 ];
 
 const CLIPS: Clip[] = [
@@ -94,8 +94,9 @@ const AUDIT = [
   ["05:33:12", "credential.check", "6 caregivers · all current", "cercana"],
   ["05:33:12", "offer.sent", "#1042 → wave 1 · 3 caregivers · ES", "cercana"],
   ["05:35:40", "offer.declined", "Niurka D. · reply “2”", "sms"],
-  ["05:37:48", "offer.accepted", "Xiomara R. · reply “1”", "sms"],
-  ["05:37:49", "shift.filled", "#1042 · 4 open offers closed", "cercana"],
+  ["05:36:02", "offer.interested", "Xiomara R. · reply “1”", "sms"],
+  ["05:37:15", "offer.interested", "Lázaro P. · reply “1”", "sms"],
+  ["05:39:30", "caregiver.connected", "ana@sunrise ↔ Xiomara R.", "cercana"],
 ];
 
 const STORED = ["Neighborhood and ZIP of the visit", "Approximate pin, rounded to about 1 km", "Visit time, role, pay and experience needed", "Who changed what, and when"];
@@ -103,6 +104,7 @@ const NEVER = ["Client names", "Home addresses", "Diagnoses, medications or care
 
 const FAQ = [
   ["Is Cercana a nurse registry or staffing agency?", "No. Cercana is software. Caregivers contract with your licensed agency, never with us, and we don't set pay or employ anyone."],
+  ["Does Cercana schedule visits?", "No. Cercana finds caregivers who fit a shift's time, place and role and connects you with the ones who are interested. You hire, schedule and track visits (including EVV) in your own system."],
   ["Do caregivers need to download an app?", "No. Offers arrive by SMS (reply 1 or 2) and the app is optional — it's where they manage hours, documents and history."],
   ["How is the match score calculated?", "Six weighted factors totaling 100. Any coordinator can open a score and see the points behind each factor. Hard rules (role, expired credentials, required language, availability) are applied first."],
   ["What is the founding offer?", "The first 50 agencies to sign up get 6 months free on any plan, with every feature. No card is needed to start, and you can cancel any time."],
@@ -135,8 +137,8 @@ export default async function Home() {
               </span>
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-              Cercana ranks your caregivers, and verified caregivers nearby who aren&apos;t on your roster yet, then texts offers in English or Spanish until
-              someone says yes. You stay in control.
+              Cercana ranks your caregivers, and verified caregivers nearby who aren&apos;t on your roster yet, then texts the shift in English or Spanish. You see who&apos;s
+              interested and choose who to talk to.
             </p>
             <LiveStatus
               className="mt-5"
@@ -187,7 +189,7 @@ export default async function Home() {
                       ["Language", 15, 15],
                       ["Skills", 15, 15],
                       ["Continuity", 10, 10],
-                      ["Reliab.", 8, 10],
+                      ["Replies", 8, 10],
                     ].map(([l, p, m]) => (
                       <div key={l as string}>
                         <p className="text-xs text-muted">{l}</p>
@@ -293,7 +295,7 @@ export default async function Home() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <SectionLabel n={5}>How it works</SectionLabel>
-              <h2 className="mt-3 font-display text-4xl tracking-tight">Post. Match. Fill.</h2>
+              <h2 className="mt-3 font-display text-4xl tracking-tight">Post. Match. Connect.</h2>
             </div>
             <Link href="/app/shifts/s-1042" className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-brand hover:underline">
               Watch it run on a live shift <ArrowRight className="size-4" />
@@ -321,8 +323,8 @@ export default async function Home() {
             <SectionLabel n={6}>Compliance</SectionLabel>
             <h2 className="mt-3 font-display text-4xl tracking-tight">Built for offices that get audited.</h2>
             <p className="mt-4 leading-relaxed text-muted">
-              Every shift change, offer, reply and document view is written to your office&apos;s log with who did it and when. When a surveyor asks how a
-              visit was staffed, you open the record instead of reconstructing it.
+              Every shift change, offer, reply and document view is written to your office&apos;s log with who did it and when. When a surveyor asks how you
+              found a caregiver, you open the record instead of reconstructing it.
             </p>
             <ul className="mt-6 space-y-2 text-sm">
               {["Who, what and when for every action", "Credentials checked before each offer", "Caregiver replies kept with the shift"].map((t) => (
@@ -343,7 +345,7 @@ export default async function Home() {
                   {AUDIT.map(([t, a, d, who], i) => (
                     <tr key={i} className={i === AUDIT.length - 1 ? "bg-ok/10" : "border-b border-line/70"}>
                       <td className="px-4 py-2.5 tabular-nums text-muted">{t}</td>
-                      <td className={`px-2 py-2.5 ${a === "shift.filled" ? "text-ok" : a === "offer.declined" ? "text-muted" : "text-brand"}`}>{a}</td>
+                      <td className={`px-2 py-2.5 ${a === "caregiver.connected" ? "text-ok" : a === "offer.declined" ? "text-muted" : "text-brand"}`}>{a}</td>
                       <td className="px-2 py-2.5 text-ink">{d}</td>
                       <td className="px-4 py-2.5 text-right text-muted">{who}</td>
                     </tr>
@@ -351,7 +353,7 @@ export default async function Home() {
                 </tbody>
               </table>
             </div>
-            <p className="border-t border-line px-4 py-3 text-muted">Filled in 6 min 45 s · no client name, address or health detail in the record</p>
+            <p className="border-t border-line px-4 py-3 text-muted">2 interested in 6 min · no client name, address or health detail in the record</p>
           </figure>
         </div>
       </section>
@@ -397,7 +399,7 @@ export default async function Home() {
             <div className="flex justify-center">
               <SectionLabel n={8}>Pricing</SectionLabel>
             </div>
-            <h2 className="mt-3 font-display text-4xl tracking-tight">Flat per location. Unlimited fills.</h2>
+            <h2 className="mt-3 font-display text-4xl tracking-tight">Flat per location. Unlimited shifts.</h2>
             <p className="mt-3 text-muted">No per-shift fees, no placement fees, no charge per caregiver on your roster.</p>
           </div>
           <FoundingOfferBanner className="mt-10" />

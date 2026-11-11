@@ -29,7 +29,7 @@ export default function PricingPage() {
       <div className="text-center">
         <p className="eyebrow">Pricing</p>
         <h1 className="mt-3 font-display text-5xl tracking-tight">Simple, per location.</h1>
-        <p className="mt-3 text-muted">Unlimited fills on every plan. No per-caregiver fees. Cancel any month.</p>
+        <p className="mt-3 text-muted">Unlimited shifts on every plan. No per-caregiver fees. Cancel any month.</p>
       </div>
       <FoundingOfferBanner className="mt-12" />
       <div className="mt-10">

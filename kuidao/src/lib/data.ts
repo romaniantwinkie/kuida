@@ -20,7 +20,7 @@ export type Caregiver = {
   credentials: Credential[];
   skills: string[];
   weeklyHours: number;
-  /** % of accepted visits completed on time over the last 90 days. */
+  /** % of accepted visits completed on time over the last 90 days. Shown as the share of offers they reply to. */
   reliability: number;
   /** Prior visits with each client id. */
   history: Record<string, number>;

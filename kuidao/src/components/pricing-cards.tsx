@@ -28,7 +28,7 @@ export function PricingCards() {
           <p className={cn("mt-1 text-sm", "text-ink")}>
             then {p.monthly ? <b>${p.monthly}/location/mo</b> : <b>custom pricing</b>}
           </p>
-          <p className={cn("mt-1 text-xs", "text-muted")}>{p.seats} · unlimited fills</p>
+          <p className={cn("mt-1 text-xs", "text-muted")}>{p.seats} · unlimited shifts</p>
           <ul className="mt-6 flex-1 space-y-3 text-sm">
             {p.features.map((f) => (
               <li key={f} className="flex gap-2.5">

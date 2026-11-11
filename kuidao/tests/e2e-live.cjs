@@ -133,7 +133,8 @@ const ok = (c, m) => { if (!c) throw new Error("FAIL: " + m); console.log("ok -"
   // ---- demo booking on the homepage
   const h = await b.newPage(); h.on("pageerror", (e) => errs.push(e.message));
   await h.goto(`${BASE}/#demo`); await h.locator("#demo").getByRole("button", { pressed: false }).nth(1).click();
-  await h.locator("#demo").getByRole("button", { name: /^\d{1,2}:\d{2} (AM|PM)$/ }).first().click();
+  await h.waitForLoadState("networkidle"); await h.waitForTimeout(800);
+  await h.locator("#demo button:not([disabled])").filter({ hasText: /^\d{1,2}:\d{2} (AM|PM)$/ }).first().click();
   await h.getByLabel("Your name").fill("Ana Martínez"); await h.getByLabel("Work email").fill(`demo-${tag}@sunrise.test`); await h.getByLabel("Agency").fill("Sunrise Home Health");
   await h.getByRole("button", { name: /^Book / }).click(); await h.getByText("You're booked for").waitFor(); ok(true, "demo booked from the homepage");
   // signed-out demo still works

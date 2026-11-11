@@ -25,7 +25,7 @@ import { clientById, DAYS, fmtHour, type Client, type Shift } from "@/lib/data";
 import type { Match } from "@/lib/match";
 import { cn } from "@/lib/cn";
 
-type Status = "idle" | "sent" | "viewed" | "declined" | "noreply" | "accepted" | "withdrawn";
+type Status = "idle" | "sent" | "viewed" | "declined" | "noreply" | "interested" | "connected";
 
 const STATUS: Record<Status, { label: string; tone: Tone }> = {
   idle: { label: "Ready", tone: "muted" },
@@ -33,18 +33,21 @@ const STATUS: Record<Status, { label: string; tone: Tone }> = {
   viewed: { label: "Viewed", tone: "warn" },
   declined: { label: "Declined", tone: "danger" },
   noreply: { label: "No reply", tone: "muted" },
-  accepted: { label: "Accepted", tone: "ok" },
-  withdrawn: { label: "Offer closed", tone: "muted" },
+  interested: { label: "Interested", tone: "ok" },
+  connected: { label: "Connected", tone: "brand" },
 };
 
 type Event = { at: number; text: string; tone: Tone; icon: "send" | "eye" | "x" | "check" | "clock" | "shield" };
 const EVENT_ICONS = { send: Send, eye: Eye, x: X, check: Check, clock: Clock, shield: ShieldCheck };
 
 /** Deterministic demo outcome so the story is repeatable. */
-function outcomeFor(id: string): "accepted" | "declined" | "noreply" {
+function outcomeFor(id: string): "interested" | "declined" | "noreply" {
   const h = [...id].reduce((s, ch) => s + ch.charCodeAt(0), 0) % 3;
-  return h === 0 ? "accepted" : h === 1 ? "declined" : "noreply";
+  return h === 0 ? "interested" : h === 1 ? "declined" : "noreply";
 }
+
+/** Outreach keeps going until this many caregivers say they're interested (or the list runs out). */
+const INTERESTED_GOAL = 2;
 
 const TICK = 650; // ms of real time per demo step
 const SIM_SECONDS_PER_TICK = 19;
@@ -74,7 +77,8 @@ export function MatchBoard({
   const [statuses, setStatuses] = useState<Record<string, Status>>({});
   const [events, setEvents] = useState<Event[]>([]);
   const [running, setRunning] = useState(false);
-  const [filledBy, setFilledBy] = useState<string | null>(null);
+  const [interested, setInterested] = useState<string[]>([]);
+  const [done, setDone] = useState(false);
   const [showBlocked, setShowBlocked] = useState(false);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
 
@@ -88,7 +92,13 @@ export function MatchBoard({
     setStatuses({});
     setEvents([]);
     setRunning(false);
-    setFilledBy(null);
+    setInterested([]);
+    setDone(false);
+  }
+
+  function connect(m: Match) {
+    setStatuses((prev) => ({ ...prev, [m.caregiver.id]: "connected" }));
+    setEvents((prev) => [{ at: prev[0]?.at ?? 0, text: `Connected with ${m.caregiver.firstName} ${m.caregiver.lastInitial}. · message thread opened`, tone: "brand", icon: "check" }, ...prev]);
   }
 
   function start() {
@@ -99,8 +109,8 @@ export function MatchBoard({
     const set = (step: number, id: string, s: Status) => at(step, () => setStatuses((prev) => ({ ...prev, [id]: s })));
 
     let step = 0;
-    let winner: Match | null = null;
-    for (let w = 0; w * waveSize < queue.length && !winner; w++) {
+    const yes: Match[] = [];
+    for (let w = 0; w * waveSize < queue.length && yes.length < INTERESTED_GOAL; w++) {
       const wave = queue.slice(w * waveSize, (w + 1) * waveSize);
       const names = wave.map((m) => m.caregiver.firstName).join(", ");
       push(step, {
@@ -117,12 +127,13 @@ export function MatchBoard({
         const m = wave[i];
         const out = outcomeFor(m.caregiver.id);
         step += 0.8;
-        if (out === "accepted") {
-          winner = m;
-          set(step, m.caregiver.id, "accepted");
-          push(step, { text: `${m.caregiver.firstName} ${m.caregiver.lastInitial}. accepted (score ${m.score})`, tone: "ok", icon: "check" });
-          wave.slice(i + 1).forEach((o) => set(step + 0.4, o.caregiver.id, "withdrawn"));
-          break;
+        if (out === "interested") {
+          yes.push(m);
+          const id = m.caregiver.id;
+          set(step, id, "interested");
+          at(step, () => setInterested((prev) => [...prev, id]));
+          push(step, { text: `${m.caregiver.firstName} ${m.caregiver.lastInitial}. is interested (score ${m.score})`, tone: "ok", icon: "check" });
+          continue;
         }
         set(step, m.caregiver.id, out);
         push(step, {
@@ -134,29 +145,27 @@ export function MatchBoard({
           icon: out === "declined" ? "x" : "clock",
         });
       }
-      if (!winner && (w + 1) * waveSize < queue.length) {
+      if (yes.length < INTERESTED_GOAL && (w + 1) * waveSize < queue.length) {
         step += 0.6;
-        push(step, { text: "No acceptance — backfilling with next wave", tone: "warn", icon: "clock" });
+        push(step, { text: `${yes.length} interested so far — sending the next wave`, tone: "warn", icon: "clock" });
         step += 0.6;
       }
     }
 
     step += 1;
-    if (winner) {
-      const w = winner;
-      push(step, { text: `Assigned · credentials re-checked · family notified`, tone: "brand", icon: "shield" });
-      at(step, () => {
-        setFilledBy(w.caregiver.id);
-        setSelected(w.caregiver.id);
-        setRunning(false);
-      });
+    if (yes.length) {
+      push(step, { text: `${yes.length} interested · credentials checked · pick who to talk to`, tone: "brand", icon: "shield" });
     } else {
-      push(step, { text: "Queue exhausted — escalated to on-call coordinator", tone: "danger", icon: "x" });
-      at(step, () => setRunning(false));
+      push(step, { text: "No one interested yet — widen the area or raise the pay", tone: "danger", icon: "x" });
     }
+    at(step, () => {
+      setRunning(false);
+      setDone(true);
+      if (yes[0]) setSelected(yes[0].caregiver.id);
+    });
   }
 
-  const winner = eligible.find((m) => m.caregiver.id === filledBy);
+  const interestedMatches = interested.map((id) => eligible.find((m) => m.caregiver.id === id)).filter((m): m is Match => Boolean(m));
   const lastStep = events[0]?.at ?? 0;
 
   const pins = eligible.map((m) => ({
@@ -164,7 +173,7 @@ export function MatchBoard({
     x: m.caregiver.x,
     y: m.caregiver.y,
     label: `${m.caregiver.firstName} · ${m.score}`,
-    tone: (statuses[m.caregiver.id] === "accepted" ? "ok" : statuses[m.caregiver.id] === "declined" ? "muted" : "brand") as "ok" | "muted" | "brand",
+    tone: (["interested", "connected"].includes(statuses[m.caregiver.id] ?? "") ? "ok" : statuses[m.caregiver.id] === "declined" ? "muted" : "brand") as "ok" | "muted" | "brand",
   }));
 
   return (
@@ -176,7 +185,7 @@ export function MatchBoard({
               Ranked matches <Badge tone="brand">{eligible.length} eligible</Badge>
             </span>
           }
-          subtitle="Score = availability 30 · distance 20 · language 15 · skills 15 · continuity 10 · reliability 10"
+          subtitle="Score = availability 30 · distance 20 · language 15 · skills 15 · continuity 10 · responsiveness 10"
         />
         <ul className="divide-y divide-line">
           {eligible.map((m, idx) => {
@@ -185,7 +194,7 @@ export function MatchBoard({
             return (
               <li
                 key={m.caregiver.id}
-                className={cn("transition-colors", selected === m.caregiver.id && "bg-brand-soft/40", st === "accepted" && "bg-ok/10")}
+                className={cn("transition-colors", selected === m.caregiver.id && "bg-brand-soft/40", (st === "interested" || st === "connected") && "bg-ok/10")}
                 onMouseEnter={() => setSelected(m.caregiver.id)}
                 onFocusCapture={() => setSelected(m.caregiver.id)}
               >
@@ -292,7 +301,7 @@ export function MatchBoard({
                       <span className="size-2 rounded-full bg-brand" /> Eligible caregiver
                     </span>
                     <span className="flex items-center gap-2">
-                      <span className="size-2 rounded-full bg-ok" /> Accepted
+                      <span className="size-2 rounded-full bg-ok" /> Interested
                     </span>
                     <span>Esc to close</span>
                   </span>
@@ -303,7 +312,7 @@ export function MatchBoard({
               <span className="flex items-center gap-2">
                 <span className="size-2 rounded-full bg-accent" /> {client.alias} · {client.area}
               </span>
-              <span>Exact address hidden from caregivers until assigned</span>
+              <span>Cercana never has the address; you share it after you hire</span>
             </div>
           </Card>
         )}
@@ -320,7 +329,7 @@ export function MatchBoard({
                 )}
               </span>
             }
-            subtitle="Offers go out in waves; a decline automatically backfills."
+            subtitle="Offers go out in waves until enough caregivers are interested. You choose who to talk to."
             action={
               events.length > 0 && (
                 <span className="rounded-full bg-surface-2 px-3 py-1 font-mono text-xs tabular-nums">{simClock(lastStep)}</span>
@@ -328,19 +337,36 @@ export function MatchBoard({
             }
           />
           <div className="space-y-4 p-5">
-            {winner ? (
-              <div className="flex animate-fade-up items-center gap-3 rounded-xl bg-ok/10 p-3">
-                <CaregiverLink caregiver={winner.caregiver} withAvatar avatarClassName="size-10 ring-2 ring-ok">
-                  <></>
-                </CaregiverLink>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold">
-                    Filled by {winner.caregiver.firstName} {winner.caregiver.lastInitial}. in {simClock(lastStep)}
-                  </p>
-                  <p className="text-xs text-muted">
-                    {DAYS[shift.day]} {fmtHour(shift.start)}–{fmtHour(shift.end)} · connected through Cercana
-                  </p>
-                </div>
+            {interestedMatches.length > 0 ? (
+              <div className="animate-fade-up rounded-xl bg-ok/10 p-3">
+                <p className="px-1 text-sm font-semibold">
+                  {interestedMatches.length} interested{done ? ` in ${simClock(lastStep)}` : " so far"} · pick who to talk to
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {interestedMatches.map((m) => {
+                    const isConnected = statuses[m.caregiver.id] === "connected";
+                    return (
+                      <li key={m.caregiver.id} className="flex items-center gap-3 rounded-lg bg-surface px-3 py-2">
+                        <CaregiverLink caregiver={m.caregiver} withAvatar avatarClassName="size-9">
+                          <span className="text-sm font-semibold">
+                            {m.caregiver.firstName} {m.caregiver.lastInitial}.
+                          </span>
+                        </CaregiverLink>
+                        <span className="flex-1 text-xs text-muted">score {m.score}</span>
+                        {isConnected ? (
+                          <a href={`/app/messages?with=${m.caregiver.id}`} className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 text-sm font-semibold text-brand hover:bg-brand-soft">
+                            <MessageSquareText className="size-4" /> Message
+                          </a>
+                        ) : (
+                          <Button size="sm" onClick={() => connect(m)}>
+                            Connect
+                          </Button>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+                <p className="mt-2 px-1 text-xs text-muted">You hire and schedule in your own system. Cercana never sees the client&apos;s address.</p>
               </div>
             ) : (
               <>
@@ -359,14 +385,14 @@ export function MatchBoard({
                     <MessageSquareText className="size-3.5" /> Offer preview (ES)
                   </p>
                   <p className="mt-2 text-sm leading-relaxed">
-                    Cercana: Turno {shift.role} en {client.area}, {DAYS[shift.day].toLowerCase()} {fmtHour(shift.start)}–{fmtHour(shift.end)}, ${shift.pay[0]}–{shift.pay[1]}/h. Responde <b>1</b> para aceptar o <b>2</b> para pasar.
+                    Cercana: Turno {shift.role} en {client.area}, {DAYS[shift.day].toLowerCase()} {fmtHour(shift.start)}–{fmtHour(shift.end)}, ${shift.pay[0]}–{shift.pay[1]}/h. Responde <b>1</b> si te interesa o <b>2</b> para pasar.
                   </p>
                 </div>
               </>
             )}
 
             <div className="flex gap-2">
-              {!running && !filledBy && events.length === 0 && (
+              {!running && !done && events.length === 0 && (
                 <Button onClick={start} className="flex-1" disabled={queue.length === 0}>
                   <Play className="size-4" /> Start outreach ({Math.min(waveSize, queue.length)} first)
                 </Button>
